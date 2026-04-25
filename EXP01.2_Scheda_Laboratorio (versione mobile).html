@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXP 01 – Misure Dirette di Lunghezze</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Source+Code+Pro:wght@400;600&display=swap');
+  :root {
+    --blu: #1a3a5c; --blu-chiaro: #2e6da4; --accento: #c0392b;
+    --grigio-linea: #b0bec5; --grigio-sfondo: #f0f4f8;
+    --grigio-tabella: #dce8f3; --testo: #1c2a38; --bianco: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Serif 4', Georgia, serif; font-size: 10.5pt; color: var(--testo); background: #e8edf2; padding: 20px; }
+  .pagina { background: var(--bianco); width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 15mm 12mm 15mm; box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+  .intestazione { border-top: 4px solid var(--blu); border-bottom: 2px solid var(--blu-chiaro); padding: 8px 0 7px 0; margin-bottom: 10px; display: flex; align-items: baseline; justify-content: space-between; }
+  .intestazione .codice { font-family: 'Source Code Pro', monospace; font-size: 11pt; font-weight: 600; color: var(--accento); letter-spacing: 1px; }
+  .intestazione .titolo-principale { font-size: 13.5pt; font-weight: 600; color: var(--blu); text-align: center; flex: 1; padding: 0 10px; }
+  .intestazione .data-nome { font-size: 8.5pt; color: #666; text-align: right; line-height: 1.7; min-width: 90px; }
+  .intestazione .data-nome span { display: block; border-bottom: 1px solid var(--grigio-linea); min-width: 80px; }
+  .sezione { margin-bottom: 9px; }
+  .sezione-titolo { background: var(--blu); color: var(--bianco); font-size: 8.5pt; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; margin-bottom: 5px; }
+  .sezione-titolo.secondario { background: var(--blu-chiaro); font-size: 8pt; letter-spacing: 1px; }
+  .sezione-corpo { padding: 0 4px; }
+  .obiettivo-testo { font-size: 9.5pt; line-height: 1.55; color: var(--testo); padding: 4px 6px; border-left: 3px solid var(--accento); background: #fef9f9; }
+  .principi-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .principio-box { background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); padding: 5px 7px; border-radius: 2px; }
+  .principio-box .label { font-family: 'Source Code Pro', monospace; font-size: 7.5pt; font-weight: 600; color: var(--accento); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
+  .principio-box .formula { font-family: 'Source Code Pro', monospace; font-size: 10pt; color: var(--blu); text-align: center; padding: 3px 0; border-bottom: 1px dashed var(--grigio-linea); margin-bottom: 3px; }
+  .principio-box .desc { font-size: 8.5pt; color: #444; line-height: 1.4; }
+  .materiali-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .strumento-riga { display: flex; align-items: center; border-bottom: 1px solid var(--grigio-linea); padding: 3px 0; gap: 4px; font-size: 8.5pt; }
+  .strumento-nome { flex: 0 0 140px; font-weight: 600; color: var(--blu); }
+  .campo-campo { display: flex; align-items: center; gap: 3px; flex: 1; }
+  .campo-campo label { font-size: 7.5pt; color: #777; white-space: nowrap; }
+  .linea-vuota { flex: 1; border-bottom: 1px solid #bbb; min-width: 28px; height: 14px; }
+  .unita { font-size: 7.5pt; color: #999; font-family: 'Source Code Pro', monospace; }
+  .materiali-lista { list-style: none; padding: 0; }
+  .materiali-lista li { font-size: 8.5pt; padding: 2px 0 2px 12px; border-bottom: 1px solid #e8ecef; position: relative; }
+  .materiali-lista li::before { content: '›'; position: absolute; left: 2px; color: var(--accento); font-weight: 700; }
+  .step-lista { list-style: none; padding: 0; counter-reset: steps; }
+  .step-lista li { counter-increment: steps; display: flex; gap: 6px; align-items: flex-start; padding: 3px 0; border-bottom: 1px solid #edf1f5; font-size: 8.5pt; line-height: 1.45; }
+  .step-lista li::before { content: counter(steps); background: var(--blu-chiaro); color: white; font-family: 'Source Code Pro', monospace; font-size: 7.5pt; font-weight: 700; min-width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  table.dati { width: 100%; border-collapse: collapse; font-size: 8pt; margin-top: 2px; }
+  table.dati th { background: var(--blu); color: white; padding: 4px 5px; text-align: center; font-weight: 600; font-size: 8pt; border: 1px solid var(--blu); }
+  table.dati th .unita-th { display: block; font-family: 'Source Code Pro', monospace; font-size: 7pt; font-weight: 400; opacity: 0.85; margin-top: 1px; }
+  table.dati td { border: 1px solid var(--grigio-linea); padding: 0; height: 22px; vertical-align: middle; }
+  table.dati td.contenitore { background: var(--grigio-sfondo); font-size: 8pt; font-weight: 600; color: var(--blu); padding: 3px 5px; }
+  table.dati tr:nth-child(even) td.contenitore { background: #e3ecf5; }
+  table.dati td.vuota { background: white; }
+  table.dati tr:nth-child(even) td.vuota { background: #f9fbfd; }
+  table.dati td.media-row { background: #dce8f3; font-style: italic; color: #1a3a5c; font-size: 7.5pt; padding: 3px 5px; font-weight: 600; }
+  .grafico-box { border: 1px solid var(--grigio-linea); background: white; }
+  .grafico-titolo { background: var(--blu-chiaro); color: white; font-size: 8pt; font-weight: 600; text-align: center; padding: 3px 4px; font-family: 'Source Code Pro', monospace; letter-spacing: 0.5px; }
+  .riga-scrittura { border-bottom: 1px solid var(--grigio-linea); height: 18px; margin-bottom: 1px; width: 100%; }
+  .conclusioni-domande { list-style: none; padding: 0; }
+  .conclusioni-domande li { font-size: 8.5pt; padding: 3px 0 1px 0; border-bottom: 1px dashed #d0dbe6; color: var(--blu); }
+  .conclusioni-domande li .risposta-linea { border-bottom: 1px solid var(--grigio-linea); display: block; height: 16px; margin-top: 2px; }
+  @media print {
+    body { background: white; padding: 0; }
+    .pagina { box-shadow: none; margin: 0; width: 100%; padding: 10mm 12mm; }
+    .pagina + .pagina { page-break-before: always; margin-top: 0; }
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE
+  ═══════════════════════════════════════════ */
+  @media (max-width: 700px) {
+    body { padding: 0; background: var(--bianco); font-size: 13pt; }
+    .pagina { width: 100%; min-height: unset; padding: 16px 14px 20px 14px; box-shadow: none; border-radius: 0; margin-top: 0; }
+    .pagina + .pagina { margin-top: 0; border-top: 4px solid var(--grigio-tabella); }
+
+    .intestazione { flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 0 8px 0; }
+    .intestazione .codice { font-size: 13pt; }
+    .intestazione .titolo-principale { font-size: 15pt; text-align: left; padding: 0; }
+    .intestazione .data-nome { text-align: left; font-size: 11pt; line-height: 2.2; }
+    .intestazione .data-nome span { min-width: 120px; }
+
+    .sezione { margin-bottom: 16px; }
+    .sezione-titolo { font-size: 11pt; padding: 5px 10px; letter-spacing: 0.8px; }
+    .sezione-titolo.secondario { font-size: 10pt; }
+    .sezione-corpo { padding: 0 2px; }
+
+    .obiettivo-testo { font-size: 12pt; line-height: 1.6; padding: 8px 10px; }
+
+    .principi-griglia { grid-template-columns: 1fr; gap: 8px; }
+    .principio-box { padding: 8px 10px; }
+    .principio-box .label { font-size: 10pt; }
+    .principio-box .formula { font-size: 12pt; padding: 6px 0; }
+    .principio-box .desc { font-size: 11pt; line-height: 1.5; }
+
+    .materiali-griglia { grid-template-columns: 1fr; gap: 10px; }
+    .strumento-riga { flex-wrap: wrap; gap: 6px; padding: 6px 0; font-size: 11pt; }
+    .strumento-nome { flex: 0 0 100%; font-size: 12pt; margin-bottom: 2px; }
+    .campo-campo label { font-size: 10pt; }
+    .unita { font-size: 10pt; }
+    .linea-vuota { min-width: 60px; }
+    .materiali-lista li { font-size: 11pt; padding: 5px 0 5px 16px; }
+
+    .step-lista li { font-size: 11pt; line-height: 1.6; padding: 6px 0; gap: 10px; }
+    .step-lista li::before { min-width: 24px; height: 24px; font-size: 10pt; }
+
+    .tabella-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table.dati { font-size: 10pt; min-width: 480px; }
+    table.dati th { font-size: 10pt; padding: 6px 6px; }
+    table.dati th .unita-th { font-size: 9pt; }
+    table.dati td { height: 30px; }
+    table.dati td.contenitore { font-size: 10pt; padding: 5px 7px; }
+    table.dati td.media-row { font-size: 10pt; padding: 5px 7px; }
+
+    .grafico-box { margin-bottom: 10px; }
+    .grafico-titolo { font-size: 11pt; padding: 5px 8px; }
+
+    .riga-scrittura { height: 28px; margin-bottom: 2px; }
+
+    .conclusioni-domande li { font-size: 11pt; padding: 6px 0 2px 0; }
+    .conclusioni-domande li .risposta-linea { height: 26px; margin-top: 4px; }
+
+    div[style*="grid-template-columns:1fr 1fr"],
+    div[style*="grid-template-columns: 1fr 1fr"] {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 14px !important;
+    }
+
+    div[style*="border-bottom: 2px solid var(--blu-chiaro)"] {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 4px !important;
+      padding-bottom: 8px !important;
+    }
+    div[style*="border-bottom: 2px solid var(--blu-chiaro)"] span { font-size: 11pt !important; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- PAGINA 1 -->
+<div class="pagina">
+
+  <div class="intestazione">
+    <div class="codice">EXP 01</div>
+    <div class="titolo-principale">Misure Dirette di Lunghezze e Confronto di Strumenti</div>
+    <div class="data-nome">
+      Nome: <span>&nbsp;</span>
+      Data: <span>&nbsp;</span>
+      Classe: <span>&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- OBIETTIVO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Obiettivo</div>
+    <div class="sezione-corpo">
+      <p class="obiettivo-testo">
+        Misurare le dimensioni di un parallelepipedo con due strumenti a sensibilità diversa (righello e calibro ventesimale) e confrontare i risultati. Calcolare l'<strong>errore relativo percentuale</strong> per ciascuna misura e verificare come la sensibilità dello strumento influenzi la qualità della misura.
+      </p>
+    </div>
+  </div>
+
+  <!-- PRINCIPI TEORICI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Principi Teorici</div>
+    <div class="sezione-corpo">
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="label">Misura Diretta</div>
+          <div class="formula">x = (valore ± Δx) u.m.</div>
+          <div class="desc">Il valore si legge direttamente sulla scala dello strumento. L'incertezza assoluta Δx coincide con la <strong>sensibilità</strong> dello strumento.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Errore Relativo Percentuale</div>
+          <div class="formula">E% = (Δx / |x|) × 100</div>
+          <div class="desc">Indica il peso dell'incertezza rispetto al valore misurato. Più E% è piccolo, più la misura è di qualità. È adimensionale (espresso in %).</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Righello</div>
+          <div class="formula">sensibilità = 1 mm = 0,1 cm</div>
+          <div class="desc">Strumento semplice per misure di lunghezza. La sensibilità è determinata dalla distanza tra due tacche consecutive sulla scala graduata.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Calibro Ventesimale</div>
+          <div class="formula">sensibilità = 1/20 mm = 0,05 mm</div>
+          <div class="desc">Strumento di precisione per lunghezze esterne, interne e profondità. La lettura combina la scala principale con il nonio (verniero).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALI E STRUMENTI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Materiali e Strumenti</div>
+    <div class="sezione-corpo">
+      <div class="materiali-griglia">
+        <div>
+          <div class="sezione-titolo secondario" style="margin-bottom:4px;">Materiali</div>
+          <ul class="materiali-lista">
+            <li>Parallelepipedo da misurare</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sezione-titolo secondario" style="margin-bottom:4px;">Strumenti di Misura</div>
+          <div class="strumento-riga">
+            <span class="strumento-nome">Righello</span>
+            <div class="campo-campo"><label>Portata:</label><div class="linea-vuota"></div><span class="unita">mm</span></div>
+            <div class="campo-campo" style="margin-left:4px;"><label>Sens.:</label><div class="linea-vuota"></div><span class="unita">mm</span></div>
+          </div>
+          <div class="strumento-riga" style="border:none;">
+            <span class="strumento-nome">Calibro ventesimale</span>
+            <div class="campo-campo"><label>Portata:</label><div class="linea-vuota"></div><span class="unita">mm</span></div>
+            <div class="campo-campo" style="margin-left:4px;"><label>Sens.:</label><div class="linea-vuota"></div><span class="unita">mm</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCEDIMENTO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Procedimento</div>
+    <div class="sezione-corpo">
+      <ol class="step-lista">
+        <li>Identifica le tre dimensioni del parallelepipedo: LARGHEZZA (L), ALTEZZA (A), SPESSORE (S).</li>
+        <li>Misura ciascuna dimensione con il RIGHELLO e registra il valore nella tabella con la relativa incertezza Δx = sensibilità del righello.</li>
+        <li>Misura ciascuna dimensione con il CALIBRO VENTESIMALE e registra il valore con la relativa incertezza Δx = sensibilità del calibro.</li>
+        <li>Per ogni misura calcola l'ERRORE RELATIVO PERCENTUALE: E% = (Δx / |x|) × 100.</li>
+        <li>Confronta i valori di E% ottenuti con i due strumenti per la stessa dimensione e commenta la differenza.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- TABELLA DATI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Raccolta Dati e Calcoli</div>
+    <div class="sezione-corpo">
+      <div class="sezione-titolo secondario" style="margin-bottom:4px;">Misure con il Righello</div>
+      <div class="tabella-scroll"><table class="dati" style="margin-bottom:8px;">
+        <thead>
+          <tr>
+            <th style="width:22%">Dimensione</th>
+            <th>Valore misurato<span class="unita-th">[mm]</span></th>
+            <th>Δx (sensib.)<span class="unita-th">[mm]</span></th>
+            <th>Misura completa<span class="unita-th">(val. ± Δx) mm</span></th>
+            <th>E% = (Δx/x)×100<span class="unita-th">[%]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="contenitore">Larghezza (L)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+          <tr><td class="contenitore">Altezza (A)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+          <tr><td class="contenitore">Spessore (S)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="sezione-titolo secondario" style="margin-bottom:4px;">Misure con il Calibro Ventesimale</div>
+      <div class="tabella-scroll"><table class="dati">
+        <thead>
+          <tr>
+            <th style="width:22%">Dimensione</th>
+            <th>Valore misurato<span class="unita-th">[mm]</span></th>
+            <th>Δx (sensib.)<span class="unita-th">[mm]</span></th>
+            <th>Misura completa<span class="unita-th">(val. ± Δx) mm</span></th>
+            <th>E% = (Δx/x)×100<span class="unita-th">[%]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="contenitore">Larghezza (L)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+          <tr><td class="contenitore">Altezza (A)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+          <tr><td class="contenitore">Spessore (S)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+</div><!-- fine pagina 1 -->
+
+<!-- PAGINA 2 -->
+<div class="pagina" style="margin-top:16px;">
+
+  <div style="border-bottom: 2px solid var(--blu-chiaro); display:flex; justify-content:space-between; align-items:baseline; padding-bottom:5px; margin-bottom:10px;">
+    <span style="font-family:'Source Code Pro',monospace; font-size:9pt; font-weight:600; color:var(--accento);">EXP 01</span>
+    <span style="font-size:9.5pt; font-weight:600; color:var(--blu);">Osservazioni e Conclusioni</span>
+    <span style="font-size:8pt; color:#888;">Nome: ___________________________</span>
+  </div>
+
+  <!-- TABELLA CONFRONTO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Tabella di Confronto — Spessore (S)</div>
+    <div class="sezione-corpo">
+      <div class="tabella-scroll"><table class="dati">
+        <thead>
+          <tr>
+            <th style="width:30%">Strumento</th>
+            <th>Sensibilità<span class="unita-th">[mm]</span></th>
+            <th>Valore misurato<span class="unita-th">[mm]</span></th>
+            <th>Δx<span class="unita-th">[mm]</span></th>
+            <th>E%<span class="unita-th">[%]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="contenitore">Righello</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+          <tr><td class="contenitore">Calibro ventesimale</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ERRORI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Classificazione degli Errori</div>
+    <div class="sezione-corpo">
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="label">Errori Casuali</div>
+          <div class="formula">distribuiti ± attorno al valore vero</div>
+          <div class="desc">Imprevedibili, possono alterare la misura per eccesso o per difetto. Sono riducibili ripetendo le misure. Esempi: variazioni ambientali, limiti di percezione dell'operatore.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Errori Sistematici</div>
+          <div class="formula">sempre per eccesso o sempre per difetto</div>
+          <div class="desc">Costanti e unidirezionali. Causati da strumenti non tarati o da difetti del metodo. Una volta individuati possono essere corretti.</div>
+        </div>
+      </div>
+      <p style="font-size:8pt; color:#555; margin-top:5px; font-style:italic;">
+        Esempio: una bilancia che a vuoto indica 2 g introduce un errore sistematico di +2 g su ogni misura.
+      </p>
+    </div>
+  </div>
+
+  <!-- OSSERVAZIONI + CONCLUSIONI -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+
+    <div class="sezione" style="margin-bottom:0;">
+      <div class="sezione-titolo">Osservazioni</div>
+      <div class="sezione-corpo">
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+      </div>
+    </div>
+
+    <div class="sezione" style="margin-bottom:0;">
+      <div class="sezione-titolo">Conclusioni</div>
+      <div class="sezione-corpo">
+        <ul class="conclusioni-domande">
+          <li>
+            Quale strumento ha prodotto l'errore relativo percentuale minore? Perché?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            Come cambia E% al variare della sensibilità dello strumento?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            Hai riscontrato possibili errori sistematici? Se sì, di che tipo?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            La misura del calibro è sempre preferibile a quella del righello?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- fine pagina 2 -->
+</body>
+</html>

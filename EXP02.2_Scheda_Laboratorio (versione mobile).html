@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXP 02 – Misura del Periodo del Pendolo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Source+Code+Pro:wght@400;600&display=swap');
+  :root {
+    --blu: #1a3a5c; --blu-chiaro: #2e6da4; --accento: #c0392b;
+    --grigio-linea: #b0bec5; --grigio-sfondo: #f0f4f8;
+    --grigio-tabella: #dce8f3; --testo: #1c2a38; --bianco: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Serif 4', Georgia, serif; font-size: 10.5pt; color: var(--testo); background: #e8edf2; padding: 20px; }
+  .pagina { background: var(--bianco); width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm 15mm 12mm 15mm; box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+  .intestazione { border-top: 4px solid var(--blu); border-bottom: 2px solid var(--blu-chiaro); padding: 8px 0 7px 0; margin-bottom: 10px; display: flex; align-items: baseline; justify-content: space-between; }
+  .intestazione .codice { font-family: 'Source Code Pro', monospace; font-size: 11pt; font-weight: 600; color: var(--accento); letter-spacing: 1px; }
+  .intestazione .titolo-principale { font-size: 13.5pt; font-weight: 600; color: var(--blu); text-align: center; flex: 1; padding: 0 10px; }
+  .intestazione .data-nome { font-size: 8.5pt; color: #666; text-align: right; line-height: 1.7; min-width: 90px; }
+  .intestazione .data-nome span { display: block; border-bottom: 1px solid var(--grigio-linea); min-width: 80px; }
+  .sezione { margin-bottom: 9px; }
+  .sezione-titolo { background: var(--blu); color: var(--bianco); font-size: 8.5pt; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; margin-bottom: 5px; }
+  .sezione-titolo.secondario { background: var(--blu-chiaro); font-size: 8pt; letter-spacing: 1px; }
+  .sezione-corpo { padding: 0 4px; }
+  .obiettivo-testo { font-size: 9.5pt; line-height: 1.55; color: var(--testo); padding: 4px 6px; border-left: 3px solid var(--accento); background: #fef9f9; }
+  .principi-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .principio-box { background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); padding: 5px 7px; border-radius: 2px; }
+  .principio-box .label { font-family: 'Source Code Pro', monospace; font-size: 7.5pt; font-weight: 600; color: var(--accento); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
+  .principio-box .formula { font-family: 'Source Code Pro', monospace; font-size: 10pt; color: var(--blu); text-align: center; padding: 3px 0; border-bottom: 1px dashed var(--grigio-linea); margin-bottom: 3px; }
+  .principio-box .desc { font-size: 8.5pt; color: #444; line-height: 1.4; }
+  .materiali-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .strumento-riga { display: flex; align-items: center; border-bottom: 1px solid var(--grigio-linea); padding: 3px 0; gap: 4px; font-size: 8.5pt; }
+  .strumento-nome { flex: 0 0 160px; font-weight: 600; color: var(--blu); }
+  .campo-campo { display: flex; align-items: center; gap: 3px; flex: 1; }
+  .campo-campo label { font-size: 7.5pt; color: #777; white-space: nowrap; }
+  .linea-vuota { flex: 1; border-bottom: 1px solid #bbb; min-width: 28px; height: 14px; }
+  .unita { font-size: 7.5pt; color: #999; font-family: 'Source Code Pro', monospace; }
+  .materiali-lista { list-style: none; padding: 0; }
+  .materiali-lista li { font-size: 8.5pt; padding: 2px 0 2px 12px; border-bottom: 1px solid #e8ecef; position: relative; }
+  .materiali-lista li::before { content: '›'; position: absolute; left: 2px; color: var(--accento); font-weight: 700; }
+  .step-lista { list-style: none; padding: 0; counter-reset: steps; }
+  .step-lista li { counter-increment: steps; display: flex; gap: 6px; align-items: flex-start; padding: 3px 0; border-bottom: 1px solid #edf1f5; font-size: 8.5pt; line-height: 1.45; }
+  .step-lista li::before { content: counter(steps); background: var(--blu-chiaro); color: white; font-family: 'Source Code Pro', monospace; font-size: 7.5pt; font-weight: 700; min-width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  table.dati { width: 100%; border-collapse: collapse; font-size: 8pt; margin-top: 2px; }
+  table.dati th { background: var(--blu); color: white; padding: 4px 5px; text-align: center; font-weight: 600; font-size: 8pt; border: 1px solid var(--blu); }
+  table.dati th .unita-th { display: block; font-family: 'Source Code Pro', monospace; font-size: 7pt; font-weight: 400; opacity: 0.85; margin-top: 1px; }
+  table.dati td { border: 1px solid var(--grigio-linea); padding: 0; height: 22px; vertical-align: middle; }
+  table.dati td.contenitore { background: var(--grigio-sfondo); font-size: 8pt; font-weight: 600; color: var(--blu); padding: 3px 5px; }
+  table.dati tr:nth-child(even) td.contenitore { background: #e3ecf5; }
+  table.dati td.vuota { background: white; }
+  table.dati tr:nth-child(even) td.vuota { background: #f9fbfd; }
+  table.dati td.media-row { background: #dce8f3; font-style: italic; color: #1a3a5c; font-size: 7.5pt; padding: 3px 5px; font-weight: 600; }
+  .riga-scrittura { border-bottom: 1px solid var(--grigio-linea); height: 18px; margin-bottom: 1px; width: 100%; }
+  .conclusioni-domande { list-style: none; padding: 0; }
+  .conclusioni-domande li { font-size: 8.5pt; padding: 3px 0 1px 0; border-bottom: 1px dashed #d0dbe6; color: var(--blu); }
+  .conclusioni-domande li .risposta-linea { border-bottom: 1px solid var(--grigio-linea); display: block; height: 16px; margin-top: 2px; }
+  @media print {
+    body { background: white; padding: 0; }
+    .pagina { box-shadow: none; margin: 0; width: 100%; padding: 10mm 12mm; }
+    .pagina + .pagina { page-break-before: always; margin-top: 0; }
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE
+  ═══════════════════════════════════════════ */
+  @media (max-width: 700px) {
+    body { padding: 0; background: var(--bianco); font-size: 13pt; }
+    .pagina { width: 100%; min-height: unset; padding: 16px 14px 20px 14px; box-shadow: none; border-radius: 0; margin-top: 0; }
+    .pagina + .pagina { margin-top: 0; border-top: 4px solid var(--grigio-tabella); }
+
+    .intestazione { flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 0 8px 0; }
+    .intestazione .codice { font-size: 13pt; }
+    .intestazione .titolo-principale { font-size: 15pt; text-align: left; padding: 0; }
+    .intestazione .data-nome { text-align: left; font-size: 11pt; line-height: 2.2; }
+    .intestazione .data-nome span { min-width: 120px; }
+
+    .sezione { margin-bottom: 16px; }
+    .sezione-titolo { font-size: 11pt; padding: 5px 10px; letter-spacing: 0.8px; }
+    .sezione-titolo.secondario { font-size: 10pt; }
+    .sezione-corpo { padding: 0 2px; }
+
+    .obiettivo-testo { font-size: 12pt; line-height: 1.6; padding: 8px 10px; }
+
+    .principi-griglia { grid-template-columns: 1fr; gap: 8px; }
+    .principio-box { padding: 8px 10px; }
+    .principio-box .label { font-size: 10pt; }
+    .principio-box .formula { font-size: 12pt; padding: 6px 0; }
+    .principio-box .desc { font-size: 11pt; line-height: 1.5; }
+
+    .materiali-griglia { grid-template-columns: 1fr; gap: 10px; }
+    .strumento-riga { flex-wrap: wrap; gap: 6px; padding: 6px 0; font-size: 11pt; }
+    .strumento-nome { flex: 0 0 100%; font-size: 12pt; margin-bottom: 2px; }
+    .campo-campo label { font-size: 10pt; }
+    .unita { font-size: 10pt; }
+    .linea-vuota { min-width: 60px; }
+    .materiali-lista li { font-size: 11pt; padding: 5px 0 5px 16px; }
+
+    .step-lista li { font-size: 11pt; line-height: 1.6; padding: 6px 0; gap: 10px; }
+    .step-lista li::before { min-width: 24px; height: 24px; font-size: 10pt; }
+
+    .tabella-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table.dati { font-size: 10pt; min-width: 480px; }
+    table.dati th { font-size: 10pt; padding: 6px 6px; }
+    table.dati th .unita-th { font-size: 9pt; }
+    table.dati td { height: 30px; }
+    table.dati td.contenitore { font-size: 10pt; padding: 5px 7px; }
+    table.dati td.media-row { font-size: 10pt; padding: 5px 7px; }
+
+    .grafico-box { margin-bottom: 10px; }
+    .grafico-titolo { font-size: 11pt; padding: 5px 8px; }
+
+    .riga-scrittura { height: 28px; margin-bottom: 2px; }
+
+    .conclusioni-domande li { font-size: 11pt; padding: 6px 0 2px 0; }
+    .conclusioni-domande li .risposta-linea { height: 26px; margin-top: 4px; }
+
+    div[style*="grid-template-columns:1fr 1fr"],
+    div[style*="grid-template-columns: 1fr 1fr"] {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 14px !important;
+    }
+
+    div[style*="border-bottom: 2px solid var(--blu-chiaro)"] {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 4px !important;
+      padding-bottom: 8px !important;
+    }
+    div[style*="border-bottom: 2px solid var(--blu-chiaro)"] span { font-size: 11pt !important; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- PAGINA 1 -->
+<div class="pagina">
+
+  <div class="intestazione">
+    <div class="codice">EXP 02</div>
+    <div class="titolo-principale">Misura del Periodo del Pendolo con Metodi Diversi</div>
+    <div class="data-nome">
+      Nome: <span>&nbsp;</span>
+      Data: <span>&nbsp;</span>
+      Classe: <span>&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- OBIETTIVO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Obiettivo</div>
+    <div class="sezione-corpo">
+      <p class="obiettivo-testo">
+        Misurare il periodo di oscillazione di un pendolo semplice con due metodi distinti e confrontarne i risultati. <strong>Metodo 1:</strong> misura del tempo di 10 oscillazioni con cronometro analogico. <strong>Metodo 2:</strong> 5 misure ripetute di una singola oscillazione con cronometro digitale e analisi statistica (semi-dispersione massima).
+      </p>
+    </div>
+  </div>
+
+  <!-- PRINCIPI TEORICI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Principi Teorici</div>
+    <div class="sezione-corpo">
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="label">Periodo del Pendolo</div>
+          <div class="formula">T = t_N / N</div>
+          <div class="desc">Il periodo <em>T</em> è il tempo di una singola oscillazione completa. Misurando <em>N</em> oscillazioni consecutive si divide il tempo totale t_N per N, riducendo l'incertezza di un fattore N.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Metodo 1 — Oscillazioni Multiple</div>
+          <div class="formula">T = T₁₀ / 10 &nbsp;·&nbsp; ΔT = ΔT₁₀ / 10</div>
+          <div class="desc">Si misura il tempo di 10 oscillazioni con il cronometro analogico (sens. 0,1 s). Dividendo per 10 si riduce l'incertezza di 10 volte, ottenendo una precisione apparente di 0,01 s.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Metodo 2 — Valor Medio</div>
+          <div class="formula">T_medio = (t₁+t₂+t₃+t₄+t₅) / 5</div>
+          <div class="desc">Si ripete la misura 5 volte con il cronometro digitale (sens. 0,01 s). La dispersione dei valori riflette anche il TEMPO DI REAZIONE dell'operatore, non solo la sensibilità strumentale.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Metodo 2 — Semi-dispersione</div>
+          <div class="formula">ΔT = (t_max – t_min) / 2</div>
+          <div class="desc">L'incertezza si stima con la semi-dispersione massima, che tiene conto di tutte le fonti di errore casuale. Il risultato finale è T = T_medio ± ΔT.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALI E STRUMENTI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Materiali e Strumenti</div>
+    <div class="sezione-corpo">
+      <div class="materiali-griglia">
+        <div>
+          <div class="sezione-titolo secondario" style="margin-bottom:4px;">Materiali</div>
+          <ul class="materiali-lista">
+            <li>Filo inestensibile</li>
+            <li>Massa (bob del pendolo)</li>
+            <li>Supporto con morsetto</li>
+            <li>Righello o metro (per la lunghezza del pendolo)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sezione-titolo secondario" style="margin-bottom:4px;">Strumenti di Misura</div>
+          <div class="strumento-riga">
+            <span class="strumento-nome">Cronometro analogico</span>
+            <div class="campo-campo"><label>Portata:</label><div class="linea-vuota"></div><span class="unita">s</span></div>
+            <div class="campo-campo" style="margin-left:4px;"><label>Sens.:</label><div class="linea-vuota"></div><span class="unita">s</span></div>
+          </div>
+          <div class="strumento-riga" style="border:none;">
+            <span class="strumento-nome">Cronometro digitale</span>
+            <div class="campo-campo"><label>Portata:</label><div class="linea-vuota"></div><span class="unita">s</span></div>
+            <div class="campo-campo" style="margin-left:4px;"><label>Sens.:</label><div class="linea-vuota"></div><span class="unita">s</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCEDIMENTO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Procedimento</div>
+    <div class="sezione-corpo">
+      <ol class="step-lista">
+        <li>Monta il pendolo e misura la lunghezza del filo (dal punto di sospensione al centro della massa). Registra il valore con la sua incertezza.</li>
+        <li>METODO 1 — con il CRONOMETRO ANALOGICO: fai oscillare il pendolo e misura il tempo totale di 10 OSCILLAZIONI CONSECUTIVE (T₁₀). Registra il valore.</li>
+        <li>Calcola il periodo: T = T₁₀ / 10. Calcola l'incertezza: ΔT = Δt_analogico / 10. Scrivi il risultato nella forma T ± ΔT.</li>
+        <li>METODO 2 — con il CRONOMETRO DIGITALE: misura il tempo di UNA SINGOLA OSCILLAZIONE per 5 volte consecutive (t₁, t₂, t₃, t₄, t₅). Registra tutti i valori.</li>
+        <li>Calcola T_medio = (t₁+t₂+t₃+t₄+t₅) / 5 e la SEMI-DISPERSIONE MASSIMA ΔT = (t_max - t_min) / 2.</li>
+        <li>Confronta i due risultati: sono compatibili? Quale metodo produce l'incertezza maggiore? Quale è più realistico?</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- TABELLA METODO 1 -->
+  <div class="sezione">
+    <div class="sezione-titolo">Raccolta Dati — Metodo 1 (Cronometro Analogico)</div>
+    <div class="sezione-corpo">
+      <div class="tabella-scroll"><table class="dati">
+        <thead>
+          <tr>
+            <th style="width:30%">Grandezza</th>
+            <th>Valore misurato<span class="unita-th">[s]</span></th>
+            <th>Δt strumentale<span class="unita-th">[s]</span></th>
+            <th>Misura completa<span class="unita-th">(val. ± Δt) s</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="contenitore">Tempo 10 oscillazioni (T₁₀)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+          <tr>
+            <td class="media-row" colspan="3" style="text-align:right; padding-right:8px;">Periodo T = T₁₀ / 10 =</td>
+            <td class="vuota" style="background:#dce8f3;"></td>
+          </tr>
+          <tr>
+            <td class="media-row" colspan="3" style="text-align:right; padding-right:8px;">Incertezza ΔT = Δt / 10 =</td>
+            <td class="vuota" style="background:#dce8f3;"></td>
+          </tr>
+          <tr>
+            <td class="media-row" colspan="3" style="text-align:right; padding-right:8px;">Risultato: T = T ± ΔT =</td>
+            <td class="vuota" style="background:#dce8f3;"></td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+</div><!-- fine pagina 1 -->
+
+<!-- PAGINA 2 -->
+<div class="pagina" style="margin-top:16px;">
+
+  <div style="border-bottom: 2px solid var(--blu-chiaro); display:flex; justify-content:space-between; align-items:baseline; padding-bottom:5px; margin-bottom:10px;">
+    <span style="font-family:'Source Code Pro',monospace; font-size:9pt; font-weight:600; color:var(--accento);">EXP 02</span>
+    <span style="font-size:9.5pt; font-weight:600; color:var(--blu);">Metodo 2 — Confronto e Conclusioni</span>
+    <span style="font-size:8pt; color:#888;">Nome: ___________________________</span>
+  </div>
+
+  <!-- TABELLA METODO 2 -->
+  <div class="sezione">
+    <div class="sezione-titolo">Raccolta Dati — Metodo 2 (Cronometro Digitale, 5 misure ripetute)</div>
+    <div class="sezione-corpo">
+      <div class="tabella-scroll"><table class="dati" style="margin-bottom:6px;">
+        <thead>
+          <tr>
+            <th style="width:20%">Misura</th>
+            <th>t₁<span class="unita-th">[s]</span></th>
+            <th>t₂<span class="unita-th">[s]</span></th>
+            <th>t₃<span class="unita-th">[s]</span></th>
+            <th>t₄<span class="unita-th">[s]</span></th>
+            <th>t₅<span class="unita-th">[s]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="contenitore">Tempo oscillazione</td>
+            <td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td>
+          </tr>
+        </tbody>
+      </table></div>
+      <div class="tabella-scroll"><table class="dati">
+        <thead>
+          <tr>
+            <th style="width:25%">Calcolo</th>
+            <th>t_max<span class="unita-th">[s]</span></th>
+            <th>t_min<span class="unita-th">[s]</span></th>
+            <th>T_medio<span class="unita-th">[s]</span></th>
+            <th>ΔT = (t_max−t_min)/2<span class="unita-th">[s]</span></th>
+            <th>Risultato T ± ΔT<span class="unita-th">[s]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="contenitore">Metodo 2</td>
+            <td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- CONFRONTO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Confronto tra i Due Metodi</div>
+    <div class="sezione-corpo">
+      <div class="tabella-scroll"><table class="dati">
+        <thead>
+          <tr>
+            <th style="width:35%">Metodo</th>
+            <th>Strumento usato</th>
+            <th>T misurato<span class="unita-th">[s]</span></th>
+            <th>ΔT<span class="unita-th">[s]</span></th>
+            <th>E%<span class="unita-th">[%]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="contenitore">Metodo 1 (10 oscillazioni)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+          <tr><td class="contenitore">Metodo 2 (5 misure ripetute)</td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td><td class="vuota"></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- OSSERVAZIONI + CONCLUSIONI -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+
+    <div class="sezione" style="margin-bottom:0;">
+      <div class="sezione-titolo">Osservazioni</div>
+      <div class="sezione-corpo">
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+      </div>
+    </div>
+
+    <div class="sezione" style="margin-bottom:0;">
+      <div class="sezione-titolo">Conclusioni</div>
+      <div class="sezione-corpo">
+        <ul class="conclusioni-domande">
+          <li>
+            I due metodi danno risultati compatibili? I valori di T si sovrappongono entro i rispettivi ΔT?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            Quale metodo produce l'incertezza numericamente minore? È anche il più realistico?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            Qual è la principale fonte di errore casuale nel Metodo 2?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            In quale situazione è preferibile il Metodo 1? E il Metodo 2?
+            <span class="risposta-linea"></span>
+            <span class="risposta-linea"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- fine pagina 2 -->
+</body>
+</html>

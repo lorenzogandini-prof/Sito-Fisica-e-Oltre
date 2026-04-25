@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio di Fisica — Schede Sperimentali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM
+   Palette: schede EXP (#1a3a5c / #2e6da4 / #c0392b)
+   Layout/componenti: stile emergent-prova.html
+   (Inter font · rounded-xl · border shadow · sezioni alternate · footer slate-900)
+═══════════════════════════════════════════ */
+:root {
+  --blu:          #1a3a5c;
+  --blu-chiaro:   #2e6da4;
+  --blu-medio:    #1d4f7c;
+  --blu-scuro:    #0f2440;
+  --accento:      #c0392b;
+  --grigio-linea: #b0bec5;
+  --grigio-sfondo:#f0f4f8;
+  --grigio-tab:   #dce8f3;
+  --testo:        #1c2a38;
+  --border:       #e2e8f0;
+  --muted-fg:     #64748b;
+  --radius:       0.75rem;
+  --nav-h:        64px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:var(--testo);-webkit-font-smoothing:antialiased;line-height:1.5}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:4px}
+::selection{background:rgba(46,109,164,.22)}
+a{color:inherit;text-decoration:none}
+
+/* ── NAV ── */
+header{position:fixed;inset-x:0;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:var(--nav-h)}
+nav{max-width:1280px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:800;font-size:1.05rem;color:var(--blu);display:flex;align-items:center;gap:9px;letter-spacing:-.02em}
+.nav-badge{background:var(--blu);color:#fff;font-family:'Source Code Pro',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;padding:2px 8px;border-radius:4px}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-links a{font-size:.875rem;font-weight:500;color:var(--muted-fg);padding:6px 14px;border-radius:6px;transition:background .15s,color .15s}
+.nav-links a:hover{background:#f1f5f9;color:var(--testo)}
+.nav-links a.active{color:var(--blu);background:var(--grigio-sfondo);font-weight:600}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(140deg,var(--blu-scuro) 0%,var(--blu) 55%,var(--blu-medio) 100%);padding-top:var(--nav-h)}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 40px);pointer-events:none}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 62% 38%,rgba(46,109,164,.38) 0%,transparent 70%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;text-align:center;padding:4rem 1.5rem 5rem;max-width:880px;width:100%}
+.hero-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-family:'Source Code Pro',monospace;font-size:10.5px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;padding:5px 14px;border-radius:99px;margin-bottom:26px;animation:fadeUp .6s ease both}
+.hero h1{font-size:clamp(2.4rem,6vw,4.6rem);font-weight:800;color:#fff;line-height:1.07;letter-spacing:-.03em;margin-bottom:18px;animation:fadeUp .7s ease .1s both}
+.hero h1 span{color:#7bb8e8}
+.hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:rgba(255,255,255,.58);font-weight:300;max-width:540px;margin:0 auto 38px;line-height:1.7;animation:fadeUp .7s ease .2s both}
+.hero-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s ease .3s both}
+
+/* ── BOTTONI ── */
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:.875rem;font-weight:600;padding:10px 22px;border-radius:8px;border:none;cursor:pointer;transition:all .2s ease;white-space:nowrap}
+.btn-white{background:#fff;color:var(--blu);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.btn-white:hover{background:#f0f4f8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.14)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.78);border:1.5px solid rgba(255,255,255,.28)}
+.btn-ghost:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.5)}
+.btn-blue{background:var(--blu-chiaro);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.btn-blue:hover{background:var(--blu-medio);transform:translateY(-1px)}
+
+/* ── STAT STRIP ── */
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:3.5rem;animation:fadeUp .7s ease .42s both}
+.hero-stat{background:#fff;padding:1.4rem;text-align:center}
+.stat-num{font-size:1.9rem;font-weight:800;color:var(--blu);letter-spacing:-.04em;line-height:1;margin-bottom:3px}
+.stat-label{font-size:.75rem;color:var(--muted-fg);font-weight:500}
+
+/* ── SEZIONI ── */
+main{padding-top:var(--nav-h)}
+.section{padding:5rem 1.5rem}
+.section-white{background:#fff}
+.section-gray{background:#f8fafc}
+.section-dark{background:var(--blu-scuro)}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blu-chiaro);margin-bottom:7px}
+.section-label-light{color:rgba(123,184,232,.9)}
+.section-title{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--blu);letter-spacing:-.025em;line-height:1.13;margin-bottom:10px}
+.section-title-light{color:#fff}
+.section-desc{font-size:1rem;color:var(--muted-fg);max-width:580px;line-height:1.65;margin-bottom:2.8rem}
+.section-desc-light{color:rgba(255,255,255,.5)}
+
+/* ── RIASSUNTO CARDS ── */
+.rias-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.15rem;margin-bottom:1.4rem}
+.rias-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.35rem 1.25rem;border-top:3px solid var(--blu-chiaro);box-shadow:0 1px 4px rgba(0,0,0,.05);transition:box-shadow .2s,transform .2s}
+.rias-card:hover{box-shadow:0 6px 18px rgba(26,58,92,.1);transform:translateY(-2px)}
+.rias-icon{font-size:1.75rem;margin-bottom:9px;display:block}
+.rias-card h3{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:600;color:var(--accento);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:7px}
+.rias-card p{font-size:.83rem;color:var(--muted-fg);line-height:1.62}
+.rias-card p strong{color:var(--testo)}
+.rias-note{background:var(--blu);color:rgba(255,255,255,.88);border-radius:var(--radius);padding:1.25rem 1.4rem;border-left:4px solid var(--accento);font-size:.875rem;line-height:1.7}
+.rias-note strong{color:#fff}
+
+/* ── EXP CARDS ── */
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
+.exp-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .25s,transform .25s;display:flex;flex-direction:column}
+.exp-card:hover{box-shadow:0 10px 28px rgba(26,58,92,.12);transform:translateY(-3px)}
+.exp-card-head{background:linear-gradient(135deg,var(--blu) 0%,var(--blu-medio) 100%);padding:1.1rem 1.2rem 1rem;display:flex;align-items:flex-start;gap:11px}
+.exp-badge{background:rgba(192,57,43,.82);color:#fff;font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.exp-card-title{font-size:.875rem;font-weight:700;color:#fff;line-height:1.35}
+.exp-body{padding:1.1rem 1.2rem;flex:1;display:flex;flex-direction:column;gap:11px}
+.exp-desc{font-size:.82rem;color:var(--muted-fg);line-height:1.65;flex:1}
+.exp-desc strong{color:var(--testo);font-weight:600}
+.exp-tags{display:flex;flex-wrap:wrap;gap:5px}
+.exp-tag{font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:500;color:var(--blu-chiaro);background:var(--grigio-sfondo);border:1px solid var(--grigio-tab);padding:2px 8px;border-radius:4px}
+.exp-foot{padding:.7rem 1.2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fafcff}
+.exp-link{font-size:.79rem;font-weight:600;color:var(--blu-chiaro);display:flex;align-items:center;gap:5px;transition:color .15s,gap .15s}
+.exp-link:hover{color:var(--blu);gap:8px}
+.exp-link svg{width:13px;height:13px}
+.exp-pages{font-family:'Source Code Pro',monospace;font-size:9.5px;color:var(--muted-fg)}
+
+/* ── GLOSSARIO ── */
+.gl-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.7rem}
+.fl-btn{font-size:.8rem;font-weight:500;padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted-fg);cursor:pointer;transition:all .15s}
+.fl-btn:hover{border-color:var(--blu-chiaro);color:var(--blu-chiaro)}
+.fl-btn.active{background:var(--blu);color:#fff;border-color:var(--blu)}
+.gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.gl-entry{background:#fff;border:1px solid var(--border);border-left:3px solid var(--grigio-linea);border-radius:8px;padding:.95rem 1.05rem;transition:box-shadow .2s}
+.gl-entry:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.cat-strumenti{border-left-color:var(--blu-chiaro)}
+.cat-errori{border-left-color:var(--accento)}
+.cat-formule{border-left-color:#c49a3c}
+.cat-leggi{border-left-color:#27ae60}
+.gl-term{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:600;color:var(--blu);margin-bottom:5px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.g-badge{font-size:9px;font-weight:500;letter-spacing:.8px;padding:1px 7px;border-radius:3px}
+.gb-str{background:rgba(46,109,164,.1);color:var(--blu-chiaro)}
+.gb-err{background:rgba(192,57,43,.1);color:var(--accento)}
+.gb-for{background:rgba(196,154,60,.12);color:#8a6c20}
+.gb-leg{background:rgba(39,174,96,.1);color:#1a7a44}
+.gl-formula{font-family:'Source Code Pro',monospace;font-size:10.5px;color:var(--blu-chiaro);background:var(--grigio-sfondo);border:1px solid var(--grigio-tab);padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:6px}
+.gl-def{font-size:.8rem;line-height:1.62;color:var(--muted-fg)}
+
+/* ── LIBRO DIGITALE ── */
+.libro-box{background:rgba(255,255,255,.04);border:1px dashed rgba(123,184,232,.28);border-radius:var(--radius);padding:2.2rem;text-align:center;max-width:560px;margin:0 auto 2.2rem}
+.libro-box-icon{font-size:2.8rem;margin-bottom:.8rem;display:block;opacity:.65}
+.libro-box h3{font-size:1.2rem;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:8px}
+.libro-box p{font-size:.85rem;color:rgba(255,255,255,.42);line-height:1.7;margin-bottom:1.1rem}
+.ch-list{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:3px}
+.ch-row{display:flex;align-items:center;gap:14px;padding:12px 15px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;transition:background .2s}
+a.ch-row{cursor:pointer}
+a.ch-row:hover{background:rgba(39,174,96,.07);border-color:rgba(39,174,96,.22)}
+.ch-num{font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:700;color:var(--accento);letter-spacing:1px;width:40px;flex-shrink:0}
+.ch-title{flex:1;font-size:.85rem;color:rgba(255,255,255,.48);font-style:italic;line-height:1.4}
+a.ch-row .ch-title{color:rgba(255,255,255,.82);font-style:normal;font-weight:500}
+.ch-status{font-family:'Source Code Pro',monospace;font-size:8.5px;letter-spacing:1px;padding:3px 9px;border-radius:3px;white-space:nowrap}
+.st-ok{border:1px solid rgba(39,174,96,.5);color:rgba(39,174,96,.95);background:rgba(39,174,96,.07)}
+.st-wip{border:1px solid rgba(196,154,60,.4);color:rgba(196,154,60,.8)}
+.st-plan{border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.24)}
+/* risorse pills */
+.risorse{display:flex;gap:11px;flex-wrap:wrap;margin-top:1.8rem;max-width:620px;margin-left:auto;margin-right:auto}
+.ris-pill{flex:1;min-width:210px;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.04);border:1px solid rgba(196,154,60,.24);border-radius:8px;padding:11px 14px;transition:background .2s,border-color .2s}
+.ris-pill:hover{background:rgba(196,154,60,.07);border-color:rgba(196,154,60,.48)}
+.ris-icon{font-size:1.3rem;flex-shrink:0}
+.ris-label{font-family:'Source Code Pro',monospace;font-size:8.5px;color:#c49a3c;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:3px}
+.ris-name{font-size:.78rem;color:rgba(255,255,255,.62);display:block;line-height:1.35}
+.ris-arrow{font-size:.95rem;color:rgba(196,154,60,.42);flex-shrink:0}
+
+/* ── FOOTER ── */
+footer{background:#0f172a;color:#cbd5e1;padding:3rem 1.5rem}
+.ft-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem}
+.ft-brand-name{font-weight:800;font-size:1.05rem;color:#fff;display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.ft-brand-badge{background:var(--blu);color:#fff;font-family:'Source Code Pro',monospace;font-size:9px;font-weight:600;letter-spacing:1.5px;padding:2px 7px;border-radius:3px}
+.ft-desc{font-size:.8rem;color:#475569;line-height:1.65}
+.ft-col-title{font-size:.8rem;font-weight:700;color:#fff;margin-bottom:11px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:7px}
+.ft-links a{font-size:.8rem;color:#475569;transition:color .15s}
+.ft-links a:hover{color:#94a3b8}
+.ft-bottom{max-width:1100px;margin:2.2rem auto 0;padding-top:1.3rem;border-top:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:#334155}
+
+/* ── ANIMAZIONI ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:0 1rem}
+  .nav-links{display:none}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .ft-inner{grid-template-columns:1fr;gap:2rem}
+  .ft-bottom{flex-direction:column;gap:6px;text-align:center}
+  .exp-grid,.rias-grid{grid-template-columns:1fr}
+  .gl-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ NAV ════════════ -->
+<header>
+  <nav>
+    <a href="#" class="nav-logo">
+      <span class="nav-badge">FIS·LAB</span>
+      Laboratorio di Fisica
+    </a>
+    <ul class="nav-links">
+      <li><a href="#riassunto">Riassunto</a></li>
+      <li><a href="#esperienze">Esperienze</a></li>
+      <li><a href="#glossario">Glossario</a></li>
+      <li><a href="#libro">Libro Digitale</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+<!-- ════════════ HERO ════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-chip">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+      Schede Sperimentali · EXP 01 – 04
+    </div>
+    <h1>Misura, Analisi<br><span>&amp; Scoperta</span></h1>
+    <p class="hero-sub">Quattro esperienze di laboratorio dalla misura diretta alla verifica di leggi fisiche. Strumenti, errori, analisi statistica, grafici.</p>
+    <div class="hero-cta">
+      <a href="#esperienze" class="btn btn-white">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+        Apri le Schede
+      </a>
+      <a href="#glossario" class="btn btn-ghost">Glossario</a>
+      <a href="#libro" class="btn btn-ghost">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
+        Libro Digitale
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="stat-num">4</div><div class="stat-label">Esperienze</div></div>
+      <div class="hero-stat"><div class="stat-num">16</div><div class="stat-label">Voci glossario</div></div>
+      <div class="hero-stat"><div class="stat-num">2</div><div class="stat-label">PDF disponibili</div></div>
+      <div class="hero-stat"><div class="stat-num">8</div><div class="stat-label">Pagine schede</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ RIASSUNTO ════════════ -->
+<section class="section section-white" id="riassunto">
+  <div class="section-inner">
+    <div class="section-label">Panoramica del corso</div>
+    <h2 class="section-title">Di cosa trattano<br>le esperienze</h2>
+    <p class="section-desc">Ogni scheda segue la stessa struttura: obiettivo, principi teorici, materiali e strumenti, procedimento passo-passo, tabelle di raccolta dati, osservazioni e conclusioni guidate.</p>
+
+    <div class="rias-grid">
+      <div class="rias-card">
+        <span class="rias-icon">📏</span>
+        <h3>EXP 01 — Strumenti</h3>
+        <p>Righello (sens. 1&nbsp;mm) vs calibro ventesimale (sens. 0,05&nbsp;mm) su un parallelepipedo. Formula chiave: <strong>E% = (Δx/|x|)×100</strong>. Classificazione errori casuali e sistematici.</p>
+      </div>
+      <div class="rias-card">
+        <span class="rias-icon">⏱️</span>
+        <h3>EXP 02 — Pendolo</h3>
+        <p><strong>Metodo 1</strong> (analogico): T = T₁₀/10, ΔT = Δt/10. <strong>Metodo 2</strong> (digitale): valor medio + semi-dispersione massima ΔT = (t_max – t_min)/2 da 5 misure.</p>
+      </div>
+      <div class="rias-card">
+        <span class="rias-icon">⚖️</span>
+        <h3>EXP 03 — Forza Peso</h3>
+        <p>Verifica sperimentale di <strong>P = g·m</strong> con bilancia + dinamometro. Determinazione di g come media dei rapporti Pᵢ/mᵢ; confronto con g_teorico = 9,81&nbsp;N/kg.</p>
+      </div>
+      <div class="rias-card">
+        <span class="rias-icon">🧪</span>
+        <h3>EXP 04 — Volume</h3>
+        <p>Verifica di <strong>A·h = V = cost.</strong> con cilindri di diametro diverso. Propagazione errori: ΔA/A = 2·Δd/d. Grafici: iperbole (A–h), parabola (h–d²), retta (d–A).</p>
+      </div>
+    </div>
+
+    <div class="rias-note">
+      <strong>Competenze sviluppate.</strong> Al termine lo studente sarà in grado di: scegliere lo strumento adeguato; esprimere ogni misura nella forma <em>(valore ± Δx) u.m.</em>; calcolare E% e valutarne la qualità; distinguere errori casuali da sistematici; applicare la propagazione degli errori su grandezze derivate; costruire grafici e identificare la legge fisica sottostante (retta, iperbole, parabola).
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ ESPERIENZE ════════════ -->
+<section class="section section-gray" id="esperienze">
+  <div class="section-inner">
+    <div class="section-label">Schede sperimentali</div>
+    <h2 class="section-title">Le Esperienze<br>di Laboratorio</h2>
+    <p class="section-desc">Clicca su "Apri scheda" per accedere alla versione interattiva mobile-friendly di ogni esperienza.</p>
+
+    <div class="exp-grid">
+
+      <!-- EXP 01 -->
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 01</span>
+          <span class="exp-card-title">Misure Dirette di Lunghezze e Confronto di Strumenti</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc">Misurare le tre dimensioni (L, A, S) di un parallelepipedo con <strong>righello</strong> (sens. 1&nbsp;mm) e <strong>calibro ventesimale</strong> (sens. 0,05&nbsp;mm). Per ogni misura: valore, Δx, misura completa (val ± Δx) mm, E% = (Δx/|x|)×100. Pag.&nbsp;2: confronto tabellare sullo Spessore, classificazione errori casuali vs sistematici, 4 domande conclusive.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">righello 1&nbsp;mm</span>
+            <span class="exp-tag">calibro 0,05&nbsp;mm</span>
+            <span class="exp-tag">E% = (Δx/x)×100</span>
+            <span class="exp-tag">errori casuali</span>
+            <span class="exp-tag">errori sistematici</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="EXP01_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span class="exp-pages">2 pagine</span>
+        </div>
+      </div>
+
+      <!-- EXP 02 -->
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 02</span>
+          <span class="exp-card-title">Misura del Periodo del Pendolo con Metodi Diversi</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc"><strong>Metodo 1</strong> — cronometro analogico (sens. 0,1&nbsp;s): misura T₁₀ di 10 oscillazioni consecutive, calcolo T = T₁₀/10 e ΔT = Δt_analogico/10. <strong>Metodo 2</strong> — cronometro digitale (sens. 0,01&nbsp;s): 5 misure singole t₁…t₅, calcolo T_medio = Σtᵢ/5 e semi-dispersione ΔT = (t_max − t_min)/2. Pag.&nbsp;2: confronto tra i due metodi con calcolo E%.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">T = t_N/N</span>
+            <span class="exp-tag">semi-dispersione</span>
+            <span class="exp-tag">valor medio</span>
+            <span class="exp-tag">tempo di reazione</span>
+            <span class="exp-tag">cronometro analogico/digitale</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="EXP02_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span class="exp-pages">2 pagine</span>
+        </div>
+      </div>
+
+      <!-- EXP 03 -->
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 03</span>
+          <span class="exp-card-title">Proporzionalità Diretta tra Massa e Forza Peso</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc">5 assemblaggi (supporto + masse campione): misura massa con <strong>bilancia elettronica</strong> (in g → kg) e peso con <strong>dinamometro</strong> (in N). Per ogni coppia: gᵢ = Pᵢ/mᵢ. Calcolo di ḡ (media aritmetica) e Δg = (g_max − g_min)/2. Risultato: g = ḡ ± Δg vs g_teorico = 9,81&nbsp;N/kg. Pag.&nbsp;2: grafico P–m su carta millimetrata (retta per l'origine, pendenza = g).</p>
+          <div class="exp-tags">
+            <span class="exp-tag">P = g·m</span>
+            <span class="exp-tag">bilancia elettronica</span>
+            <span class="exp-tag">dinamometro</span>
+            <span class="exp-tag">retta per l'origine</span>
+            <span class="exp-tag">g = ḡ ± Δg</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="EXP03_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span class="exp-pages">2 pagine</span>
+        </div>
+      </div>
+
+      <!-- EXP 04 -->
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 04</span>
+          <span class="exp-card-title">Proporzionalità Inversa e Volume del Cilindro</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc">Trasvasare un volume fisso d'acqua in 5 contenitori (cil. 100&nbsp;mL, 250&nbsp;mL, 1000&nbsp;mL, 2 cristallizzatori). Per ciascuno: altezza h con scala graduata, diametro interno d con <strong>calibro</strong>. Calcolo A = π·(d/2)² con propagazione ΔA/A = 2·Δd/d, poi V_calc = A·h. Pag.&nbsp;2: 3 grafici su carta millimetrata — A vs h (iperbole), h vs d (quadratica inversa), d vs A (parabola A∝d²).</p>
+          <div class="exp-tags">
+            <span class="exp-tag">V = A·h = cost.</span>
+            <span class="exp-tag">A = π(d/2)²</span>
+            <span class="exp-tag">ΔA/A = 2·Δd/d</span>
+            <span class="exp-tag">iperbole equilatera</span>
+            <span class="exp-tag">calibro + cilindri</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="EXP04_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span class="exp-pages">2 pagine</span>
+        </div>
+      </div>
+
+    </div><!-- /exp-grid -->
+  </div>
+</section>
+
+
+<!-- ════════════ GLOSSARIO ════════════ -->
+<section class="section section-white" id="glossario">
+  <div class="section-inner">
+    <div class="section-label">Vocabolario della fisica sperimentale</div>
+    <h2 class="section-title">Glossario dei<br>Termini Chiave</h2>
+    <p class="section-desc">Tutti i concetti presenti nelle schede EXP&nbsp;01–04. Filtra per categoria.</p>
+
+    <div class="gl-filter">
+      <button class="fl-btn active" onclick="filterGL('all',this)">Tutti</button>
+      <button class="fl-btn" onclick="filterGL('strumenti',this)">Strumenti</button>
+      <button class="fl-btn" onclick="filterGL('errori',this)">Errori</button>
+      <button class="fl-btn" onclick="filterGL('formule',this)">Formule</button>
+      <button class="fl-btn" onclick="filterGL('leggi',this)">Leggi fisiche</button>
+    </div>
+
+    <div class="gl-grid" id="gl-grid">
+
+      <!-- STRUMENTI -->
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Sensibilità <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-formula">Δx = più piccola divisione della scala</div>
+        <div class="gl-def">La più piccola variazione che uno strumento riesce a rilevare; coincide con l'incertezza assoluta nella misura singola diretta. Righello → 1&nbsp;mm; calibro ventesimale → 0,05&nbsp;mm; cronometro digitale → 0,01&nbsp;s.</div>
+      </div>
+
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Portata <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-def">Valore massimo misurabile senza danneggiare lo strumento o uscire dal campo di linearità. Va verificata prima di ogni misura. Esempio: un dinamometro da 5&nbsp;N non si usa con masse che producono P > 5&nbsp;N.</div>
+      </div>
+
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Calibro ventesimale <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-formula">sens. = 1/20 mm = 0,05 mm</div>
+        <div class="gl-def">Strumento di precisione per lunghezze esterne, interne e profondità. La lettura combina scala principale (mm interi) + nonio/verniero (ventesimi di mm). Usato in EXP&nbsp;01 (confronto con righello) e EXP&nbsp;04 (misura del diametro d dei cilindri).</div>
+      </div>
+
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Righello <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-formula">sens. = 1 mm = 0,1 cm</div>
+        <div class="gl-def">Strumento semplice per misure di lunghezza. La sensibilità coincide con la distanza tra due tacche consecutive. In EXP&nbsp;01 viene confrontato con il calibro ventesimale sulle stesse dimensioni del parallelepipedo.</div>
+      </div>
+
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Dinamometro <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-def">Misura le forze in Newton sfruttando la legge di Hooke (F = k·x). In EXP&nbsp;03 viene usato per misurare il peso P degli assemblaggi (supporto + masse campione). Lettura con il corpo in quiete, in posizione verticale.</div>
+      </div>
+
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Bilancia elettronica <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-def">Misura la massa in grammi. Distinta dal dinamometro: la bilancia misura la massa (proprietà intrinseca del corpo), il dinamometro misura la forza peso (dipende da g). In EXP&nbsp;03 il valore in g va convertito in kg per calcolare gᵢ = Pᵢ/mᵢ.</div>
+      </div>
+
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Cronometro analogico <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-formula">sens. = 0,1 s</div>
+        <div class="gl-def">Usato nel Metodo 1 di EXP&nbsp;02: misura T₁₀ (tempo di 10 oscillazioni). Dividendo per 10 si ottiene T con una precisione "apparente" di 0,01&nbsp;s, riducendo l'incertezza strumentale di un fattore 10.</div>
+      </div>
+
+      <div class="gl-entry cat-strumenti">
+        <div class="gl-term">Cronometro digitale <span class="g-badge gb-str">Strumenti</span></div>
+        <div class="gl-formula">sens. = 0,01 s</div>
+        <div class="gl-def">Usato nel Metodo 2 di EXP&nbsp;02 per 5 misure singole di T. La dispersione dei valori è dovuta principalmente al <strong>tempo di reazione</strong> dell'operatore — fonte di errore casuale ben più grande della sensibilità strumentale.</div>
+      </div>
+
+      <!-- ERRORI -->
+      <div class="gl-entry cat-errori">
+        <div class="gl-term">Incertezza assoluta <span class="g-badge gb-err">Errori</span></div>
+        <div class="gl-formula">Δx  [stessa u.m. di x]</div>
+        <div class="gl-def">Ampiezza dell'intervallo di incertezza attorno al valore misurato. Per misura singola diretta: Δx = sensibilità dello strumento. Per misure ripetute: Δx = semi-dispersione massima. Ha sempre le stesse unità di misura della grandezza misurata.</div>
+      </div>
+
+      <div class="gl-entry cat-errori">
+        <div class="gl-term">Errore casuale <span class="g-badge gb-err">Errori</span></div>
+        <div class="gl-formula">distribuito ± attorno al valore vero</div>
+        <div class="gl-def">Imprevedibile, alterna misure per eccesso e per difetto. Cause tipiche: variazioni ambientali, parallasse, tempo di reazione dell'operatore. Si <em>riduce</em> ripetendo le misure e calcolando il valor medio (EXP&nbsp;02, Metodo 2; EXP&nbsp;03).</div>
+      </div>
+
+      <div class="gl-entry cat-errori">
+        <div class="gl-term">Errore sistematico <span class="g-badge gb-err">Errori</span></div>
+        <div class="gl-formula">sempre per eccesso o sempre per difetto</div>
+        <div class="gl-def">Costante e unidirezionale. Causato da strumenti non tarati, difetti del metodo o condizioni ambientali stabili ma scorrette. Non si riduce ripetendo le misure. Esempio: bilancia che a vuoto segna +2&nbsp;g → errore sistematico di +2&nbsp;g su ogni misura (EXP&nbsp;01).</div>
+      </div>
+
+      <div class="gl-entry cat-errori">
+        <div class="gl-term">Propagazione degli errori <span class="g-badge gb-err">Errori</span></div>
+        <div class="gl-formula">ΔA/A = 2 · Δd/d</div>
+        <div class="gl-def">Come l'incertezza di una grandezza misurata si trasferisce sulle grandezze derivate. Per potenze: l'errore relativo si moltiplica per l'esponente. In EXP&nbsp;04: A = π·(d/2)² → l'errore relativo su A è il <em>doppio</em> di quello su d perché d compare al quadrato.</div>
+      </div>
+
+      <!-- FORMULE -->
+      <div class="gl-entry cat-formule">
+        <div class="gl-term">Misura completa <span class="g-badge gb-for">Formule</span></div>
+        <div class="gl-formula">x = (valore ± Δx) u.m.</div>
+        <div class="gl-def">Modo corretto di esprimere qualsiasi misura fisica: valore numerico, incertezza assoluta e unità di misura devono essere sempre indicati. Esempio: L = (45,30 ± 0,05)&nbsp;mm con calibro ventesimale; L = (45 ± 1)&nbsp;mm con righello.</div>
+      </div>
+
+      <div class="gl-entry cat-formule">
+        <div class="gl-term">Errore relativo percentuale <span class="g-badge gb-for">Formule</span></div>
+        <div class="gl-formula">E% = (Δx / |x|) × 100</div>
+        <div class="gl-def">Misura adimensionale della qualità di una misura (%). Più è piccolo, più la misura è precisa. Per la stessa grandezza, il calibro produce sempre un E% molto inferiore al righello: Δx calibro = 0,05&nbsp;mm vs Δx righello = 1&nbsp;mm (EXP&nbsp;01).</div>
+      </div>
+
+      <div class="gl-entry cat-formule">
+        <div class="gl-term">Valor medio <span class="g-badge gb-for">Formule</span></div>
+        <div class="gl-formula">x̄ = (x₁ + x₂ + … + xₙ) / n</div>
+        <div class="gl-def">Media aritmetica di n misure ripetute della stessa grandezza. Riduce l'effetto degli errori casuali avvicinandosi al valore vero. Usato in EXP&nbsp;02 (T_medio da 5 misure digitali) e EXP&nbsp;03 (ḡ da 5 rapporti Pᵢ/mᵢ).</div>
+      </div>
+
+      <div class="gl-entry cat-formule">
+        <div class="gl-term">Semi-dispersione massima <span class="g-badge gb-for">Formule</span></div>
+        <div class="gl-formula">Δx = (x_max – x_min) / 2</div>
+        <div class="gl-def">Stima dell'incertezza da misure ripetute. Tiene conto di tutta la variabilità osservata, inclusa la reazione dell'operatore. Risultato finale: x = x̄ ± Δx. Usata in EXP&nbsp;02 (ΔT del pendolo) e EXP&nbsp;03 (Δg dell'accelerazione di gravità).</div>
+      </div>
+
+      <!-- LEGGI FISICHE -->
+      <div class="gl-entry cat-leggi">
+        <div class="gl-term">Proporzionalità diretta <span class="g-badge gb-leg">Leggi fisiche</span></div>
+        <div class="gl-formula">y = k · x  →  retta per l'origine</div>
+        <div class="gl-def">Al raddoppiare di x, y raddoppia. Il rapporto y/x = k rimane costante. Grafico: retta passante per l'origine con pendenza k. Verificata in EXP&nbsp;03: il grafico P–m è una retta per O con pendenza = g ≈ 9,81&nbsp;N/kg.</div>
+      </div>
+
+      <div class="gl-entry cat-leggi">
+        <div class="gl-term">Proporzionalità inversa <span class="g-badge gb-leg">Leggi fisiche</span></div>
+        <div class="gl-formula">x · y = k  →  iperbole equilatera</div>
+        <div class="gl-def">Al raddoppiare di x, y si dimezza. Il prodotto x·y = k rimane costante. Grafico: ramo di iperbole equilatera. Verificata in EXP&nbsp;04: A·h = V = cost. → al crescere del diametro (area), l'altezza del liquido scende proporzionalmente.</div>
+      </div>
+
+      <div class="gl-entry cat-leggi">
+        <div class="gl-term">Forza peso <span class="g-badge gb-leg">Leggi fisiche</span></div>
+        <div class="gl-formula">P = g · m  [N = N/kg · kg]</div>
+        <div class="gl-def">Forza gravitazionale esercitata sulla massa m. La massa è proprietà intrinseca del corpo; il peso dipende dall'intensità del campo gravitazionale locale. Sulla Terra g ≈ 9,81&nbsp;N/kg. In EXP&nbsp;03 se ne determina il valore sperimentale.</div>
+      </div>
+
+      <div class="gl-entry cat-leggi">
+        <div class="gl-term">Periodo del pendolo <span class="g-badge gb-leg">Leggi fisiche</span></div>
+        <div class="gl-formula">T = t_N / N  ;  ΔT = Δt / N</div>
+        <div class="gl-def">Tempo di una singola oscillazione completa. Misurando N oscillazioni e dividendo per N si riduce l'incertezza relativa su T di un fattore N (Metodo 1 di EXP&nbsp;02). Per piccole ampiezze T dipende solo dalla lunghezza del filo e da g.</div>
+      </div>
+
+      <div class="gl-entry cat-leggi">
+        <div class="gl-term">Volume del cilindro <span class="g-badge gb-leg">Leggi fisiche</span></div>
+        <div class="gl-formula">V = A · h = π · (d/2)² · h</div>
+        <div class="gl-def">Con V costante, A e h sono inversamente proporzionali (EXP&nbsp;04). Poiché A = π·r², un piccolo errore relativo su d si amplifica con fattore 2 su A: ΔA/A = 2·Δd/d. Il grafico d–A mostra una parabola (A∝d²).</div>
+      </div>
+
+    </div><!-- /gl-grid -->
+  </div>
+</section>
+
+
+<!-- ════════════ LIBRO DIGITALE ════════════ -->
+<section class="section section-dark" id="libro">
+  <div class="section-inner">
+    <div class="section-label section-label-light">Risorse didattiche</div>
+    <h2 class="section-title section-title-light">Il Libro Digitale</h2>
+    <p class="section-desc section-desc-light">Il libro verrà arricchito progressivamente con spiegazioni teoriche, approfondimenti e materiali integrativi alle esperienze. Due PDF sono già disponibili.</p>
+
+    <div class="libro-box">
+      <span class="libro-box-icon">📖</span>
+      <h3>Contenuti in arrivo</h3>
+      <p>I capitoli saranno pubblicati seguendo l'ordine delle esperienze, con riferimenti incrociati alle schede EXP.</p>
+      <a href="#esperienze" class="btn btn-ghost" style="font-size:.82rem;padding:8px 18px;">Esplora le schede nel frattempo →</a>
+    </div>
+
+    <div class="ch-list">
+      <a href="Capitolo_1__Concetti_Fondamentali_del_Laboratorio_di_Fisica.pdf" class="ch-row" target="_blank">
+        <span class="ch-num">CAP 1</span>
+        <span class="ch-title">Concetti Fondamentali del Laboratorio di Fisica</span>
+        <span class="ch-status st-ok">PDF ↗</span>
+      </a>
+      <a href="Analisi_statistica.pdf" class="ch-row" target="_blank">
+        <span class="ch-num">APP</span>
+        <span class="ch-title">Analisi Statistica — errori e incertezze</span>
+        <span class="ch-status st-ok">PDF ↗</span>
+      </a>
+      <div class="ch-row">
+        <span class="ch-num">CAP 2</span>
+        <span class="ch-title">Gli errori di misura: tipologie e gestione statistica</span>
+        <span class="ch-status st-wip">In preparazione</span>
+      </div>
+      <div class="ch-row">
+        <span class="ch-num">CAP 3</span>
+        <span class="ch-title">Le relazioni funzionali: proporzionalità diretta e inversa</span>
+        <span class="ch-status st-plan">Pianificato</span>
+      </div>
+      <div class="ch-row">
+        <span class="ch-num">CAP 4</span>
+        <span class="ch-title">Il moto periodico: forze, massa, peso e il pendolo</span>
+        <span class="ch-status st-plan">Pianificato</span>
+      </div>
+      <div class="ch-row">
+        <span class="ch-num">CAP 5</span>
+        <span class="ch-title">Geometria e fisica: aree, volumi, propagazione degli errori</span>
+        <span class="ch-status st-plan">Pianificato</span>
+      </div>
+    </div>
+
+    <div class="risorse">
+      <a href="Capitolo_1__Concetti_Fondamentali_del_Laboratorio_di_Fisica.pdf" class="ris-pill" target="_blank">
+        <span class="ris-icon">📄</span>
+        <span>
+          <span class="ris-label">PDF disponibile</span>
+          <span class="ris-name">Capitolo 1 — Concetti Fondamentali</span>
+        </span>
+        <span class="ris-arrow">↗</span>
+      </a>
+      <a href="Analisi_statistica.pdf" class="ris-pill" target="_blank">
+        <span class="ris-icon">📊</span>
+        <span>
+          <span class="ris-label">PDF disponibile</span>
+          <span class="ris-name">Appendice — Analisi Statistica</span>
+        </span>
+        <span class="ris-arrow">↗</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+</main><!-- /main -->
+
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <div class="ft-inner">
+    <div>
+      <div class="ft-brand-name">
+        <span class="ft-brand-badge">FIS·LAB</span>
+        Laboratorio di Fisica
+      </div>
+      <p class="ft-desc">Schede sperimentali per il biennio. Ogni esperienza guida lo studente attraverso obiettivi, principi teorici, procedimento e analisi dei dati, con attenzione alla misura, agli errori e alle relazioni tra grandezze fisiche.</p>
+    </div>
+    <div>
+      <div class="ft-col-title">Esperienze</div>
+      <ul class="ft-links">
+        <li><a href="EXP01_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 01 — Misure di Lunghezze</a></li>
+        <li><a href="EXP02_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 02 — Periodo del Pendolo</a></li>
+        <li><a href="EXP03_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 03 — Massa e Forza Peso</a></li>
+        <li><a href="EXP04_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 04 — Volume del Cilindro</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-col-title">Risorse</div>
+      <ul class="ft-links">
+        <li><a href="Capitolo_1__Concetti_Fondamentali_del_Laboratorio_di_Fisica.pdf" target="_blank">Capitolo 1 (PDF)</a></li>
+        <li><a href="Analisi_statistica.pdf" target="_blank">Analisi Statistica (PDF)</a></li>
+        <li><a href="#riassunto">Riassunto corso</a></li>
+        <li><a href="#glossario">Glossario termini</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <span>FIS·LAB — Laboratorio di Fisica · EXP 01–04</span>
+    <span>Misure · Proporzionalità · Pendolo · Volume · Analisi Statistica</span>
+  </div>
+</footer>
+
+
+<script>
+/* Filtro glossario */
+function filterGL(cat, btn) {
+  document.querySelectorAll('.fl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.gl-entry').forEach(el => {
+    el.style.display = (cat === 'all' || el.classList.contains('cat-' + cat)) ? '' : 'none';
+  });
+}
+
+/* Highlight nav attivo su scroll */
+const secs = document.querySelectorAll('section[id]');
+const nls  = document.querySelectorAll('.nav-links a');
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting)
+      nls.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+  });
+}, { threshold: 0.45 }).observe(secs, secs);
+
+// fix: observe each section individually
+secs.forEach(s => new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting)
+      nls.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+  });
+}, { threshold: 0.45 }).observe(s));
+</script>
+</body>
+</html>

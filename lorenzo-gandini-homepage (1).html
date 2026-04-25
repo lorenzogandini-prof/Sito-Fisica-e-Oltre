@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorenzo Gandini — Fisica, Arte &amp; Poesia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   DESIGN SYSTEM
+   Palette: index.html (#1a3a5c / #2e6da4 / #c0392b)
+   Tipografia: Inter (UI) + Libre Baskerville (titoli/blog) + Source Code Pro (badge)
+   Stile: index.html layout + Xarenios editorial tone
+══════════════════════════════════════════ */
+:root {
+  --blu:          #1a3a5c;
+  --blu-chiaro:   #2e6da4;
+  --blu-medio:    #1d4f7c;
+  --blu-scuro:    #0f2440;
+  --accento:      #c0392b;
+  --accento-soft: rgba(192,57,43,.12);
+  --grigio-sfondo:#f0f4f8;
+  --grigio-tab:   #dce8f3;
+  --testo:        #1c2a38;
+  --border:       #e2e8f0;
+  --muted-fg:     #64748b;
+  --radius:       0.75rem;
+  --nav-h:        64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #fff;
+  color: var(--testo);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+::selection { background: rgba(46,109,164,.22); }
+a { color: inherit; text-decoration: none; }
+
+/* ── NAV ── */
+header {
+  position: fixed; inset-x: 0; top: 0; z-index: 50;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: var(--nav-h);
+}
+nav {
+  max-width: 1280px; margin: 0 auto; padding: 0 2rem;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-weight: 800; font-size: 1.05rem; color: var(--blu);
+  display: flex; align-items: center; gap: 9px; letter-spacing: -.02em;
+}
+.nav-badge {
+  background: var(--blu); color: #fff;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  padding: 2px 8px; border-radius: 4px;
+}
+.nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+.nav-links a {
+  font-size: .875rem; font-weight: 500; color: var(--muted-fg);
+  padding: 6px 14px; border-radius: 6px;
+  transition: background .15s, color .15s;
+}
+.nav-links a:hover { background: #f1f5f9; color: var(--testo); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  background: linear-gradient(140deg, var(--blu-scuro) 0%, var(--blu) 55%, var(--blu-medio) 100%);
+  padding-top: var(--nav-h);
+}
+/* grid overlay identico a index.html */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.04) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.04) 40px);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 65% 55% at 62% 38%, rgba(46,109,164,.38) 0%, transparent 70%);
+  pointer-events: none;
+}
+#heroCanvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  text-align: center; padding: 4rem 1.5rem 5rem;
+  max-width: 900px; width: 100%;
+}
+.hero-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.8);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 10.5px; font-weight: 500; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 5px 14px; border-radius: 99px; margin-bottom: 26px;
+  animation: fadeUp .6s ease both;
+}
+/* Titolo: Libre Baskerville come Xarenios */
+.hero h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  font-weight: 700; color: #fff;
+  line-height: 1.08; letter-spacing: -.02em;
+  margin-bottom: 18px;
+  animation: fadeUp .7s ease .1s both;
+}
+.hero h1 span { color: #7bb8e8; font-style: italic; font-weight: 400; }
+.hero-sub {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(.95rem, 2vw, 1.15rem);
+  font-style: italic;
+  color: rgba(255,255,255,.58);
+  max-width: 560px; margin: 0 auto 38px; line-height: 1.75;
+  animation: fadeUp .7s ease .2s both;
+}
+.hero-cta {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp .7s ease .3s both;
+}
+
+/* ── BOTTONI (identici a index.html) ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Inter', sans-serif;
+  font-size: .875rem; font-weight: 600;
+  padding: 10px 22px; border-radius: 8px;
+  border: none; cursor: pointer;
+  transition: all .2s ease; white-space: nowrap;
+  text-decoration: none;
+}
+.btn-white { background: #fff; color: var(--blu); box-shadow: 0 1px 3px rgba(0,0,0,.14); }
+.btn-white:hover { background: #f0f4f8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.14); }
+.btn-ghost { background: transparent; color: rgba(255,255,255,.78); border: 1.5px solid rgba(255,255,255,.28); }
+.btn-ghost:hover { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.5); }
+.btn-blue { background: var(--blu-chiaro); color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.btn-blue:hover { background: var(--blu-medio); transform: translateY(-1px); }
+
+/* ── STAT STRIP (come index.html) ── */
+.hero-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden; margin-top: 3.5rem;
+  animation: fadeUp .7s ease .42s both;
+}
+.hero-stat { background: #fff; padding: 1.4rem; text-align: center; }
+.stat-num {
+  font-size: 1.9rem; font-weight: 800; color: var(--blu);
+  letter-spacing: -.04em; line-height: 1; margin-bottom: 3px;
+}
+.stat-label { font-size: .75rem; color: var(--muted-fg); font-weight: 500; }
+
+/* ── SEZIONI ── */
+main { padding-top: var(--nav-h); }
+.section { padding: 5rem 1.5rem; }
+.section-white { background: #fff; }
+.section-gray  { background: #f8fafc; }
+.section-dark  { background: var(--blu-scuro); }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--blu-chiaro); margin-bottom: 7px;
+}
+.section-label-light { color: rgba(123,184,232,.9); }
+/* Titoli sezione: Libre Baskerville come Xarenios */
+.section-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+  font-weight: 700; color: var(--blu);
+  letter-spacing: -.015em; line-height: 1.13; margin-bottom: 10px;
+}
+.section-title-light { color: #fff; }
+.section-desc {
+  font-size: 1rem; color: var(--muted-fg);
+  max-width: 580px; line-height: 1.65; margin-bottom: 2.8rem;
+}
+.section-desc-light { color: rgba(255,255,255,.48); }
+
+/* ── CARD DIDATTICA (stile exp-card di index.html) ── */
+.exp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.2rem; }
+.exp-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  transition: box-shadow .25s, transform .25s;
+  display: flex; flex-direction: column;
+}
+.exp-card:hover { box-shadow: 0 10px 28px rgba(26,58,92,.12); transform: translateY(-3px); }
+.exp-card-head {
+  background: linear-gradient(135deg, var(--blu) 0%, var(--blu-medio) 100%);
+  padding: 1.1rem 1.2rem 1rem;
+  display: flex; align-items: flex-start; gap: 11px;
+}
+.exp-badge {
+  background: rgba(192,57,43,.82); color: #fff;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 9.5px; font-weight: 700; letter-spacing: 1.5px;
+  padding: 3px 9px; border-radius: 4px;
+  flex-shrink: 0; margin-top: 2px;
+}
+.exp-card-title { font-size: .875rem; font-weight: 700; color: #fff; line-height: 1.35; }
+.exp-body { padding: 1.1rem 1.2rem; flex: 1; display: flex; flex-direction: column; gap: 11px; }
+.exp-desc { font-size: .82rem; color: var(--muted-fg); line-height: 1.65; flex: 1; }
+.exp-desc strong { color: var(--testo); font-weight: 600; }
+.exp-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.exp-tag {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 9.5px; font-weight: 500;
+  color: var(--blu-chiaro); background: var(--grigio-sfondo);
+  border: 1px solid var(--grigio-tab);
+  padding: 2px 8px; border-radius: 4px;
+}
+.exp-foot {
+  padding: .7rem 1.2rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: #fafcff;
+}
+.exp-link {
+  font-size: .79rem; font-weight: 600; color: var(--blu-chiaro);
+  display: flex; align-items: center; gap: 5px;
+  transition: color .15s, gap .15s;
+}
+.exp-link:hover { color: var(--blu); gap: 8px; }
+.exp-link svg { width: 13px; height: 13px; }
+
+/* ── ARTE & SCIENZA — sezione scura con card foto ── */
+.art-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;
+  max-width: 1100px; margin: 0 auto;
+}
+.art-card {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius); min-height: 280px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.06);
+  transition: box-shadow .3s, transform .3s;
+}
+.art-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,.45); transform: translateY(-4px); }
+.art-card img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .5s, filter .5s;
+  filter: brightness(.68) saturate(.8);
+}
+.art-card:hover img { transform: scale(1.05); filter: brightness(.78) saturate(1); }
+.art-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(15,36,64,.92) 0%, rgba(15,36,64,.3) 55%, transparent 100%);
+}
+.art-card-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px 22px; }
+.art-card-label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 9px; font-weight: 600; letter-spacing: 2.5px;
+  text-transform: uppercase; color: #7bb8e8;
+  display: block; margin-bottom: 7px;
+}
+.art-card-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.1rem; font-weight: 700; color: #fff;
+  line-height: 1.3; margin-bottom: 7px;
+}
+.art-card-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: .8rem; font-style: italic;
+  color: rgba(255,255,255,.58); line-height: 1.55;
+}
+
+/* Note panel — stile rias-note di index.html */
+.note-panel {
+  background: var(--blu); color: rgba(255,255,255,.88);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.6rem;
+  border-left: 4px solid var(--accento);
+  font-size: .9rem; line-height: 1.7;
+  margin-top: 2rem;
+}
+.note-panel strong { color: #fff; }
+
+/* ── POESIE ── */
+.poem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+.poem-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius);
+  border-top: 3px solid var(--blu-chiaro);
+  padding: 1.5rem; display: flex; flex-direction: column; gap: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  transition: box-shadow .2s, transform .2s;
+}
+.poem-card:hover { box-shadow: 0 6px 18px rgba(26,58,92,.1); transform: translateY(-2px); }
+.poem-num {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 9px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accento);
+}
+.poem-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--blu); line-height: 1.3;
+}
+.poem-excerpt {
+  font-family: 'Libre Baskerville', serif;
+  font-size: .85rem; font-style: italic;
+  color: var(--muted-fg); line-height: 1.85; flex: 1;
+}
+.poem-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.poem-tag {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 9.5px; font-weight: 500; color: var(--blu-chiaro);
+  background: var(--grigio-sfondo); border: 1px solid var(--grigio-tab);
+  padding: 2px 8px; border-radius: 4px;
+}
+
+/* ── FOOTER (identico a index.html) ── */
+footer { background: #0f172a; color: #cbd5e1; padding: 3rem 1.5rem; }
+.ft-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem;
+}
+.ft-brand-name {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700; font-size: 1.05rem; color: #fff;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 7px;
+}
+.ft-brand-badge {
+  background: var(--blu); color: #fff;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 9px; font-weight: 600; letter-spacing: 1.5px;
+  padding: 2px 7px; border-radius: 3px;
+}
+.ft-desc { font-size: .8rem; color: #475569; line-height: 1.65; }
+.ft-col-title { font-size: .8rem; font-weight: 700; color: #fff; margin-bottom: 11px; }
+.ft-links { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.ft-links a { font-size: .8rem; color: #475569; transition: color .15s; }
+.ft-links a:hover { color: #94a3b8; }
+.ft-bottom {
+  max-width: 1100px; margin: 2.2rem auto 0;
+  padding-top: 1.3rem; border-top: 1px solid #1e293b;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: .75rem; color: #334155;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .art-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  .hero-stats { grid-template-columns: repeat(3, 1fr); }
+  .ft-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .ft-bottom { flex-direction: column; gap: 6px; text-align: center; }
+  .exp-grid, .poem-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ NAV ════════ -->
+<header>
+  <nav>
+    <a href="#home" class="nav-logo">
+      <span class="nav-badge">LG·LAB</span>
+      Lorenzo Gandini
+    </a>
+    <ul class="nav-links">
+      <li><a href="#didattica">Didattica</a></li>
+      <li><a href="https://xarenios-science.art/" target="_blank" rel="noopener">Divulgazione</a></li>
+      <li><a href="https://xarenios-science.art/" target="_blank" rel="noopener">Arte &amp; Scienza</a></li>
+      <li><a href="#poesie">Poesie</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero" id="home">
+  <canvas id="heroCanvas"></canvas>
+
+  <div class="hero-inner">
+    <div class="hero-chip">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+      </svg>
+      Fisica · Arte · Poesia
+    </div>
+
+    <h1>Lorenzo<br><span>Gandini</span></h1>
+
+    <p class="hero-sub">Dove il laboratorio diventa poesia e la scienza incontra l'arte contemporanea</p>
+
+    <div class="hero-cta">
+      <a href="https://xarenios-science.art/" target="_blank" rel="noopener" class="btn btn-white">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+        </svg>
+        Arte &amp; Scienza
+      </a>
+      <a href="index.html" class="btn btn-ghost">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+        </svg>
+        Didattica
+      </a>
+      <a href="#poesie" class="btn btn-ghost">Poesie</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Schede Lab</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Arte &amp; Scienza</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num">6+</div>
+        <div class="stat-label">Poesie</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════ DIDATTICA ════════ -->
+<section class="section section-gray" id="didattica">
+  <div class="section-inner">
+    <div class="section-label">Laboratorio di Fisica</div>
+    <h2 class="section-title">Didattica di<br>Laboratorio</h2>
+    <p class="section-desc">Quattro esperienze dalla misura alla verifica di leggi fisiche. Ogni scheda guida dalla teoria all'analisi statistica dei dati.</p>
+
+    <div class="exp-grid">
+
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 01</span>
+          <span class="exp-card-title">Misure Dirette e Confronto di Strumenti</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc">Righello vs calibro ventesimale. Formula: <strong>E% = (Δx/|x|)×100</strong>. Errori casuali e sistematici.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">misura</span>
+            <span class="exp-tag">errore</span>
+            <span class="exp-tag">calibro</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="index.html" class="exp-link">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span style="font-family:'Source Code Pro',monospace;font-size:9.5px;color:var(--muted-fg)">2 pag.</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 02</span>
+          <span class="exp-card-title">Misura del Periodo del Pendolo</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc">Metodo analogico e digitale. <strong>T = T₁₀/10</strong>, semi-dispersione da 5 misure. Confronto metodi.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">pendolo</span>
+            <span class="exp-tag">periodo</span>
+            <span class="exp-tag">statistica</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="index.html" class="exp-link">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span style="font-family:'Source Code Pro',monospace;font-size:9.5px;color:var(--muted-fg)">2 pag.</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 03</span>
+          <span class="exp-card-title">Verifica Sperimentale: P = g·m</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc">Bilancia + dinamometro. Determinazione sperimentale di g. Confronto con <strong>g = 9,81 N/kg</strong>.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">forza-peso</span>
+            <span class="exp-tag">g</span>
+            <span class="exp-tag">verifica</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="index.html" class="exp-link">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span style="font-family:'Source Code Pro',monospace;font-size:9.5px;color:var(--muted-fg)">2 pag.</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-head">
+          <span class="exp-badge">EXP 04</span>
+          <span class="exp-card-title">Verifica A·h = V = costante</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-desc">Cilindri di diametro diverso. <strong>ΔA/A = 2·Δd/d</strong>. Grafici: iperbole, parabola, retta.</p>
+          <div class="exp-tags">
+            <span class="exp-tag">volume</span>
+            <span class="exp-tag">grafico</span>
+            <span class="exp-tag">propagazione</span>
+          </div>
+        </div>
+        <div class="exp-foot">
+          <a href="index.html" class="exp-link">
+            Apri scheda
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span style="font-family:'Source Code Pro',monospace;font-size:9.5px;color:var(--muted-fg)">2 pag.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:2.5rem;">
+      <a href="index.html" class="btn btn-blue">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+        Vai a tutte le schede
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════ ARTE E SCIENZA ════════ -->
+<section class="section section-dark" id="arte-scienza">
+  <div class="section-inner">
+    <div class="section-label section-label-light">Blog</div>
+    <h2 class="section-title section-title-light">Arte &amp;<br>Scienza</h2>
+    <p class="section-desc section-desc-light">Quando creatività e rigore scientifico si incontrano, nasce qualcosa che né l'arte né la scienza da soli possono creare.</p>
+  </div>
+
+  <div class="art-grid" style="padding:0 1.5rem;">
+
+    <div class="art-card">
+      <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&auto=format&fit=crop" alt="Arte Rinascimentale">
+      <div class="art-card-overlay"></div>
+      <div class="art-card-body">
+        <span class="art-card-label">Geometria · Storia dell'Arte</span>
+        <div class="art-card-title">La Geometria nell'Arte Rinascimentale</div>
+        <div class="art-card-text">Come i principi matematici guidavano i grandi maestri del Rinascimento verso la perfezione formale.</div>
+      </div>
+    </div>
+
+    <div class="art-card">
+      <img src="https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=800&auto=format&fit=crop" alt="Musica e Fisica">
+      <div class="art-card-overlay"></div>
+      <div class="art-card-body">
+        <span class="art-card-label">Acustica · Composizione</span>
+        <div class="art-card-title">Musica e Fisica Acustica</div>
+        <div class="art-card-text">L'armonia matematica nascosta nelle composizioni musicali di ogni epoca.</div>
+      </div>
+    </div>
+
+    <div class="art-card">
+      <img src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?w=800&auto=format&fit=crop" alt="Colore e Luce">
+      <div class="art-card-overlay"></div>
+      <div class="art-card-body">
+        <span class="art-card-label">Ottica · Arte Visiva</span>
+        <div class="art-card-title">Colore e Luce</div>
+        <div class="art-card-text">L'ottica fisica come fondamento dell'arte visiva moderna e della percezione contemporanea.</div>
+      </div>
+    </div>
+
+    <div class="art-card">
+      <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop" alt="Architettura">
+      <div class="art-card-overlay"></div>
+      <div class="art-card-body">
+        <span class="art-card-label">Statica · Architettura</span>
+        <div class="art-card-title">Architettura e Statica</div>
+        <div class="art-card-text">I principi fisici che permettono la realizzazione di strutture monumentali e bellissime.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-inner" style="margin-top:2.2rem;">
+    <div class="note-panel">
+      <strong>Arte e scienza non sono mondi separati,</strong> ma facce della stessa medaglia. La matematica nasconde simmetrie che incantano l'occhio; la fisica svela i segreti della luce che gli artisti usano per emozionare. Entrambe cercano di comprendere la realtà, ciascuna con il proprio linguaggio.
+      <span style="display:block;margin-top:12px;">
+        <a href="https://xarenios-science.art/" target="_blank" rel="noopener" style="color:#7bb8e8;font-weight:600;display:inline-flex;align-items:center;gap:6px;">
+          Visita il blog Xarenios — Art &amp; Science
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════ POESIE ════════ -->
+<section class="section section-white" id="poesie">
+  <div class="section-inner">
+    <div class="section-label">Scrittura</div>
+    <h2 class="section-title">Poesie</h2>
+    <p class="section-desc">Versi che danzano tra equazioni e stelle, dove la scienza incontra l'anima.</p>
+
+    <div class="poem-grid">
+
+      <div class="poem-card">
+        <span class="poem-num">Poesia · 01</span>
+        <div class="poem-title">La Danza dei Fotoni</div>
+        <p class="poem-excerpt">Luce che danza nel vuoto,<br>particelle che sono onde,<br>mistero che sfida la mente,<br>bellezza che abbraccia l'infinito.</p>
+        <div class="poem-tags"><span class="poem-tag">fisica</span><span class="poem-tag">luce</span><span class="poem-tag">quantistica</span></div>
+      </div>
+
+      <div class="poem-card">
+        <span class="poem-num">Poesia · 02</span>
+        <div class="poem-title">Gravità</div>
+        <p class="poem-excerpt">Forza invisibile che tutto attrae,<br>curva lo spazio, piega il tempo,<br>tiene i pianeti nelle loro orbite,<br>e i nostri piedi sulla terra.</p>
+        <div class="poem-tags"><span class="poem-tag">cosmologia</span><span class="poem-tag">spazio</span><span class="poem-tag">gravità</span></div>
+      </div>
+
+      <div class="poem-card">
+        <span class="poem-num">Poesia · 03</span>
+        <div class="poem-title">L'Equazione della Bellezza</div>
+        <p class="poem-excerpt">Nelle formule si cela poesia,<br>simmetria che incanta l'occhio,<br>eleganza di un teorema,<br>arte nascosta nei numeri.</p>
+        <div class="poem-tags"><span class="poem-tag">matematica</span><span class="poem-tag">bellezza</span><span class="poem-tag">simmetria</span></div>
+      </div>
+
+      <div class="poem-card">
+        <span class="poem-num">Poesia · 04</span>
+        <div class="poem-title">Il Laboratorio</div>
+        <p class="poem-excerpt">Tra provette e strumenti,<br>si svela il segreto del mondo,<br>ogni esperimento una domanda,<br>ogni risultato un nuovo inizio.</p>
+        <div class="poem-tags"><span class="poem-tag">scienza</span><span class="poem-tag">laboratorio</span><span class="poem-tag">scoperta</span></div>
+      </div>
+
+      <div class="poem-card">
+        <span class="poem-num">Poesia · 05</span>
+        <div class="poem-title">Onde Sonore</div>
+        <p class="poem-excerpt">Vibrazioni nell'aria,<br>armonie che toccano l'anima,<br>fisica che diventa musica,<br>scienza che diventa emozione.</p>
+        <div class="poem-tags"><span class="poem-tag">acustica</span><span class="poem-tag">musica</span><span class="poem-tag">onde</span></div>
+      </div>
+
+      <div class="poem-card">
+        <span class="poem-num">Poesia · 06</span>
+        <div class="poem-title">Stelle Lontane</div>
+        <p class="poem-excerpt">Luce viaggiata per millenni,<br>messaggera di mondi scomparsi,<br>ogni stella un capitolo scritto<br>nella grammatica dell'universo.</p>
+        <div class="poem-tags"><span class="poem-tag">astronomia</span><span class="poem-tag">stelle</span><span class="poem-tag">tempo</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  <div class="ft-inner">
+    <div>
+      <div class="ft-brand-name">
+        <span class="ft-brand-badge">LG</span>
+        Lorenzo Gandini
+      </div>
+      <p class="ft-desc">Insegnante di Fisica. Esploratore dei confini tra scienza, arte e poesia. Questo sito raccoglie le schede di laboratorio, i post del blog e i versi scritti lungo il percorso.</p>
+    </div>
+    <div>
+      <div class="ft-col-title">Sezioni</div>
+      <ul class="ft-links">
+        <li><a href="index.html">Didattica di Laboratorio</a></li>
+        <li><a href="https://xarenios-science.art/" target="_blank" rel="noopener">Arte &amp; Scienza Blog</a></li>
+        <li><a href="#poesie">Poesie</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-col-title">Schede Lab</div>
+      <ul class="ft-links">
+        <li><a href="index.html">EXP 01 — Misure dirette</a></li>
+        <li><a href="index.html">EXP 02 — Pendolo</a></li>
+        <li><a href="index.html">EXP 03 — Forza peso</a></li>
+        <li><a href="index.html">EXP 04 — Volume</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <span>Lorenzo Gandini · Fisica, Arte &amp; Poesia · 2025</span>
+    <span style="font-family:'Source Code Pro',monospace;letter-spacing:1px;">LG·LAB</span>
+  </div>
+</footer>
+
+
+<!-- ════════ CANVAS: particelle fisica/arte ════════ -->
+<script>
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx    = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth  || window.innerWidth;
+    canvas.height = canvas.offsetHeight || window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // 3 tipi di particelle:
+  // 0 = orbita atomica (lab) → blu chiaro  #7bb8e8
+  // 1 = croce/misura         → accento rosso rgba(192,57,43)
+  // 2 = dash calligrafico    → bianco tenue
+  const N = 55;
+  const pts = Array.from({length: N}, () => ({
+    x:  Math.random(), y:  Math.random(),
+    vx: (Math.random() - 0.5) * 0.00015,
+    vy: (Math.random() - 0.5) * 0.0001,
+    type:  Math.floor(Math.random() * 3),
+    alpha: Math.random() * 0.22 + 0.06,
+    size:  Math.random() * 0.014 + 0.004,
+    phase: Math.random() * Math.PI * 2,
+    freq:  Math.random() * 0.4  + 0.1,
+  }));
+
+  // Onde sinusoidali (fisica delle onde)
+  const waves = Array.from({length: 4}, () => ({
+    amp:   Math.random() * 0.07 + 0.03,
+    freq:  Math.random() * 2.5  + 1,
+    phase: Math.random() * Math.PI * 2,
+    speed: (Math.random() - 0.5) * 0.002,
+    y:     Math.random() * 0.8 + 0.1,
+    alpha: Math.random() * 0.06 + 0.02,
+  }));
+
+  let t = 0;
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Onde
+    waves.forEach(w => {
+      w.phase += w.speed;
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 4) {
+        const y = (w.y + Math.sin(x / W * Math.PI * 2 * w.freq + w.phase + t * 0.3) * w.amp) * H;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(123,184,232,${w.alpha})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    // Particelle
+    pts.forEach(p => {
+      p.x = (p.x + p.vx + 1) % 1;
+      p.y = (p.y + p.vy + 1) % 1;
+      const px = p.x * W, py = p.y * H;
+      const sz = p.size * Math.min(W, H);
+
+      if (p.type === 0) {
+        // orbita — blu chiaro (palette index.html)
+        ctx.strokeStyle = `rgba(123,184,232,${p.alpha})`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.arc(px, py, sz, p.phase + t * p.freq * 0.02, p.phase + t * p.freq * 0.02 + Math.PI * 1.4);
+        ctx.stroke();
+        ctx.fillStyle = `rgba(123,184,232,${p.alpha * 1.2})`;
+        ctx.beginPath();
+        ctx.arc(px, py, sz * 0.12, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (p.type === 1) {
+        // croce — accento rosso (palette index.html)
+        ctx.strokeStyle = `rgba(192,57,43,${p.alpha * 0.75})`;
+        ctx.lineWidth = 0.9;
+        const h = sz * 0.9;
+        ctx.beginPath();
+        ctx.moveTo(px - h, py); ctx.lineTo(px + h, py);
+        ctx.moveTo(px, py - h); ctx.lineTo(px, py + h);
+        ctx.stroke();
+      } else {
+        // dash calligrafico — bianco tenue (eco Xarenios)
+        ctx.strokeStyle = `rgba(255,255,255,${p.alpha * 0.55})`;
+        ctx.lineWidth = 0.6;
+        const len = sz * 2.2;
+        const ang = p.phase + t * 0.008;
+        ctx.beginPath();
+        ctx.moveTo(px - Math.cos(ang) * len, py - Math.sin(ang) * len);
+        ctx.lineTo(px + Math.cos(ang) * len, py + Math.sin(ang) * len);
+        ctx.stroke();
+      }
+    });
+
+    t += 0.016;
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+})();
+</script>
+
+</body>
+</html>

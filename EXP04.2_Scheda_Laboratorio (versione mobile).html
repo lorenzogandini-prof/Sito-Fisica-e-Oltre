@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXP 04 – Proporzionalità Inversa e Volume del Becher</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Source+Code+Pro:wght@400;600&display=swap');
+
+  :root {
+    --blu: #1a3a5c;
+    --blu-chiaro: #2e6da4;
+    --accento: #c0392b;
+    --grigio-linea: #b0bec5;
+    --grigio-sfondo: #f0f4f8;
+    --grigio-tabella: #dce8f3;
+    --testo: #1c2a38;
+    --bianco: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 10.5pt;
+    color: var(--testo);
+    background: #e8edf2;
+    padding: 20px;
+  }
+
+  .pagina {
+    background: var(--bianco);
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 14mm 15mm 12mm 15mm;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  }
+
+  /* INTESTAZIONE */
+  .intestazione {
+    border-top: 4px solid var(--blu);
+    border-bottom: 2px solid var(--blu-chiaro);
+    padding: 8px 0 7px 0;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .intestazione .codice {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--accento);
+    letter-spacing: 1px;
+  }
+  .intestazione .titolo-principale {
+    font-size: 13.5pt;
+    font-weight: 600;
+    color: var(--blu);
+    text-align: center;
+    flex: 1;
+    padding: 0 10px;
+  }
+  .intestazione .data-nome {
+    font-size: 8.5pt;
+    color: #666;
+    text-align: right;
+    line-height: 1.7;
+    min-width: 90px;
+  }
+  .intestazione .data-nome span {
+    display: block;
+    border-bottom: 1px solid var(--grigio-linea);
+    min-width: 80px;
+  }
+
+  /* SEZIONI */
+  .sezione {
+    margin-bottom: 9px;
+  }
+  .sezione-titolo {
+    background: var(--blu);
+    color: var(--bianco);
+    font-size: 8.5pt;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    margin-bottom: 5px;
+  }
+  .sezione-titolo.secondario {
+    background: var(--blu-chiaro);
+    font-size: 8pt;
+    letter-spacing: 1px;
+  }
+  .sezione-corpo {
+    padding: 0 4px;
+  }
+
+  /* OBIETTIVO */
+  .obiettivo-testo {
+    font-size: 9.5pt;
+    line-height: 1.55;
+    color: var(--testo);
+    padding: 4px 6px;
+    border-left: 3px solid var(--accento);
+    background: #fef9f9;
+  }
+
+  /* PRINCIPI TEORICI */
+  .principi-griglia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .principio-box {
+    background: var(--grigio-sfondo);
+    border: 1px solid var(--grigio-tabella);
+    padding: 5px 7px;
+    border-radius: 2px;
+  }
+  .principio-box .label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 7.5pt;
+    font-weight: 600;
+    color: var(--accento);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 2px;
+  }
+  .principio-box .formula {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10pt;
+    color: var(--blu);
+    text-align: center;
+    padding: 3px 0;
+    border-bottom: 1px dashed var(--grigio-linea);
+    margin-bottom: 3px;
+  }
+  .principio-box .desc {
+    font-size: 8.5pt;
+    color: #444;
+    line-height: 1.4;
+  }
+
+  /* MATERIALI */
+  .materiali-griglia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .strumento-riga {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--grigio-linea);
+    padding: 3px 0;
+    gap: 4px;
+    font-size: 8.5pt;
+  }
+  .strumento-nome {
+    flex: 0 0 120px;
+    font-weight: 600;
+    color: var(--blu);
+  }
+  .campo-campo {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex: 1;
+  }
+  .campo-campo label {
+    font-size: 7.5pt;
+    color: #777;
+    white-space: nowrap;
+  }
+  .linea-vuota {
+    flex: 1;
+    border-bottom: 1px solid #bbb;
+    min-width: 28px;
+    height: 14px;
+  }
+  .unita {
+    font-size: 7.5pt;
+    color: #999;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  /* Elenco materiali senza strumenti */
+  .materiali-lista {
+    columns: 2;
+    list-style: none;
+    padding: 0;
+    gap: 4px;
+  }
+  .materiali-lista li {
+    font-size: 8.5pt;
+    padding: 2px 0 2px 12px;
+    border-bottom: 1px solid #e8ecef;
+    position: relative;
+  }
+  .materiali-lista li::before {
+    content: '›';
+    position: absolute;
+    left: 2px;
+    color: var(--accento);
+    font-weight: 700;
+  }
+
+  /* PROCEDIMENTO */
+  .step-lista {
+    list-style: none;
+    padding: 0;
+    counter-reset: steps;
+  }
+  .step-lista li {
+    counter-increment: steps;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    padding: 3px 0;
+    border-bottom: 1px solid #edf1f5;
+    font-size: 8.5pt;
+    line-height: 1.45;
+  }
+  .step-lista li::before {
+    content: counter(steps);
+    background: var(--blu-chiaro);
+    color: white;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 7.5pt;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* TABELLA DATI */
+  table.dati {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8pt;
+    margin-top: 2px;
+  }
+  table.dati th {
+    background: var(--blu);
+    color: white;
+    padding: 4px 5px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 8pt;
+    letter-spacing: 0.3px;
+    border: 1px solid var(--blu);
+  }
+  table.dati th .unita-th {
+    display: block;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 7pt;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-top: 1px;
+  }
+  table.dati td {
+    border: 1px solid var(--grigio-linea);
+    padding: 0;
+    height: 22px;
+    vertical-align: middle;
+  }
+  table.dati td.contenitore {
+    background: var(--grigio-sfondo);
+    font-size: 8pt;
+    font-weight: 600;
+    color: var(--blu);
+    padding: 3px 5px;
+    width: 32%;
+  }
+  table.dati tr:nth-child(even) td.contenitore {
+    background: #e3ecf5;
+  }
+  table.dati td.vuota {
+    background: white;
+  }
+  table.dati tr:nth-child(even) td.vuota {
+    background: #f9fbfd;
+  }
+  table.dati tr.errori-row th {
+    background: #5a7a9a;
+    font-size: 7.5pt;
+  }
+  table.dati td.media-row {
+    background: #dce8f3;
+    font-style: italic;
+    color: #1a3a5c;
+    font-size: 7.5pt;
+    padding: 3px 5px;
+    font-weight: 600;
+  }
+
+  /* GRAFICI */
+  .grafici-griglia {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 7px;
+    margin-top: 2px;
+  }
+  .grafico-box {
+    border: 1px solid var(--grigio-linea);
+    background: white;
+  }
+  .grafico-titolo {
+    background: var(--blu-chiaro);
+    color: white;
+    font-size: 8pt;
+    font-weight: 600;
+    text-align: center;
+    padding: 3px 4px;
+    font-family: 'Source Code Pro', monospace;
+    letter-spacing: 0.5px;
+  }
+  .grafico-area {
+    position: relative;
+    height: 115px;
+    margin: 4px;
+  }
+  svg.griglia {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* OSSERVAZIONI */
+  .riga-scrittura {
+    border-bottom: 1px solid var(--grigio-linea);
+    height: 18px;
+    margin-bottom: 1px;
+    width: 100%;
+  }
+
+  /* CONCLUSIONI */
+  .conclusioni-domande {
+    list-style: none;
+    padding: 0;
+  }
+  .conclusioni-domande li {
+    font-size: 8.5pt;
+    padding: 3px 0 1px 0;
+    border-bottom: 1px dashed #d0dbe6;
+    color: var(--blu);
+  }
+  .conclusioni-domande li .risposta-linea {
+    border-bottom: 1px solid var(--grigio-linea);
+    display: block;
+    height: 16px;
+    margin-top: 2px;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .pagina { box-shadow: none; margin: 0; width: 100%; padding: 10mm 12mm; }
+    .pagina + .pagina { page-break-before: always; margin-top: 0; }
+  }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE
+  ═══════════════════════════════════════════ */
+  @media (max-width: 700px) {
+    body { padding: 0; background: var(--bianco); font-size: 13pt; }
+    .pagina { width: 100%; min-height: unset; padding: 16px 14px 20px 14px; box-shadow: none; border-radius: 0; margin-top: 0; }
+    .pagina + .pagina { margin-top: 0; border-top: 4px solid var(--grigio-tabella); }
+
+    .intestazione { flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 0 8px 0; }
+    .intestazione .codice { font-size: 13pt; }
+    .intestazione .titolo-principale { font-size: 15pt; text-align: left; padding: 0; }
+    .intestazione .data-nome { text-align: left; font-size: 11pt; line-height: 2.2; }
+    .intestazione .data-nome span { min-width: 120px; }
+
+    .sezione { margin-bottom: 16px; }
+    .sezione-titolo { font-size: 11pt; padding: 5px 10px; letter-spacing: 0.8px; }
+    .sezione-titolo.secondario { font-size: 10pt; }
+    .sezione-corpo { padding: 0 2px; }
+
+    .obiettivo-testo { font-size: 12pt; line-height: 1.6; padding: 8px 10px; }
+
+    .principi-griglia { grid-template-columns: 1fr; gap: 8px; }
+    .principio-box { padding: 8px 10px; }
+    .principio-box .label { font-size: 10pt; }
+    .principio-box .formula { font-size: 12pt; padding: 6px 0; }
+    .principio-box .desc { font-size: 11pt; line-height: 1.5; }
+
+    .materiali-griglia { grid-template-columns: 1fr; gap: 10px; }
+    .strumento-riga { flex-wrap: wrap; gap: 6px; padding: 6px 0; font-size: 11pt; }
+    .strumento-nome { flex: 0 0 100%; font-size: 12pt; margin-bottom: 2px; }
+    .campo-campo label { font-size: 10pt; }
+    .unita { font-size: 10pt; }
+    .linea-vuota { min-width: 60px; }
+    .materiali-lista li { font-size: 11pt; padding: 5px 0 5px 16px; }
+
+    .step-lista li { font-size: 11pt; line-height: 1.6; padding: 6px 0; gap: 10px; }
+    .step-lista li::before { min-width: 24px; height: 24px; font-size: 10pt; }
+
+    .tabella-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table.dati { font-size: 10pt; min-width: 480px; }
+    table.dati th { font-size: 10pt; padding: 6px 6px; }
+    table.dati th .unita-th { font-size: 9pt; }
+    table.dati td { height: 30px; }
+    table.dati td.contenitore { font-size: 10pt; padding: 5px 7px; }
+    table.dati td.media-row { font-size: 10pt; padding: 5px 7px; }
+
+    .grafico-box { margin-bottom: 10px; }
+    .grafico-titolo { font-size: 11pt; padding: 5px 8px; }
+
+    .riga-scrittura { height: 28px; margin-bottom: 2px; }
+
+    .conclusioni-domande li { font-size: 11pt; padding: 6px 0 2px 0; }
+    .conclusioni-domande li .risposta-linea { height: 26px; margin-top: 4px; }
+
+    div[style*="grid-template-columns:1fr 1fr"],
+    div[style*="grid-template-columns: 1fr 1fr"] {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 14px !important;
+    }
+
+    div[style*="border-bottom: 2px solid var(--blu-chiaro)"] {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 4px !important;
+      padding-bottom: 8px !important;
+    }
+    div[style*="border-bottom: 2px solid var(--blu-chiaro)"] span { font-size: 11pt !important; }
+  }
+
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <!-- INTESTAZIONE -->
+  <div class="intestazione">
+    <div class="codice">EXP 04</div>
+    <div class="titolo-principale">Proporzionalità Inversa e Volume del Becher</div>
+    <div class="data-nome">
+      Nome: <span>&nbsp;</span>
+      Data: <span>&nbsp;</span>
+      Classe: <span>&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- OBIETTIVO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Obiettivo</div>
+    <div class="sezione-corpo">
+      <p class="obiettivo-testo">
+        Verificare empiricamente la relazione di <strong>proporzionalità inversa</strong> tra l'area della base (<em>A</em>) e l'altezza del liquido (<em>h</em>) in cilindri di diverso diametro, mantenendo costante il volume (<em>V</em>) dell'acqua travasata. Mostrare che il prodotto <em>A · h = V</em> rimane costante e rappresentare graficamente la relazione iperbolica tra le grandezze.
+      </p>
+    </div>
+  </div>
+
+  <!-- PRINCIPI TEORICI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Principi Teorici</div>
+    <div class="sezione-corpo">
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="label">Proporzionalità Inversa</div>
+          <div class="formula">x · y = k = cost.</div>
+          <div class="desc">Al raddoppiare di <em>x</em>, <em>y</em> si dimezza. Il prodotto rimane costante. Il grafico nel piano cartesiano è un ramo di <strong>iperbole equilatera</strong>.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Volume del Becher</div>
+          <div class="formula">V = A · h = π · (d/2)² · h</div>
+          <div class="desc">Con <em>V</em> costante, <em>A</em> e <em>h</em> sono inversamente proporzionali. L'area dipende dal quadrato del diametro: <em>A ∝ d²</em>.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Calcolo dell'Area della Base</div>
+          <div class="formula">A = π · r² = π · (d/2)²</div>
+          <div class="desc">Il raggio <em>r = d/2</em> si ottiene dal diametro interno <em>d</em> misurato con il <strong>calibro</strong>. L'errore relativo su <em>A</em> è il <em>doppio</em> dell'errore relativo su <em>d</em>.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Propagazione degli Errori</div>
+          <div class="formula">ΔA/A = 2 · Δd/d</div>
+          <div class="desc">L'errore su <em>V<sub>calc</sub></em> si stima con la <strong>semi-dispersione massima</strong>: <em>ΔV = (V<sub>max</sub> – V<sub>min</sub>) / 2</em>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALI E STRUMENTI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Materiali e Strumenti</div>
+    <div class="sezione-corpo">
+      <div class="materiali-griglia">
+
+        <!-- Colonna sinistra: materiali di laboratorio -->
+        <div>
+          <div class="sezione-titolo secondario" style="margin-bottom:4px;">Materiali</div>
+          <ul class="materiali-lista">
+            <li>Becher graduato da 100 mL</li>
+            <li>Becher graduato da 250 mL</li>
+            <li>Becher graduato da 1000 mL</li>
+            <li>Cristallizzatore piccolo</li>
+            <li>Cristallizzatore grande</li>
+            <li>Becher da 3000 mL <em>(facolt.)</em></li>
+            <li>Acqua</li>
+          </ul>
+        </div>
+
+        <!-- Colonna destra: strumenti con portata/sensibilità -->
+        <div>
+          <div class="sezione-titolo secondario" style="margin-bottom:4px;">Strumenti di Misura</div>
+
+          <div class="strumento-riga">
+            <span class="strumento-nome">Calibro</span>
+            <div class="campo-campo">
+              <label>Portata:</label>
+              <div class="linea-vuota"></div>
+              <span class="unita">mm</span>
+            </div>
+            <div class="campo-campo" style="margin-left:4px;">
+              <label>Sens.:</label>
+              <div class="linea-vuota"></div>
+              <span class="unita">mm</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCEDIMENTO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Procedimento</div>
+    <div class="sezione-corpo">
+      <ol class="step-lista">
+        <li>Misura con il calibro il DIAMETRO INTERNO (d) di ciascun contenitore e registra il valore nella tabella.</li>
+        <li>Versa una quantità fissa di acqua nel becher da 100 mL e annota il VOLUME INIZIALE in mL. Questo è la costante k.</li>
+        <li>Leggi e registra l'ALTEZZA (h) del livello dell'acqua sulla scala graduata del becher da 100 mL.</li>
+        <li>Travasa la stessa acqua nel becher successivo. Leggi e registra la nuova altezza h. Ripeti per tutti i contenitori.</li>
+        <li>Calcola l'AREA DELLA BASE per ciascun contenitore: A = π · (d/2)².</li>
+        <li>Calcola il VOLUME V_calc = A · h per ogni contenitore e verifica che rimanga approssimativamente costante.</li>
+        <li>Calcola V_medio e la semi-dispersione massima per stimare l'incertezza sul volume.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- TABELLA DATI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Raccolta Dati e Calcoli</div>
+    <div class="sezione-corpo">
+      <div class="tabella-scroll"><table class="dati">
+        <thead>
+          <tr>
+            <th style="width:28%">Contenitore</th>
+            <th>h misurata<span class="unita-th">[mm]</span></th>
+            <th>Δh<span class="unita-th">[mm]</span></th>
+            <th>d misurato<span class="unita-th">[mm]</span></th>
+            <th>Δd<span class="unita-th">[mm]</span></th>
+            <th>A calcolata<span class="unita-th">[mm²]</span></th>
+            <th>ΔA<span class="unita-th">[mm²]</span></th>
+            <th>V<sub>calc</sub><span class="unita-th">[mm³]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="contenitore">Becher 100 mL</td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td>
+          </tr>
+          <tr>
+            <td class="contenitore">Becher 250 mL</td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td>
+          </tr>
+          <tr>
+            <td class="contenitore">Becher 1000 mL</td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td>
+          </tr>
+          <tr>
+            <td class="contenitore">Cristallizzatore piccolo</td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td>
+          </tr>
+          <tr>
+            <td class="contenitore">Cristallizzatore grande</td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td>
+          </tr>
+          <tr>
+            <td class="contenitore" style="font-style:italic; font-weight:400; color:#555;">Cil. 3000 mL (facolt.)</td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td><td class="vuota"></td>
+            <td class="vuota"></td>
+          </tr>
+          <tr>
+            <td class="media-row" colspan="7" style="text-align:right; padding-right:8px;">V<sub>medio</sub> =</td>
+            <td class="vuota" style="background:#dce8f3;"></td>
+          </tr>
+          <tr>
+            <td class="media-row" colspan="7" style="text-align:right; padding-right:8px;">ΔV (semi-disp.) =</td>
+            <td class="vuota" style="background:#dce8f3;"></td>
+          </tr>
+          <tr>
+            <td class="media-row" colspan="7" style="text-align:right; padding-right:8px;">V misurato (mL → mm³) =</td>
+            <td class="vuota" style="background:#dce8f3;"></td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+
+</div><!-- fine pagina 1 -->
+
+<!-- ═══════════════════════════ PAGINA 2 ═══════════════════════════ -->
+<div class="pagina" style="margin-top: 16px;">
+
+  <!-- mini intestazione pagina 2 -->
+  <div style="border-bottom: 2px solid var(--blu-chiaro); display:flex; justify-content:space-between; align-items:baseline; padding-bottom:5px; margin-bottom:10px;">
+    <span style="font-family:'Source Code Pro',monospace; font-size:9pt; font-weight:600; color:var(--accento);">EXP 04</span>
+    <span style="font-size:9.5pt; font-weight:600; color:var(--blu);">Rappresentazione Grafica</span>
+    <span style="font-size:8pt; color:#888;">Nome: ___________________________</span>
+  </div>
+
+  <!-- GRAFICI — layout verticale: due in alto + uno in basso centrato -->
+  <div style="display:flex; flex-direction:column; gap:8px;">
+
+    <!-- Riga 1: due grafici affiancati -->
+    <div style="display:flex; gap:8px;">
+
+      <!-- Grafico 1: h-A -->
+      <div class="grafico-box" style="flex:1;">
+        <div class="grafico-titolo">h (mm) — A (mm²)</div>
+        <div style="padding:6px 6px 4px 6px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="width:100%; display:block;">
+            <defs>
+              <pattern id="mm1" width="5" height="5" patternUnits="userSpaceOnUse">
+                <path d="M 5 0 L 0 0 0 5" fill="none" stroke="#c8dff0" stroke-width="0.4"/>
+              </pattern>
+              <pattern id="cm1" width="25" height="25" patternUnits="userSpaceOnUse">
+                <rect width="25" height="25" fill="url(#mm1)"/>
+                <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#90b8d8" stroke-width="0.8"/>
+              </pattern>
+            </defs>
+            <!-- sfondo carta millimetrata -->
+            <rect x="28" y="6" width="262" height="182" fill="url(#cm1)" stroke="#5a8ab0" stroke-width="1"/>
+            <!-- assi -->
+            <line x1="28" y1="188" x2="292" y2="188" stroke="#1a3a5c" stroke-width="1.8"/>
+            <line x1="28" y1="6" x2="28" y2="188" stroke="#1a3a5c" stroke-width="1.8"/>
+            <!-- frecce assi -->
+            <polygon points="292,188 286,184 286,192" fill="#1a3a5c"/>
+            <polygon points="28,6 24,14 32,14" fill="#1a3a5c"/>
+            <!-- label assi -->
+            <text x="293" y="195" font-size="11" fill="#1a3a5c" font-family="Georgia, serif" font-style="italic" font-weight="600">h</text>
+            <text x="14" y="10" font-size="11" fill="#1a3a5c" font-family="Georgia, serif" font-style="italic" font-weight="600">A</text>
+            <text x="18" y="196" font-size="9" fill="#777" font-family="serif">O</text>
+          </svg>
+        </div>
+        <div style="font-size:7pt; color:#666; font-style:italic; text-align:center; padding:0 4px 4px 4px;">Iperbole equilatera — A · h = k</div>
+      </div>
+
+      <!-- Grafico 2: h-d -->
+      <div class="grafico-box" style="flex:1;">
+        <div class="grafico-titolo">h (mm) — d (mm)</div>
+        <div style="padding:6px 6px 4px 6px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="width:100%; display:block;">
+            <defs>
+              <pattern id="mm2" width="5" height="5" patternUnits="userSpaceOnUse">
+                <path d="M 5 0 L 0 0 0 5" fill="none" stroke="#c8dff0" stroke-width="0.4"/>
+              </pattern>
+              <pattern id="cm2" width="25" height="25" patternUnits="userSpaceOnUse">
+                <rect width="25" height="25" fill="url(#mm2)"/>
+                <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#90b8d8" stroke-width="0.8"/>
+              </pattern>
+            </defs>
+            <rect x="28" y="6" width="262" height="182" fill="url(#cm2)" stroke="#5a8ab0" stroke-width="1"/>
+            <line x1="28" y1="188" x2="292" y2="188" stroke="#1a3a5c" stroke-width="1.8"/>
+            <line x1="28" y1="6" x2="28" y2="188" stroke="#1a3a5c" stroke-width="1.8"/>
+            <polygon points="292,188 286,184 286,192" fill="#1a3a5c"/>
+            <polygon points="28,6 24,14 32,14" fill="#1a3a5c"/>
+            <text x="293" y="195" font-size="11" fill="#1a3a5c" font-family="Georgia, serif" font-style="italic" font-weight="600">h</text>
+            <text x="14" y="10" font-size="11" fill="#1a3a5c" font-family="Georgia, serif" font-style="italic" font-weight="600">d</text>
+            <text x="18" y="196" font-size="9" fill="#777" font-family="serif">O</text>
+          </svg>
+        </div>
+        <div style="font-size:7pt; color:#666; font-style:italic; text-align:center; padding:0 4px 4px 4px;">Prop. quadratica inversa — h ∝ 1/d²</div>
+      </div>
+
+    </div><!-- fine riga 1 -->
+
+    <!-- Riga 2: grafico centrato, larghezza 50% -->
+    <div style="display:flex; justify-content:center;">
+      <div class="grafico-box" style="width:calc(50% - 4px);">
+        <div class="grafico-titolo">d (mm) — A (mm²)</div>
+        <div style="padding:6px 6px 4px 6px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="width:100%; display:block;">
+            <defs>
+              <pattern id="mm3" width="5" height="5" patternUnits="userSpaceOnUse">
+                <path d="M 5 0 L 0 0 0 5" fill="none" stroke="#c8dff0" stroke-width="0.4"/>
+              </pattern>
+              <pattern id="cm3" width="25" height="25" patternUnits="userSpaceOnUse">
+                <rect width="25" height="25" fill="url(#mm3)"/>
+                <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#90b8d8" stroke-width="0.8"/>
+              </pattern>
+            </defs>
+            <rect x="28" y="6" width="262" height="182" fill="url(#cm3)" stroke="#5a8ab0" stroke-width="1"/>
+            <line x1="28" y1="188" x2="292" y2="188" stroke="#1a3a5c" stroke-width="1.8"/>
+            <line x1="28" y1="6" x2="28" y2="188" stroke="#1a3a5c" stroke-width="1.8"/>
+            <polygon points="292,188 286,184 286,192" fill="#1a3a5c"/>
+            <polygon points="28,6 24,14 32,14" fill="#1a3a5c"/>
+            <text x="293" y="195" font-size="11" fill="#1a3a5c" font-family="Georgia, serif" font-style="italic" font-weight="600">d</text>
+            <text x="14" y="10" font-size="11" fill="#1a3a5c" font-family="Georgia, serif" font-style="italic" font-weight="600">A</text>
+            <text x="18" y="196" font-size="9" fill="#777" font-family="serif">O</text>
+          </svg>
+        </div>
+        <div style="font-size:7pt; color:#666; font-style:italic; text-align:center; padding:0 4px 4px 4px;">Prop. quadratica — A ∝ d²</div>
+      </div>
+    </div><!-- fine riga 2 -->
+
+  </div><!-- fine grafici -->
+
+  <p style="font-size:7.5pt; color:#666; margin-top:5px; font-style:italic;">
+    Indicare sugli assi le scale con le unità di misura. Griglia: linee fini ogni mm, linee spesse ogni cm. Il grafico <em>A–h</em> mostra un'iperbole; il grafico <em>d–A</em> una parabola (<em>A ∝ d²</em>).
+  </p>
+
+  <!-- OSSERVAZIONI + CONCLUSIONI in griglia 2 colonne -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+
+    <!-- OSSERVAZIONI -->
+    <div class="sezione" style="margin-bottom:0;">
+      <div class="sezione-titolo">Osservazioni</div>
+      <div class="sezione-corpo">
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+        <div class="riga-scrittura"></div>
+      </div>
+    </div>
+
+    <!-- CONCLUSIONI -->
+    <div class="sezione" style="margin-bottom:0;">
+      <div class="sezione-titolo">Conclusioni</div>
+      <div class="sezione-corpo">
+        <ul class="conclusioni-domande">
+          <li>
+            Il prodotto <em>A · h</em> è rimasto costante? Commenta <em>V<sub>medio</sub></em> e ΔV.
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            Come si spiega un'eventuale diminuzione progressiva del volume?
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            Che relazione esiste tra <em>A</em> e <em>d</em>?
+            <span class="risposta-linea"></span>
+          </li>
+          <li>
+            Che legame esiste tra <em>h</em> e <em>d</em>? Giustifica con la formula.
+            <span class="risposta-linea"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- fine griglia osservazioni/conclusioni -->
+
+</div><!-- fine pagina 2 -->
+</body>
+</html>
