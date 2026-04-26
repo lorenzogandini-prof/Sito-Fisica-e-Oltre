@@ -1,0 +1,174 @@
+---
+layout: default
+title: Poesia
+description: Le mie poesie, eventi di poetry slam e la parola come performance.
+---
+
+<style>
+  .poesia-hero {
+    background: var(--poesia-bg);
+    border-bottom: 3px solid var(--poesia-accent);
+    padding: 4rem 0 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .poesia-hero::before {
+    content: '"';
+    position: absolute;
+    right: 5%;
+    top: -2rem;
+    font-family: var(--font-display);
+    font-size: 20rem;
+    color: var(--poesia-accent);
+    opacity: 0.06;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .evento-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--poesia-accent);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    transition: all 0.2s;
+  }
+  .evento-card:hover { box-shadow: var(--shadow); transform: translateX(3px); }
+  .evento-data {
+    text-align: center;
+    min-width: 56px;
+  }
+  .evento-data__giorno {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--poesia-accent);
+  }
+  .evento-data__mese {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+</style>
+
+<!-- HERO -->
+<div class="poesia-hero">
+  <div class="container">
+    <div class="page-header__badge" style="color: var(--poesia-accent);">🖋 Poesia</div>
+    <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 0.75rem;">Parole in libertà</h1>
+    <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 540px; font-style: italic;">
+      La poesia non è decorazione del linguaggio. È il linguaggio nel suo stato più onesto.
+    </p>
+  </div>
+</div>
+
+<div class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
+  <div style="display: grid; grid-template-columns: 1fr 320px; gap: 3rem; align-items: start;">
+
+    <!-- COLONNA POESIE -->
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <p class="section-label">Le mie poesie</p>
+          <h2>Raccolte</h2>
+        </div>
+        <button class="btn btn--outline" data-open-editor style="font-size: 0.85rem;">+ Nuova poesia</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% assign poesie = site.posts | where_exp: "p", "p.categories contains 'poesia'" %}
+        {% for post in poesie %}
+        <a href="{{ post.url | relative_url }}" class="poem-card" style="text-decoration: none; color: inherit; display: block;">
+          <h3 class="poem-card__title">{{ post.title }}</h3>
+          {% if post.versi %}
+          <div class="poem-card__excerpt">{{ post.versi }}</div>
+          {% else %}
+          <div class="poem-card__excerpt">{{ post.excerpt | strip_html | truncatewords: 20 }}</div>
+          {% endif %}
+          <p class="poem-card__meta">📅 {{ post.date | date: "%d %B %Y" }}
+            {% if post.raccolta %} · 📚 {{ post.raccolta }}{% endif %}
+          </p>
+        </a>
+        {% endfor %}
+
+        {% if poesie.size == 0 %}
+        <div class="poem-card" style="text-align: center; padding: 3rem;">
+          <p style="font-size: 3rem; margin-bottom: 1rem;">🖋</p>
+          <p style="color: var(--text-muted);">Le tue poesie appariranno qui.<br>
+          Usa <strong>+ Nuova poesia</strong> e seleziona la categoria <em>Poesia</em>.</p>
+        </div>
+
+        <!-- Poesia di esempio -->
+        <div class="poem-card">
+          <h3 class="poem-card__title">Esempio — Come iniziare</h3>
+          <div class="poem-card__excerpt">
+            Crea un file in <code>_posts/</code><br>
+            con front matter <code>categories: poesia</code>.<br>
+            Aggiungi <code>versi: |</code><br>
+            e scrivi i tuoi versi sotto.
+          </div>
+          <p class="poem-card__meta">Front matter example</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- SIDEBAR: EVENTI -->
+    <aside>
+      <p class="section-label">In agenda</p>
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Poetry Slam<br>& eventi</h2>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% assign eventi = site.posts | where_exp: "p", "p.categories contains 'poesia'" | where_exp: "p", "p.tipo == 'evento'" | sort: "data_evento" %}
+        {% for evento in eventi %}
+        <div class="evento-card">
+          <div class="evento-data">
+            <div class="evento-data__giorno">{{ evento.data_evento | date: "%d" }}</div>
+            <div class="evento-data__mese">{{ evento.data_evento | date: "%b %Y" }}</div>
+          </div>
+          <div>
+            <strong style="font-family: var(--font-display); font-size: 1rem; display: block; margin-bottom: 0.25rem;">{{ evento.title }}</strong>
+            {% if evento.luogo %}<p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">📍 {{ evento.luogo }}</p>{% endif %}
+            {% if evento.link %}<a href="{{ evento.link }}" style="font-size: 0.8rem; color: var(--poesia-accent); font-family: var(--font-sans); font-weight: 600;" target="_blank">Info →</a>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+
+        {% if eventi.size == 0 %}
+        <div class="evento-card" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+          <strong style="color: var(--poesia-accent);">Prossimi eventi</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+            Aggiungi post con <code>tipo: evento</code> e <code>data_evento: YYYY-MM-DD</code> per mostrarli qui.
+          </p>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Cos'è il Poetry Slam -->
+      <div style="margin-top: 2.5rem; padding: 1.5rem; background: var(--poesia-bg); border-radius: var(--radius-lg); border: 1px solid var(--border);">
+        <h3 style="font-size: 1rem; margin-bottom: 0.75rem; color: var(--poesia-accent);">Cos'è il Poetry Slam?</h3>
+        <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+          Una competizione poetica in cui i poeti recitano testi propri davanti a una giuria scelta tra il pubblico. 
+          Niente spartiti, niente costumi, solo la parola e la voce.
+        </p>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- Responsive sidebar -->
+<style>
+  @media (max-width: 768px) {
+    .container > div[style*="grid-template-columns"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

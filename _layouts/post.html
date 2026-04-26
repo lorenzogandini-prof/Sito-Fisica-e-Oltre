@@ -1,0 +1,63 @@
+---
+layout: default
+---
+
+<article class="container--narrow" style="padding-top: 3rem; padding-bottom: 3rem;">
+
+  <header style="margin-bottom: 2.5rem;">
+    {% if page.categories %}
+    <div class="section-label" style="margin-bottom: 1rem;">
+      {% for cat in page.categories %}
+        <a href="{{ '/' | append: cat | relative_url }}" 
+           style="color: var(--{% if cat == 'didattica' %}didattica{% elsif cat == 'poesia' %}poesia{% elsif cat == 'divulgazione' %}divulgazione{% else %}riflessioni{% endif %}-accent);">
+          {{ cat | capitalize }}
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <h1 style="margin-bottom: 1rem;">{{ page.title }}</h1>
+
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem;">
+      <span style="font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted);">
+        📅 {{ page.date | date: "%d %B %Y" }}
+      </span>
+      {% if page.tags %}
+      <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+        {% for tag in page.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    {% if page.excerpt %}
+    <p style="font-size: 1.15rem; color: var(--text-muted); font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; line-height: 1.7;">
+      {{ page.excerpt | strip_html | truncatewords: 40 }}
+    </p>
+    {% endif %}
+  </header>
+
+  <div class="article-content">
+    {{ content }}
+  </div>
+
+  <!-- Navigazione precedente/successivo -->
+  <nav style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); flex-wrap: wrap;">
+    {% if page.previous.url %}
+    <a href="{{ page.previous.url | relative_url }}" class="btn btn--outline" style="font-size: 0.85rem;">
+      ← {{ page.previous.title | truncatewords: 5 }}
+    </a>
+    {% endif %}
+    {% if page.next.url %}
+    <a href="{{ page.next.url | relative_url }}" class="btn btn--outline" style="font-size: 0.85rem; margin-left: auto;">
+      {{ page.next.title | truncatewords: 5 }} →
+    </a>
+    {% endif %}
+  </nav>
+
+  {% if page.comments != false %}
+  {% include comments.html %}
+  {% endif %}
+
+</article>

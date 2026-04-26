@@ -1,0 +1,259 @@
+---
+layout: default
+title: Didattica
+description: Schede esperienze, libro digitale, approfondimenti e vocabolario tecnico per studenti.
+---
+
+<!-- PAGE HEADER -->
+<div class="page-header page-header--didattica">
+  <div class="container">
+    <div class="page-header__badge">📚 Didattica</div>
+    <h1 class="page-header__title">Insegnare con passione</h1>
+    <p class="page-header__desc">Risorse per studenti e colleghi: esperienze in classe, approfondimenti disciplinari e strumenti per costruire il linguaggio tecnico.</p>
+  </div>
+</div>
+
+<!-- TAB NAVIGATION -->
+<div style="background: var(--didattica-bg); border-bottom: 1px solid var(--border); position: sticky; top: 64px; z-index: 90;">
+  <div class="container">
+    <div style="display: flex; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+      <button class="didattica-tab active" data-tab="schede"
+        style="padding: 1rem 1.25rem; font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600;
+               background: none; border: none; cursor: pointer; color: var(--text-muted);
+               border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s;">
+        🗂 Schede esperienze
+      </button>
+      <button class="didattica-tab" data-tab="libro"
+        style="padding: 1rem 1.25rem; font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600;
+               background: none; border: none; cursor: pointer; color: var(--text-muted);
+               border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s;">
+        📖 Libro digitale
+      </button>
+      <button class="didattica-tab" data-tab="approfondimenti"
+        style="padding: 1rem 1.25rem; font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600;
+               background: none; border: none; cursor: pointer; color: var(--text-muted);
+               border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s;">
+        🔬 Approfondimenti
+      </button>
+      <button class="didattica-tab" data-tab="vocabolario"
+        style="padding: 1rem 1.25rem; font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600;
+               background: none; border: none; cursor: pointer; color: var(--text-muted);
+               border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s;">
+        📝 Vocabolario
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENUTO TAB: SCHEDE -->
+<div class="didattica-content" id="tab-schede">
+  <div class="container" style="padding-top: 2.5rem; padding-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+      <div>
+        <p class="section-label">Esperienze in classe</p>
+        <h2>Schede didattiche</h2>
+      </div>
+      <button class="btn btn--outline btn--sm" data-open-editor style="font-size: 0.85rem;">+ Nuova scheda</button>
+    </div>
+
+    <div class="articles-grid">
+      {% assign schede = site.posts | where_exp: "p", "p.categories contains 'didattica'" | where_exp: "p", "p.tipo == 'scheda'" %}
+      {% for post in schede %}
+      <a href="{{ post.url | relative_url }}" class="scheda-card" style="text-decoration: none; color: inherit;">
+        <div class="scheda-card__header">
+          <span class="scheda-card__level">{{ post.livello | default: "Tutte le classi" }}</span>
+          <span style="font-family: var(--font-sans); font-size: 0.75rem; color: var(--text-muted);">{{ post.date | date: "%d %b %Y" }}</span>
+        </div>
+        <div class="scheda-card__body">
+          <h3 class="scheda-card__title">{{ post.title }}</h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem;">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+          {% if post.tags %}
+          <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+            {% for tag in post.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </a>
+      {% endfor %}
+
+      {% if schede.size == 0 %}
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p style="font-size: 2rem; margin-bottom: 1rem;">🗂</p>
+        <p>Nessuna scheda ancora. Clicca <strong>+ Nuova scheda</strong> per cominciare!</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Aggiungi <code>tipo: scheda</code> nel front matter dell'articolo.</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Articoli didattica generali -->
+    {% assign didattica_posts = site.posts | where_exp: "p", "p.categories contains 'didattica'" | where_exp: "p", "p.tipo != 'scheda'" %}
+    {% if didattica_posts.size > 0 %}
+    <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">Tutti gli articoli di didattica</h3>
+    <div class="articles-grid">
+      {% for post in didattica_posts %}
+      <a href="{{ post.url | relative_url }}" class="card" style="text-decoration: none; color: inherit;">
+        <div class="card__body">
+          <span class="card__tag" style="background: var(--didattica-bg); color: var(--didattica-accent);">Didattica</span>
+          <h3 class="card__title">{{ post.title }}</h3>
+          <p class="card__excerpt">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+          <p class="card__meta">📅 {{ post.date | date: "%d %b %Y" }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- CONTENUTO TAB: LIBRO -->
+<div class="didattica-content" id="tab-libro" style="display: none;">
+  <div class="container" style="padding-top: 2.5rem; padding-bottom: 3rem;">
+    <p class="section-label">Risorse per lo studio</p>
+    <h2>Libro digitale</h2>
+    <p style="color: var(--text-muted); max-width: 560px; margin-top: 0.5rem; margin-bottom: 2.5rem;">
+      Un manuale aperto e in continua costruzione, capitolo per capitolo. Ogni sezione può essere letta indipendentemente.
+    </p>
+
+    {% assign libro = site.posts | where_exp: "p", "p.categories contains 'didattica'" | where_exp: "p", "p.tipo == 'libro'" | sort: "capitolo" %}
+
+    {% if libro.size > 0 %}
+    <div style="display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;">
+      {% for post in libro %}
+      <a href="{{ post.url | relative_url }}"
+         style="display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem;
+                background: var(--surface); text-decoration: none; color: inherit;
+                border-bottom: 1px solid var(--border); transition: background 0.2s;">
+        <span style="font-family: var(--font-mono); font-size: 1.5rem; color: var(--didattica-accent); min-width: 2.5rem; font-weight: 700;">
+          {{ post.capitolo | prepend: "0" | slice: -2, 2 }}
+        </span>
+        <div style="flex: 1;">
+          <strong style="font-family: var(--font-display); font-size: 1.05rem;">{{ post.title }}</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.2rem 0 0;">{{ post.excerpt | strip_html | truncatewords: 15 }}</p>
+        </div>
+        <span style="color: var(--text-muted);">→</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; background: var(--bg-alt); border-radius: var(--radius-lg); color: var(--text-muted);">
+      <p style="font-size: 2rem; margin-bottom: 1rem;">📖</p>
+      <p>Il libro digitale è in costruzione. Aggiungi <code>tipo: libro</code> e <code>capitolo: 1</code> nel front matter.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- CONTENUTO TAB: APPROFONDIMENTI -->
+<div class="didattica-content" id="tab-approfondimenti" style="display: none;">
+  <div class="container" style="padding-top: 2.5rem; padding-bottom: 3rem;">
+    <p class="section-label">Per andare oltre</p>
+    <h2>Approfondimenti</h2>
+
+    {% assign approfondimenti = site.posts | where_exp: "p", "p.categories contains 'didattica'" | where_exp: "p", "p.tipo == 'approfondimento'" %}
+    <div class="articles-grid" style="margin-top: 2rem;">
+      {% for post in approfondimenti %}
+      <a href="{{ post.url | relative_url }}" class="card" style="text-decoration: none; color: inherit;">
+        <div class="card__body">
+          <span class="card__tag" style="background: var(--didattica-bg); color: var(--didattica-accent);">Approfondimento</span>
+          <h3 class="card__title">{{ post.title }}</h3>
+          <p class="card__excerpt">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+          <p class="card__meta">📅 {{ post.date | date: "%d %b %Y" }}</p>
+        </div>
+      </a>
+      {% endfor %}
+
+      {% if approfondimenti.size == 0 %}
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p style="font-size: 2rem; margin-bottom: 1rem;">🔬</p>
+        <p>Aggiungi <code>tipo: approfondimento</code> nel front matter degli articoli di approfondimento.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- CONTENUTO TAB: VOCABOLARIO -->
+<div class="didattica-content" id="tab-vocabolario" style="display: none;">
+  <div class="container" style="padding-top: 2.5rem; padding-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+      <div>
+        <p class="section-label">Linguaggio tecnico</p>
+        <h2>Vocabolario</h2>
+      </div>
+      <div class="search-bar" style="max-width: 320px;">
+        <span>🔍</span>
+        <input type="text" id="vocabSearch" placeholder="Cerca un termine…" aria-label="Cerca nel vocabolario">
+      </div>
+    </div>
+
+    <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 560px;">
+      Un glossario in continua espansione per costruire il linguaggio tecnico disciplinare. 
+      Clicca su ogni termine per approfondire.
+    </p>
+
+    <div class="vocab-grid" id="vocabGrid">
+      {% assign vocab_posts = site.posts | where_exp: "p", "p.categories contains 'didattica'" | where_exp: "p", "p.tipo == 'vocabolo'" | sort: "title" %}
+      {% for post in vocab_posts %}
+      <a href="{{ post.url | relative_url }}" class="vocab-item" style="text-decoration: none;">
+        <div class="vocab-item__term">{{ post.title }}</div>
+        <div class="vocab-item__def">{{ post.excerpt | strip_html | truncatewords: 12 }}</div>
+      </a>
+      {% endfor %}
+
+      {% if vocab_posts.size == 0 %}
+      <!-- Vocaboli di esempio -->
+      <div class="vocab-item">
+        <div class="vocab-item__term">Esempio: Entalpia</div>
+        <div class="vocab-item__def">Funzione di stato termodinamica che rappresenta il contenuto di calore di un sistema.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-item__term">Esempio: Osmosi</div>
+        <div class="vocab-item__def">Passaggio di solvente attraverso una membrana semipermeabile da soluzione meno a più concentrata.</div>
+      </div>
+      <div class="vocab-item">
+        <div class="vocab-item__term">Esempio: Cinetica</div>
+        <div class="vocab-item__def">Studio della velocità delle reazioni chimiche e dei fattori che la influenzano.</div>
+      </div>
+      <div style="grid-column: 1/-1; margin-top: 1rem; padding: 1rem; background: var(--bg-alt); border-radius: var(--radius); font-size: 0.85rem; color: var(--text-muted);">
+        💡 I vocaboli sopra sono esempi. Aggiunge <code>tipo: vocabolo</code> nei tuoi post per popolare questo glossario.
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<!-- Script tab didattica -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.didattica-tab');
+  const contents = document.querySelectorAll('.didattica-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const target = this.dataset.tab;
+
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.style.color = 'var(--text-muted)';
+        t.style.borderBottomColor = 'transparent';
+      });
+
+      this.classList.add('active');
+      this.style.color = 'var(--didattica-accent)';
+      this.style.borderBottomColor = 'var(--didattica-accent)';
+
+      contents.forEach(c => {
+        c.style.display = c.id === 'tab-' + target ? '' : 'none';
+      });
+    });
+  });
+
+  // Attiva tab attivo di default
+  const activeTab = document.querySelector('.didattica-tab.active');
+  if (activeTab) {
+    activeTab.style.color = 'var(--didattica-accent)';
+    activeTab.style.borderBottomColor = 'var(--didattica-accent)';
+  }
+});
+</script>

@@ -1,0 +1,81 @@
+<div class="editor-overlay" id="editorOverlay" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+  <div class="editor-modal">
+
+    <header class="editor-header">
+      <h2 id="editorTitle">✏️ Nuovo articolo</h2>
+      <button class="editor-close" aria-label="Chiudi editor">✕</button>
+    </header>
+
+    <div class="editor-toolbar" role="toolbar" aria-label="Formattazione">
+      <button class="editor-btn" data-md="bold" title="Grassetto"><b>B</b></button>
+      <button class="editor-btn" data-md="italic" title="Corsivo"><i>I</i></button>
+      <div class="editor-separator"></div>
+      <button class="editor-btn" data-md="h2" title="Titolo sezione">H2</button>
+      <button class="editor-btn" data-md="h3" title="Sottotitolo">H3</button>
+      <div class="editor-separator"></div>
+      <button class="editor-btn" data-md="link" title="Link">🔗</button>
+      <button class="editor-btn" data-md="quote" title="Citazione">"</button>
+      <button class="editor-btn" data-md="code" title="Codice">&lt;/&gt;</button>
+      <div class="editor-separator"></div>
+      <button class="editor-btn" data-md="ul" title="Lista">• Lista</button>
+      <button class="editor-btn" data-md="hr" title="Separatore">—</button>
+    </div>
+
+    <div class="editor-body">
+      <div class="editor-fields">
+
+        <div class="editor-field">
+          <label for="editorTitle2">Titolo *</label>
+          <input type="text" id="editorTitle2" placeholder="Il titolo del tuo articolo…">
+        </div>
+
+        <div class="editor-field">
+          <label for="editorSection">Sezione *</label>
+          <select id="editorSection">
+            <option value="riflessioni">Riflessioni</option>
+            <option value="didattica">Didattica</option>
+            <option value="poesia">Poesia</option>
+          </select>
+        </div>
+
+        <div class="editor-field">
+          <label for="editorTags">Tag (separati da virgola)</label>
+          <input type="text" id="editorTags" placeholder="es. scuola, letteratura, fisica">
+        </div>
+
+        <div class="editor-field">
+          <label for="editorContent">Contenuto (Markdown)</label>
+          <textarea id="editorContent" placeholder="Scrivi qui il tuo articolo in Markdown…
+
+## Esempio titolo sezione
+
+Il testo normale va scritto così.
+
+**Grassetto**, *corsivo*, `codice inline`.
+
+> Una citazione importante
+
+- elemento lista
+- altro elemento"></textarea>
+        </div>
+
+      </div>
+
+      <div class="editor-preview">
+        <h4>Anteprima</h4>
+        <div class="editor-preview-content" id="editorPreview"></div>
+      </div>
+    </div>
+
+    <footer class="editor-footer">
+      <div class="editor-info">
+        💡 L'articolo verrà generato come file <code>.md</code> da aggiungere a <code>_posts/</code> nel tuo repository GitHub.
+      </div>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <button class="btn btn--outline" id="editorCopy" style="font-size: 0.85rem;">📋 Copia testo</button>
+        <button class="btn btn--primary" id="editorExport" style="font-size: 0.85rem;">⬇️ Scarica .md</button>
+      </div>
+    </footer>
+
+  </div>
+</div>

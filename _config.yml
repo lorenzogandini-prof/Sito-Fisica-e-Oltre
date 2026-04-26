@@ -1,0 +1,49 @@
+title: "Il mio spazio"
+description: "Didattica, poesia, divulgazione e riflessioni"
+author: "Xarenios"
+email: ""
+baseurl: ""
+url: "https://tuousername.github.io"
+
+# Permalink
+permalink: /:categories/:title/
+
+# Collections
+collections:
+  articoli:
+    output: true
+    permalink: /:collection/:title/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      comments: true
+  - scope:
+      path: ""
+      type: "articoli"
+    values:
+      layout: "articolo"
+      comments: true
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Divulgazione link esterno
+divulgazione_url: "https://xarenios-science.art/"
+
+markdown: kramdown
+highlighter: rouge

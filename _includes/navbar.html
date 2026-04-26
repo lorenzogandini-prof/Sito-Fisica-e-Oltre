@@ -1,0 +1,31 @@
+<nav class="navbar" role="navigation" aria-label="Navigazione principale">
+  <div class="container">
+    <div class="navbar__inner">
+
+      <a href="{{ '/' | relative_url }}" class="navbar__logo" aria-label="Home">
+        X<span>.</span>
+      </a>
+
+      <div class="navbar__nav" id="mainNav">
+        <a href="{{ '/didattica/' | relative_url }}" class="navbar__link" data-section="didattica">Didattica</a>
+        <a href="{{ '/poesia/' | relative_url }}"    class="navbar__link" data-section="poesia">Poesia</a>
+        <a href="{{ site.divulgazione_url }}"        class="navbar__link" data-section="divulgazione" target="_blank" rel="noopener">Divulgazione ↗</a>
+        <a href="{{ '/riflessioni/' | relative_url }}" class="navbar__link" data-section="riflessioni">Riflessioni</a>
+      </div>
+
+      <div class="navbar__actions">
+        <button class="theme-toggle" aria-label="Cambia tema" title="Cambia tema">
+          <span class="icon-sun">☀️</span>
+          <span class="icon-moon">🌙</span>
+        </button>
+        <button class="btn btn--outline" data-open-editor style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">
+          + Nuovo articolo
+        </button>
+        <button class="navbar__burger" aria-label="Menu" aria-expanded="false" aria-controls="mainNav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</nav>

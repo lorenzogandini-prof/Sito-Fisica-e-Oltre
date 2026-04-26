@@ -1,0 +1,124 @@
+---
+layout: default
+title: Home
+---
+
+<!-- ============================================================
+     HERO HOMEPAGE — caldo, personale, accogliente
+     ============================================================ -->
+
+<section class="home-hero">
+  <div class="home-hero__bg"></div>
+  <div class="container">
+    <div class="home-hero__content">
+      <p class="home-hero__eyebrow animate animate-d1">Docente · Poeta · Divulgatore</p>
+      <h1 class="home-hero__title animate animate-d2">
+        Uno spazio per<br>
+        <em>pensare ad alta voce</em>
+      </h1>
+      <p class="home-hero__subtitle animate animate-d3">
+        Esploro i confini tra scienza e arte, insegno con curiosità, 
+        scrivo versi e rifletto su quello che leggo, ascolto, guardo 
+        e vivo. Benvenuto nel mio spazio.
+      </p>
+      <div class="home-hero__ctas animate animate-d4">
+        <a href="/divulgazione/" class="btn btn--primary" target="_blank">Scopri il sito di divulgazione ↗</a>
+        <a href="#aree" class="btn btn--outline">Esplora le sezioni</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     AREE TEMATICHE
+     ============================================================ -->
+
+<section class="home-areas" id="aree">
+  <div class="container">
+    <p class="section-label">Le sezioni</p>
+    <h2>Dove vuoi andare?</h2>
+
+    <div class="home-areas__grid">
+
+      <a href="/didattica/" class="area-card area-card--didattica">
+        <span class="area-card__icon">📚</span>
+        <div>
+          <p class="area-card__label">Didattica</p>
+          <h3 class="area-card__title">Insegnare con passione</h3>
+          <p class="area-card__desc">Schede esperienze, libro digitale, approfondimenti e un vocabolario tecnico per studenti e colleghi.</p>
+        </div>
+      </a>
+
+      <a href="/poesia/" class="area-card area-card--poesia">
+        <span class="area-card__icon">🖋</span>
+        <div>
+          <p class="area-card__label">Poesia</p>
+          <h3 class="area-card__title">Parole in libertà</h3>
+          <p class="area-card__desc">Le mie poesie, eventi di poetry slam e tutto ciò che riguarda la parola come performance.</p>
+        </div>
+      </a>
+
+      <a href="{{ site.divulgazione_url }}" class="area-card area-card--divulgazione" target="_blank" rel="noopener">
+        <span class="area-card__icon">🔭</span>
+        <div>
+          <p class="area-card__label">Divulgazione ↗</p>
+          <h3 class="area-card__title">Arte e Scienza</h3>
+          <p class="area-card__desc">Il rapporto tra le due culture: abbattere i muri tra scienze e umanistica. Vai su xarenios-science.art</p>
+        </div>
+      </a>
+
+      <a href="/riflessioni/" class="area-card area-card--riflessioni">
+        <span class="area-card__icon">💭</span>
+        <div>
+          <p class="area-card__label">Riflessioni</p>
+          <h3 class="area-card__title">Il mio punto di vista</h3>
+          <p class="area-card__desc">Sulla scuola, su libri, film, musica e tutto ciò che mi fa fermare a pensare.</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ULTIMI ARTICOLI
+     ============================================================ -->
+
+<section style="padding: 3rem 0 5rem;">
+  <div class="container">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+      <div>
+        <p class="section-label">Dal blog</p>
+        <h2>Ultimi articoli</h2>
+      </div>
+    </div>
+
+    <div class="articles-grid">
+      {% assign recent = site.posts | limit: 6 %}
+      {% for post in recent %}
+      <a href="{{ post.url | relative_url }}" class="card" style="text-decoration: none; color: inherit;"
+         data-category="{% for cat in post.categories %}{{ cat }}{% endfor %}">
+        <div class="card__body">
+          {% for cat in post.categories %}
+          <span class="card__tag" style="
+            background: var(--{{ cat }}-bg, var(--bg-alt));
+            color: var(--{{ cat }}-accent, var(--text-muted));
+          ">{{ cat | capitalize }}</span>
+          {% endfor %}
+          <h3 class="card__title">{{ post.title }}</h3>
+          <p class="card__excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+          <p class="card__meta">📅 {{ post.date | date: "%d %b %Y" }}</p>
+        </div>
+      </a>
+      {% endfor %}
+
+      {% if site.posts.size == 0 %}
+      <div class="card" style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p style="font-size: 2rem; margin-bottom: 1rem;">✍️</p>
+        <p>I primi articoli stanno arrivando. Usa il pulsante <strong>+ Nuovo articolo</strong> per cominciare!</p>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>

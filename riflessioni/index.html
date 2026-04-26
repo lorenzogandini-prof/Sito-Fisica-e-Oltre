@@ -1,0 +1,190 @@
+---
+layout: default
+title: Riflessioni
+description: Il mio punto di vista su scuola, libri, film, musica e tutto ciò che mi fa fermare a pensare.
+---
+
+<style>
+  .riflessioni-hero {
+    background: var(--riflessioni-bg);
+    border-bottom: 3px solid var(--riflessioni-accent);
+    padding: 4rem 0 3rem;
+  }
+
+  .rifl-filter-btn {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .rifl-filter-btn.active,
+  .rifl-filter-btn:hover {
+    background: var(--riflessioni-accent);
+    border-color: var(--riflessioni-accent);
+    color: white;
+  }
+
+  .riflessione-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .riflessione-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .riflessione-card__tipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--riflessioni-accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .riflessione-card__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.3;
+    margin-bottom: 0.6rem;
+  }
+
+  .riflessione-card__excerpt {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<!-- HERO -->
+<div class="riflessioni-hero">
+  <div class="container">
+    <div class="page-header__badge" style="color: var(--riflessioni-accent);">💭 Riflessioni</div>
+    <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 0.75rem;">Il mio punto di vista</h1>
+    <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 580px; line-height: 1.7;">
+      Sulla scuola e il mestiere di insegnare. Su libri, film, serie, musica. 
+      Su tutto ciò che merita un momento di pensiero in più.
+    </p>
+  </div>
+</div>
+
+<div class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+
+  <!-- Filtri per tipo -->
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; align-items: center;">
+    <span style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-muted); margin-right: 0.25rem;">Filtra per:</span>
+    <button class="rifl-filter-btn active" data-filter="all">Tutto</button>
+    <button class="rifl-filter-btn" data-filter="scuola">🏫 Scuola</button>
+    <button class="rifl-filter-btn" data-filter="libro">📕 Libri</button>
+    <button class="rifl-filter-btn" data-filter="film">🎬 Film & Serie</button>
+    <button class="rifl-filter-btn" data-filter="musica">🎵 Musica</button>
+    <button class="rifl-filter-btn" data-filter="altro">💡 Altro</button>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <p style="font-family: var(--font-sans); font-size: 0.875rem; color: var(--text-muted);" id="riflCount">
+      {% assign rifl_all = site.posts | where_exp: "p", "p.categories contains 'riflessioni'" %}
+      {{ rifl_all.size }} riflessioni
+    </p>
+    <button class="btn btn--outline" data-open-editor style="font-size: 0.85rem;">+ Nuova riflessione</button>
+  </div>
+
+  <!-- GRIGLIA -->
+  <div class="articles-grid" id="riflGrid">
+    {% assign riflessioni = site.posts | where_exp: "p", "p.categories contains 'riflessioni'" %}
+    {% for post in riflessioni %}
+    {% assign tipo = post.sottotipo | default: "altro" %}
+    <a href="{{ post.url | relative_url }}" class="riflessione-card" 
+       data-category="{{ tipo }}" style="text-decoration: none; color: inherit;">
+      <div class="riflessione-card__tipo">
+        {% if tipo == "scuola" %}🏫 Scuola
+        {% elsif tipo == "libro" %}📕 Libro
+        {% elsif tipo == "film" %}🎬 Film/Serie
+        {% elsif tipo == "musica" %}🎵 Musica
+        {% else %}💡 Riflessione{% endif %}
+      </div>
+      <h3 class="riflessione-card__title">{{ post.title }}</h3>
+      <p class="riflessione-card__excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-muted);">📅 {{ post.date | date: "%d %b %Y" }}</span>
+        {% if post.opera %}<span style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-muted); font-style: italic;">{{ post.opera }}</span>{% endif %}
+      </div>
+    </a>
+    {% endfor %}
+
+    {% if riflessioni.size == 0 %}
+    <!-- Placeholder esplicativo -->
+    <div class="riflessione-card" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+      <p style="font-size: 2.5rem; margin-bottom: 1rem;">💭</p>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">Le tue riflessioni appariranno qui.</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); background: var(--bg-alt); padding: 1rem; border-radius: var(--radius); font-family: var(--font-mono); text-align: left; max-width: 400px; margin: 0 auto;">
+        categories: riflessioni<br>
+        sottotipo: scuola  # o libro, film, musica, altro<br>
+        opera: "Titolo libro/film"  # opzionale
+      </p>
+    </div>
+
+    <!-- Card di esempio -->
+    <div class="riflessione-card" data-category="scuola">
+      <div class="riflessione-card__tipo">🏫 Scuola</div>
+      <h3 class="riflessione-card__title">Esempio: L'attenzione in classe nell'era della distrazione</h3>
+      <p class="riflessione-card__excerpt">Un esempio di come potrebbe apparire una riflessione sulla scuola. Usando il front matter giusto, ogni post viene automaticamente categorizzato e filtrabile.</p>
+      <span style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-muted);">Esempio</span>
+    </div>
+
+    <div class="riflessione-card" data-category="libro">
+      <div class="riflessione-card__tipo">📕 Libro</div>
+      <h3 class="riflessione-card__title">Esempio: Tre utilizzi del coltello — cosa ci insegna il teatro</h3>
+      <p class="riflessione-card__excerpt">Un esempio di riflessione su un libro. Il campo <code>opera</code> nel front matter mostra il titolo in basso.</p>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-muted);">Esempio</span>
+        <span style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-muted); font-style: italic;">D. Mamet</span>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<script>
+// Filtri riflessioni
+document.addEventListener('DOMContentLoaded', function() {
+  const btns = document.querySelectorAll('.rifl-filter-btn');
+  const cards = document.querySelectorAll('#riflGrid [data-category]');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      btns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const filter = this.dataset.filter;
+
+      let visible = 0;
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      const countEl = document.getElementById('riflCount');
+      if (countEl) countEl.textContent = visible + ' riflessioni';
+    });
+  });
+});
+</script>

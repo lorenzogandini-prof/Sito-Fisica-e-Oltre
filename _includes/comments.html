@@ -1,0 +1,50 @@
+<section class="comments-section container--narrow">
+  <h3>💬 Commenti e discussione</h3>
+  <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+    Per commentare è necessario un account GitHub gratuito. I commenti sono moderati.
+  </p>
+
+  <script src="https://giscus.app/client.js"
+    data-repo="TUOUSERNAME/TUOREPO"
+    data-repo-id="INSERISCI_REPO_ID"
+    data-category="Comments"
+    data-category-id="INSERISCI_CATEGORY_ID"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="it"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+
+  <noscript>
+    <p style="color: var(--text-muted); font-style: italic;">
+      Per visualizzare i commenti, abilita JavaScript nel tuo browser.
+    </p>
+  </noscript>
+</section>
+
+<!-- Giscus tema sincronizzato col toggle -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Aggiorna il tema Giscus quando cambia il tema del sito
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.attributeName === 'data-theme') {
+          const theme = document.documentElement.getAttribute('data-theme');
+          const giscusFrame = document.querySelector('iframe.giscus-frame');
+          if (giscusFrame) {
+            giscusFrame.contentWindow.postMessage({
+              giscus: { setConfig: { theme: theme === 'dark' ? 'dark' : 'light' } }
+            }, 'https://giscus.app');
+          }
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true });
+  });
+</script>
