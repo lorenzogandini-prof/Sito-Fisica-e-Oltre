@@ -38,3 +38,39 @@ Altro:
 -  Misura *c* con una tavoletta di cioccolato e un forno a microonde [da video INAF]
 -  Misura di *h* tramite utilizzo di diodi LED
 
+
+
+## Argomenti trattati
+1. Metodo sperimentale
+   1.1. Il confronto
+   1.2. Il linguaggio naturale e la necessità di un linguaggio tecnico
+   1.3. La falsificabilità delle affermazioni
+   1.4. L'universalità del linguaggio tecnico
+        1.4.1. Definizioni operitive e concettuali
+        1.4.2. La necessità della matematica
+        1.4.3. Il Sistema Internazionale
+   1.5. Il controllo sperimentale
+        1.5.1. Misura
+        1.5.2. Relazione
+        1.5.3. Modello
+        1.5.4. Legge fisica (empirica, euristica, matematica)
+        1.5.5. Teoria
+2. Sicurezza in laboratorio
+3. Fare una misura
+   3.1. Misure dirette e indirette
+   3.2. Incertezza ed errori
+   3.3. Propagazione degli errori
+   3.4. Medie
+   3.3. Deviazione standard
+4. Strumenti di misura
+5. I software
+6. Raccolta dati
+7. Relazioni tra grandezze fisiche
+   7.1. Proporzionalità
+   7.2. Ricavate dal grafico
+   7.3. Integrate nelle formule
+   7.4. Grafici, barre di errore e $R^{2}$
+8. La relazione di laboratorio
+9. Simulazione e rappresentazione
+10. Ricettario esperienze di laboratorio
+
