@@ -11,29 +11,30 @@ Sito dedicato alla didattica del laboratorio di Fisica
 7. Regola del parallelogramma con 3 dinamometri 
 8. Determinazione del coefficiente di attrito statico
 9. Equilibrio delle leve di primo genere
-10. Equilibrio dellle leve 
-11. Utilizzo della spinta di Archimede per determinare il volume di un solido irregolare
-12. Evaporazione dell'acqua a T ambiente con Phyphox
-13. Moto rettilineo uniforme sulla monorotaia a cuscino d'aria
-14. Moto rettilineo uniformemente accelerato [introduzione al programma Tracker]
-15. Dimostrazione del II principio della dinamica [tramite Tracker]
-16. Moto parabolico e conservazione dell'energia [tramite Tracker, ispirato esperienza AIF]
-17. Lavoro compiuto percorrendo le scale
-18. Verifica sperimentale della legge di Snell [tramite sensore Arduino]
-19. Realizzazione di un condensatore piano [e introduizione a tester/multimetro per la misura della capacità]
-20. Simulazione di un flash tramite circuito RC con diodo LED e filamento di magnesio
-21. Dimostrazione delle leggi di Ohm [introduzione ai circuiti e accenno alle leggi di Kirchhoff]
-22. 
-
+10. Equilibrio dellle leve di secondo genere
+11. Ricavare il baricentro di una figura piana in modo sperimentale
+12. Esperimento di Torricelli con acqua colorata
+13. Evaporazione dell'acqua a T ambiente con Phyphox
+14. Utilizzo della spinta di Archimede per determinare il volume di un solido irregolare
+16. Moto rettilineo uniforme sulla monorotaia a cuscino d'aria
+17. Moto rettilineo uniformemente accelerato [introduzione al programma Tracker]
+18. Dimostrazione del II principio della dinamica [attività di classe]
+19. Consdervazione dell'energia meccanica con la monorotaia
+20. Moto parabolico e conservazione dell'energia [tramite Tracker, ispirato esperienza AIF]
+21. Lavoro compiuto percorrendo le scale
+22. Verifica sperimentale della legge di Snell [tramite sensore Arduino]
+23. Realizzazione di un condensatore piano [e introduizione a tester/multimetro per la misura della capacità]
+24. Simulazione di un flash tramite circuito RC con diodo LED e filamento di magnesio
+25. Dimostrazione della prima legge di Ohm su breadboard [introduzione ai circuiti e accenno alle leggi di Kirchhoff]
+26. Dimostrazione della seconda legge di Ohm tramite grafite
 
 Altro: 
-
 -  Proporzionalità quadratica: relazione tra lunghezza e periodo del pendolo
--  Poportzionalità quadratica inversa:
 -  Misura sperimentale di π [propagazione degli errori]
 -  Piano inclinato dinamico con Arduino e sensore HC-SR04
 -  Verifica sperimentale della legge di Lambert-Beer
 -  Simulazione di un pixel tramite controllo di un diodo RGB (in 3 modi diversi)
+-  Accensione di un LED tramite circuito di carta
 -  Misura *c* con una tavoletta di cioccolato e un forno a microonde [da video INAF]
 -  Misura di *h* tramite utilizzo di diodi LED
--  Visualizzazione dei battimenti tramite oscilloscopio
+
