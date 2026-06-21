@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXP 05 – Circuiti RC e Flash Fotografico · Il Laboratorio di Fisica</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Source+Code+Pro:wght@400;600&display=swap');
+
+  :root {
+    --blu: #1a3a5c;
+    --blu-chiaro: #2e6da4;
+    --blu-pale: #e8f1fa;
+    --blu-pale2: #d0e4f5;
+    --accento: #c0392b;
+    --grigio-linea: #b0bec5;
+    --grigio-sfondo: #f0f4f8;
+    --grigio-tabella: #dce8f3;
+    --testo: #1c2a38;
+    --testo-s: #4a6275;
+    --bianco: #ffffff;
+    --bordo: #ccdded;
+    --bg: #f4f7fb;
+    --verde: #0F6E56;
+    --verde-p: #E1F5EE;
+    --oro: #b07d20;
+    --oro-p: #fdf3dc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--bg);
+    color: var(--testo);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--bianco);
+    border-bottom: 1px solid var(--bordo);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 1rem;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blu);
+  }
+  .nav-site {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    color: var(--testo-s);
+    letter-spacing: .1em;
+  }
+  .nav-title {
+    font-size: 13px;
+    color: var(--blu);
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  .nav-back {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    color: var(--testo-s);
+    background: none;
+    border: 1px solid var(--bordo);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: border-color .15s, color .15s;
+    flex-shrink: 0;
+  }
+  .nav-back:hover { border-color: var(--blu-chiaro); color: var(--blu); }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--bianco);
+    border-bottom: 1px solid var(--bordo);
+    padding: 2.8rem 2rem 2.2rem;
+  }
+  .hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: .9rem;
+    flex-wrap: wrap;
+  }
+  .codice-badge {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accento);
+    background: #fdf0ef;
+    border: 1px solid #f0c0b8;
+    padding: 2px 9px;
+    border-radius: 3px;
+    letter-spacing: .8px;
+  }
+  .area-badge {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    color: var(--blu-chiaro);
+    background: var(--blu-pale);
+    border: 1px solid var(--blu-pale2);
+    padding: 2px 9px;
+    border-radius: 3px;
+    letter-spacing: .5px;
+  }
+  .classe-badge {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    color: var(--testo-s);
+    background: var(--grigio-sfondo);
+    border: 1px solid var(--grigio-linea);
+    padding: 2px 9px;
+    border-radius: 3px;
+  }
+  .hero h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--blu);
+    line-height: 1.25;
+    margin-bottom: .55rem;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--testo-s);
+    font-style: italic;
+    margin-bottom: 1.4rem;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--bordo);
+    padding-top: 1rem;
+    font-size: .8rem;
+    color: var(--testo-s);
+    font-family: 'Source Code Pro', monospace;
+    letter-spacing: .03em;
+  }
+  .hero-meta span strong { color: var(--blu); font-weight: 600; }
+
+  /* ─── LAYOUT PRINCIPALE ─── */
+  .main-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.4rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ─── SEZIONI ─── */
+  .sezione {
+    background: var(--bianco);
+    border: 1px solid var(--bordo);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .sezione-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .7rem 1.2rem;
+    background: var(--blu);
+    cursor: pointer;
+    user-select: none;
+    gap: .8rem;
+  }
+  .sezione-header:hover { background: #1e4570; }
+  .sezione-header-left {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .sezione-num {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,.55);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  .sezione-titolo-txt {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--bianco);
+  }
+  .sezione-chevron {
+    color: rgba(255,255,255,.6);
+    font-size: 14px;
+    transition: transform .25s;
+    flex-shrink: 0;
+  }
+  .sezione-chevron.open { transform: rotate(180deg); }
+  .sezione-body {
+    display: none;
+    padding: 1.2rem 1.4rem;
+    border-top: 1px solid var(--bordo);
+  }
+  .sezione-body.open { display: block; }
+
+  /* ─── OBIETTIVO ─── */
+  .obiettivo-box {
+    border-left: 3px solid var(--accento);
+    background: #fef9f9;
+    padding: .85rem 1rem;
+    font-size: .95rem;
+    line-height: 1.75;
+    color: var(--testo);
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* ─── PRINCIPI BOX GRIGLIA ─── */
+  .principi-griglia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .7rem;
+    margin-bottom: .7rem;
+  }
+  .principio-box {
+    background: var(--grigio-sfondo);
+    border: 1px solid var(--grigio-tabella);
+    padding: .75rem .9rem;
+    border-radius: 4px;
+  }
+  .p-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--accento);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: .3rem;
+  }
+  .p-formula {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1rem;
+    color: var(--blu);
+    text-align: center;
+    padding: .35rem 0;
+    border-bottom: 1px dashed var(--grigio-linea);
+    margin-bottom: .4rem;
+  }
+  .p-desc {
+    font-size: .82rem;
+    color: #445;
+    line-height: 1.55;
+  }
+  .principio-wide {
+    background: #fef9f9;
+    border: 1px solid #f0c0b0;
+    border-left: 3px solid var(--accento);
+    padding: .75rem 1rem;
+    border-radius: 0 4px 4px 0;
+    font-size: .85rem;
+    line-height: 1.65;
+    color: var(--testo);
+  }
+  .principio-wide .p-label { color: var(--accento); margin-bottom: .3rem; }
+
+  /* ─── NOTA STORICA ─── */
+  .nota-storica {
+    background: var(--oro-p);
+    border: 1px solid #e5cc80;
+    border-left: 3px solid var(--oro);
+    padding: .8rem 1rem;
+    border-radius: 0 4px 4px 0;
+    margin-top: .7rem;
+    font-size: .82rem;
+    line-height: 1.65;
+    color: #3a2800;
+  }
+  .nota-storica .ns-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--oro);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    display: block;
+    margin-bottom: .3rem;
+  }
+
+  /* ─── GUIDA COMPONENTI ─── */
+  .guida-titolo {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--blu);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 1.4rem 0 .7rem;
+    padding-bottom: .35rem;
+    border-bottom: 2px solid var(--blu-pale2);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .guida-titolo::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--blu-chiaro);
+    flex-shrink: 0;
+  }
+  .componente-card {
+    background: var(--bianco);
+    border: 1px solid var(--bordo);
+    border-radius: 5px;
+    margin-bottom: .8rem;
+    overflow: hidden;
+  }
+  .componente-card-head {
+    background: var(--blu-pale);
+    border-bottom: 1px solid var(--blu-pale2);
+    padding: .55rem .9rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  .componente-icona {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--blu);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .componente-titolo {
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--blu);
+  }
+  .componente-corpo {
+    padding: .9rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .componente-corpo.full { grid-template-columns: 1fr; }
+  .componente-img-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+  }
+  .componente-img-wrap img {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid var(--grigio-tabella);
+    display: block;
+  }
+  .componente-img-cap {
+    font-size: .7rem;
+    color: var(--testo-s);
+    font-style: italic;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .componente-testo {
+    font-size: .85rem;
+    line-height: 1.65;
+    color: var(--testo);
+  }
+  .componente-testo p { margin-bottom: .55rem; }
+  .componente-testo p:last-child { margin-bottom: 0; }
+  .componente-testo strong { color: var(--blu); }
+  .collegamento-box {
+    background: var(--grigio-sfondo);
+    border-left: 2px solid var(--blu-chiaro);
+    padding: .5rem .7rem;
+    margin-top: .5rem;
+    border-radius: 0 3px 3px 0;
+    font-size: .8rem;
+    line-height: 1.55;
+  }
+  .collegamento-box .cb-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: var(--blu-chiaro);
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    display: block;
+    margin-bottom: .25rem;
+  }
+  .img-doppia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6rem;
+  }
+
+  /* ─── MATERIALI ─── */
+  .mat-griglia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .mat-gruppo-titolo {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--blu-chiaro);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    border-bottom: 1px solid var(--bordo);
+    padding-bottom: .3rem;
+    margin-bottom: .5rem;
+  }
+  .mat-lista { list-style: none; }
+  .mat-lista li {
+    font-size: .85rem;
+    padding: .3rem 0 .3rem 1rem;
+    border-bottom: 1px solid var(--grigio-sfondo);
+    position: relative;
+    color: var(--testo);
+    line-height: 1.4;
+  }
+  .mat-lista li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accento);
+    font-weight: 700;
+  }
+  .mat-lista li em {
+    font-size: .75rem;
+    color: var(--testo-s);
+    font-style: normal;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  /* ─── SCHEMA SVG ─── */
+  .schema-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    align-items: start;
+  }
+  .schema-box {
+    background: var(--grigio-sfondo);
+    border: 1px solid var(--bordo);
+    border-radius: 4px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+  }
+  .schema-box-title {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--blu-chiaro);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    align-self: flex-start;
+  }
+  .schema-didascalia {
+    font-size: .75rem;
+    color: var(--testo-s);
+    font-style: italic;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* TinkerCAD placeholder */
+  .tinkercad-box {
+    background: #f8fafc;
+    border: 1px dashed var(--grigio-linea);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    gap: .6rem;
+    min-height: 180px;
+  }
+  .tinkercad-icon {
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    background: #1477d4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -1px;
+  }
+  .tinkercad-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    color: var(--testo-s);
+    text-align: center;
+    letter-spacing: .05em;
+  }
+  .tinkercad-link {
+    font-size: .78rem;
+    color: var(--blu-chiaro);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /* ─── STEP PROCEDIMENTO ─── */
+  .step-lista { list-style: none; counter-reset: steps; }
+  .step-item {
+    counter-increment: steps;
+    display: flex;
+    gap: .9rem;
+    align-items: flex-start;
+    padding: .8rem 0;
+    border-bottom: 1px solid #edf1f5;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    background: var(--blu-chiaro);
+    color: white;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    content: counter(steps);
+  }
+  .step-content { flex: 1; }
+  .step-content strong { color: var(--blu); }
+  .step-content p { font-size: .88rem; line-height: 1.65; color: var(--testo); }
+  .step-nota {
+    margin-top: .3rem;
+    font-size: .78rem;
+    color: var(--accento);
+    font-family: 'Source Code Pro', monospace;
+    background: #fef9f9;
+    border-left: 2px solid var(--accento);
+    padding: .25rem .6rem;
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* ─── VIDEO ─── */
+  .video-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+  }
+  .video-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--blu-chiaro);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+  }
+  .video-player {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid var(--bordo);
+    background: #000;
+    display: block;
+    max-height: 420px;
+  }
+  .video-didascalia {
+    font-size: .8rem;
+    color: var(--testo-s);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ─── TABELLE DATI ─── */
+  .tabella-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.dati {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .82rem;
+    margin-top: .3rem;
+  }
+  table.dati th {
+    background: var(--blu);
+    color: white;
+    padding: .45rem .6rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: .78rem;
+    border: 1px solid var(--blu);
+  }
+  table.dati th .u {
+    display: block;
+    font-family: 'Source Code Pro', monospace;
+    font-size: .68rem;
+    font-weight: 400;
+    opacity: .8;
+    margin-top: 1px;
+  }
+  table.dati td {
+    border: 1px solid var(--grigio-linea);
+    padding: .4rem .6rem;
+    vertical-align: middle;
+    text-align: center;
+  }
+  table.dati td.lbl {
+    background: var(--grigio-sfondo);
+    font-weight: 600;
+    color: var(--blu);
+    text-align: left;
+    font-size: .82rem;
+  }
+  table.dati tr:nth-child(even) td.lbl { background: #e3ecf5; }
+  table.dati td.calc {
+    background: #f0f6fb;
+    font-family: 'Source Code Pro', monospace;
+    font-size: .8rem;
+    color: var(--blu-chiaro);
+    font-weight: 600;
+  }
+  table.dati tr:nth-child(even) td.calc { background: #e4f0f8; }
+
+  /* ─── FORMULA BLOCK ─── */
+  .formula-block {
+    background: var(--grigio-sfondo);
+    border: 1px solid var(--grigio-tabella);
+    border-left: 3px solid var(--blu-chiaro);
+    padding: .65rem 1rem;
+    margin: .5rem 0;
+    font-family: 'Source Code Pro', monospace;
+    font-size: .92rem;
+    color: var(--blu);
+    line-height: 1.8;
+    border-radius: 0 4px 4px 0;
+  }
+  .formula-block .fl { font-size: .72rem; color: var(--accento); text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .2rem; font-family: 'Source Serif 4', serif; font-weight: 600; }
+  .formula-block .fr { font-weight: 700; font-size: 1rem; color: var(--blu); }
+
+  /* ─── OSSERVAZIONI ─── */
+  .obs-item {
+    display: flex;
+    gap: .75rem;
+    align-items: flex-start;
+    padding: .7rem 0;
+    border-bottom: 1px solid #edf1f5;
+    font-size: .88rem;
+    line-height: 1.65;
+  }
+  .obs-item:last-child { border-bottom: none; }
+  .obs-arrow {
+    color: var(--blu-chiaro);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: .9rem;
+  }
+
+  /* ─── CONCLUSIONI ─── */
+  .conclusione-box {
+    background: var(--grigio-sfondo);
+    border: 1px solid var(--grigio-tabella);
+    border-left: 3px solid var(--blu);
+    padding: 1rem 1.2rem;
+    border-radius: 0 4px 4px 0;
+    font-size: .88rem;
+    line-height: 1.72;
+    color: var(--testo);
+  }
+  .conclusione-box .c-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--blu);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: .5rem;
+    display: block;
+  }
+  .conclusione-box p { margin-bottom: .6rem; }
+  .conclusione-box p:last-child { margin-bottom: 0; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 1.8rem 1rem;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10.5px;
+    color: var(--testo-s);
+    border-top: 1px solid var(--bordo);
+    background: var(--bianco);
+    letter-spacing: .04em;
+  }
+  footer strong { color: var(--blu); }
+
+  /* ─── RESPONSIVE MOBILE ─── */
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .nav-title { display: none; }
+
+    .hero { padding: 1.6rem 1rem 1.4rem; }
+    .hero h1 { font-size: 1.35rem; }
+    .hero-sub { font-size: .9rem; }
+    .hero-meta { gap: .8rem; font-size: .72rem; }
+
+    .main-wrap { padding: 1.2rem 1rem 3rem; }
+
+    .principi-griglia { grid-template-columns: 1fr; gap: .6rem; }
+    .mat-griglia { grid-template-columns: 1fr; }
+    .schema-wrap { grid-template-columns: 1fr; }
+
+    .componente-corpo { grid-template-columns: 1fr; }
+    .img-doppia { grid-template-columns: 1fr; }
+
+    .sezione-body { padding: 1rem; }
+
+    table.dati { font-size: .8rem; min-width: 440px; }
+    table.dati th { font-size: .75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-dot"></div>
+    <div>
+      <div class="nav-site">lorenzogandini.it</div>
+      <div class="nav-title">Il Laboratorio di Fisica</div>
+    </div>
+  </div>
+  <a class="nav-back" href="#">← Ricettario</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="codice-badge">REL · EXP 05</span>
+      <span class="area-badge">Elettromagnetismo</span>
+      <span class="classe-badge">Classe V</span>
+    </div>
+    <h1>Circuiti RC e Applicazioni Pratiche in Fotografia</h1>
+    <div class="hero-sub">Simulazione di un flash fotografico tramite circuito RC e diodo LED</div>
+    <div class="hero-meta">
+      <span><strong>Scuola:</strong> ITSOS Albe e Lica Steiner</span>
+      <span><strong>Argomenti:</strong> Circuiti RC · Condensatore · Costante di tempo</span>
+      <span><strong>A.S.:</strong> 2025/26</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENUTO PRINCIPALE -->
+<div class="main-wrap">
+
+  <!-- 01 — OBIETTIVO -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">01</span>
+        <span class="sezione-titolo-txt">Obiettivo</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="obiettivo-box">
+        Realizzare un circuito temporizzato <strong>RC</strong> che simula il funzionamento del flash fotografico tramite un diodo LED, sfruttando il processo di carica e scarica di un condensatore. L'esperienza mira a verificare sperimentalmente il legame tra la costante di tempo <strong>τ = R × C</strong> e la durata dell'impulso luminoso del LED, rispondendo alla domanda: <em>in che modo le proprietà dei componenti passivi di un circuito RC determinano la durata del lampo?</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 — PRINCIPI TEORICI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">02</span>
+        <span class="sezione-titolo-txt">Principi Teorici</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="p-label">Resistenza elettrica</div>
+          <div class="p-formula">R  [Ω = V / A]</div>
+          <div class="p-desc">Componente passivo che ostacola il flusso di corrente elettrica. Determina, insieme al condensatore, la velocità di carica e scarica del circuito RC.</div>
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Condensatore</div>
+          <div class="p-formula">C  [F = C / V]</div>
+          <div class="p-desc">Immagazzina energia elettrica tra le armature sotto forma di campo elettrico. Può fungere da accumulatore temporaneo a scarica rapida.</div>
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Costante di tempo</div>
+          <div class="p-formula">τ = R × C  [s]</div>
+          <div class="p-desc"><strong>Carica:</strong> in un tempo τ il condensatore raggiunge il 63,2 % della carica massima.<br><strong>Scarica:</strong> in τ la carica scende al 36,8 % del valore iniziale.</div>
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Diodo LED</div>
+          <div class="p-formula">I → solo polariz. diretta</div>
+          <div class="p-desc">Componente polarizzato (anodo +, catodo –) che emette luce quando percorso da corrente nel verso diretto. Nel circuito RC segna visivamente la scarica del condensatore.</div>
+        </div>
+      </div>
+      <div class="principio-wide">
+        <div class="p-label">Principio del flash RC</div>
+        Il condensatore si carica quando il circuito è alimentato: il LED rimane spento. Alla rimozione dell'alimentazione il condensatore si scarica attraverso il LED, generando un lampo di durata proporzionale a τ. Variando il valore della resistenza R o della capacità C è possibile modificare τ e quindi la durata del lampo.
+      </div>
+      <div class="nota-storica">
+        <span class="ns-label">Nota Storica — Il Flash al Magnesio</span>
+        I primi flash fotografici (fine '800) sfruttavano la combustione di polvere di <strong>magnesio</strong>: 2 Mg + O₂ → 2 MgO. La reazione era rapidissima, intensamente luminosa, ma non controllabile né ripetibile. L'evoluzione verso i circuiti RC ha reso il lampo programmabile, sicuro e preciso, aprendo nuove possibilità espressive alla fotografia e al cinema.
+      </div>
+
+      <!-- ═══ GUIDA AI COMPONENTI ═══ -->
+      <div class="guida-titolo">Guida ai Componenti e al Montaggio</div>
+
+      <!-- RESISTENZA -->
+      <div class="componente-card">
+        <div class="componente-card-head">
+          <div class="componente-icona">R</div>
+          <div class="componente-titolo">La Resistenza e il Codice dei Colori</div>
+        </div>
+        <div class="componente-corpo">
+          <div class="componente-img-wrap">
+            <img src="codice_resistori.png" alt="Tabella del codice colori delle resistenze">
+            <div class="componente-img-cap">Lettura del valore tramite gli anelli colorati (4 o 5 fasce).</div>
+          </div>
+          <div class="componente-testo">
+            <p>La <strong>resistenza</strong> è un componente che si oppone al passaggio della corrente elettrica, dissipando parte dell'energia sotto forma di calore. Il suo valore, espresso in Ohm (Ω), non è scritto in cifre sul corpo del componente ma è codificato tramite <strong>anelli colorati</strong>.</p>
+            <p>Nelle resistenze a 4 fasce i primi due anelli indicano le cifre significative, il terzo il moltiplicatore (potenza di dieci), il quarto la tolleranza. Nelle resistenze a 5 fasce le cifre significative sono tre.</p>
+            <div class="collegamento-box">
+              <span class="cb-label">Come si collega</span>
+              La resistenza non è polarizzata: può essere inserita nel circuito in entrambi i versi. Va posta in <strong>serie</strong> al ramo di alimentazione, tra la sorgente (Arduino) e il nodo del condensatore/LED, per limitare la corrente che li attraversa.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONDENSATORE ELETTROLITICO -->
+      <div class="componente-card">
+        <div class="componente-card-head">
+          <div class="componente-icona">C</div>
+          <div class="componente-titolo">Il Condensatore Elettrolitico</div>
+        </div>
+        <div class="componente-corpo">
+          <div class="componente-img-wrap">
+            <img src="condensatore_descrizione.webp" alt="Diversi tipi di condensatori e relativo simbolo circuitale, con indicazione di polarità + e –">
+            <div class="componente-img-cap">Tipologie di condensatori (poliestere, ceramico, elettrolitico) e simbolo circuitale: nei condensatori polarizzati i terminali + e – non sono intercambiabili.</div>
+          </div>
+          <div class="componente-testo">
+            <p>Il <strong>condensatore elettrolitico</strong> è un componente che immagazzina energia elettrica sotto forma di campo elettrico tra due armature separate da un sottile strato isolante. A differenza delle resistenze, è un componente <strong>polarizzato</strong>: possiede un terminale positivo e uno negativo, e la sua capacità si misura in Farad (F) o, più comunemente nei piccoli componenti, in microfarad (μF).</p>
+            <p>Il terminale negativo è riconoscibile da una <strong>banda chiara stampata sul corpo</strong> del componente (spesso con il simbolo "–"), ed è inoltre più corto rispetto al terminale positivo.</p>
+            <div class="collegamento-box">
+              <span class="cb-label">Come si collega</span>
+              Il terminale <strong>negativo</strong> (banda chiara, piedino corto) va collegato verso il polo a potenziale inferiore del circuito, cioè verso il GND. Il terminale <strong>positivo</strong> va collegato verso il nodo a potenziale più alto, lo stesso a cui è collegato l'anodo del LED. Un collegamento invertito può danneggiare irreversibilmente il componente: <strong>verificare sempre la polarità prima di alimentare il circuito</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIODO LED -->
+      <div class="componente-card">
+        <div class="componente-card-head">
+          <div class="componente-icona">D</div>
+          <div class="componente-titolo">Il Diodo LED: Struttura e Polarità</div>
+        </div>
+        <div class="componente-corpo">
+          <div class="componente-img-wrap">
+            <img src="led_descrizione.webp" alt="Struttura del LED e simbolo del diodo: anodo positivo e catodo negativo">
+            <div class="componente-img-cap">Struttura del LED e simbolo circuitale del diodo: la freccia indica il verso di conduzione, dall'anodo (+) al catodo (–).</div>
+          </div>
+          <div class="componente-testo">
+            <p>Un <strong>diodo</strong> è un componente che permette il passaggio di corrente in un solo verso (polarizzazione diretta) e lo blocca nel verso opposto (polarizzazione inversa). Il <strong>LED</strong> (Light Emitting Diode) è un diodo che, quando attraversato da corrente nel verso diretto, converte l'energia elettrica in luce grazie a un semiconduttore racchiuso in una cavità riflettente, protetto da una lente.</p>
+            <p>I due terminali del LED si distinguono per lunghezza: il piedino più <strong>lungo è l'anodo (+)</strong>, quello più <strong>corto è il catodo (–)</strong>. Spesso anche il bordo della lente presenta una piccola smussatura in corrispondenza del catodo.</p>
+            <div class="collegamento-box">
+              <span class="cb-label">Come si collega</span>
+              L'<strong>anodo</strong> (piedino lungo) va collegato verso il nodo a potenziale più alto del circuito — lo stesso del terminale positivo del condensatore. Il <strong>catodo</strong> (piedino corto) va collegato verso il GND. Se il LED è inserito al contrario non si accende (polarizzazione inversa) ma in genere non si danneggia, a differenza del condensatore elettrolitico.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BREADBOARD -->
+      <div class="componente-card">
+        <div class="componente-card-head">
+          <div class="componente-icona">B</div>
+          <div class="componente-titolo">La Breadboard: come Sono Collegati i Fori</div>
+        </div>
+        <div class="componente-corpo">
+          <div class="componente-img-wrap">
+            <img src="breadboard_info.png" alt="Schema delle connessioni interne della breadboard">
+            <div class="componente-img-cap">Connessioni interne: righe orizzontali collegate a gruppi di 5, strisce verticali laterali per l'alimentazione.</div>
+          </div>
+          <div class="componente-testo">
+            <p>La <strong>breadboard</strong> (basetta sperimentale) permette di assemblare circuiti senza saldature, grazie a connettori metallici nascosti sotto la plastica forata. Non tutti i fori sono collegati fra loro: bisogna conoscere lo schema delle connessioni interne per montare correttamente un circuito.</p>
+            <p>Nella <strong>zona centrale di prototipazione</strong>, i 5 fori di ogni riga verticale corta sono collegati elettricamente fra loro, ma sono isolati dalla riga adiacente. Una scanalatura centrale separa elettricamente i due lati della basetta. Le <strong>strisce laterali</strong> (contrassegnate + e –) sono invece collegate orizzontalmente lungo tutta la breadboard e si usano normalmente per portare l'alimentazione e la massa a tutto il circuito.</p>
+            <div class="collegamento-box">
+              <span class="cb-label">Come si collega</span>
+              Inserire ogni componente in modo che i suoi terminali occupino <strong>colonne diverse</strong> della stessa zona di prototipazione (così risultano collegati allo stesso nodo solo i terminali nella medesima colonna). Usare le strisce laterali + e – per distribuire l'alimentazione di Arduino (5V e GND) ai vari rami del circuito tramite cavetti di collegamento.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 03 — STRUMENTI E MATERIALI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">03</span>
+        <span class="sezione-titolo-txt">Strumenti e Materiali</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="mat-griglia">
+        <div>
+          <div class="mat-gruppo-titolo">Componenti del circuito</div>
+          <ul class="mat-lista">
+            <li>Resistore fisso <em>valore: ___ Ω</em></li>
+            <li>Condensatore elettrolitico polarizzato <em>C = ___ μF</em></li>
+            <li>Diodo LED <em>colore: ___</em></li>
+          </ul>
+        </div>
+        <div>
+          <div class="mat-gruppo-titolo">Strumenti e infrastruttura</div>
+          <ul class="mat-lista">
+            <li>Breadboard (basetta sperimentale)</li>
+            <li>Cavi di collegamento</li>
+            <li>Arduino <em>sorgente 5 V in continua</em></li>
+            <li>Multimetro digitale</li>
+            <li>Cronometro</li>
+            <li>Software Tinkercad <em>simulazione preliminare</em></li>
+            <li>Filamento di magnesio <em>riferimento storico</em></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 — SCHEMA ELETTRICO + BREADBOARD -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">04</span>
+        <span class="sezione-titolo-txt">Schema del Circuito e Montaggio</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div style="display:flex; flex-direction:column; gap:1rem;">
+
+        <!-- Schema elettrico reale -->
+        <div class="schema-box">
+          <div class="schema-box-title">Schema elettrico · TinkerCAD</div>
+          <img src="schema_elettrico.png" alt="Schema elettrico del circuito RC" style="width:100%; border-radius:3px; display:block;">
+          <div class="schema-didascalia">Schema elettrico simulato su TinkerCAD: V1 (12V) → S2 → R1 (1Ω) → C1 (1F) in parallelo con LED1. Il voltmetro PR1 misura la tensione sul condensatore; l'amperometro PR2 la corrente di scarica.</div>
+        </div>
+
+        <!-- Montaggio breadboard TinkerCAD -->
+        <div class="schema-box">
+          <div class="schema-box-title">Montaggio su Breadboard · TinkerCAD</div>
+          <img src="breadboard.png" alt="Montaggio del circuito RC su breadboard in TinkerCAD" style="width:100%; border-radius:3px; display:block;">
+          <div class="schema-didascalia">Montaggio virtuale su breadboard: Arduino UNO come sorgente di tensione, resistore R, condensatore elettrolitico e diodo LED collegati secondo lo schema. Rispettare la polarità del condensatore (banda –) e del LED (gamba lunga = anodo +).</div>
+        </div>
+
+        <div style="text-align:center; padding-top:.2rem;">
+          <a class="tinkercad-link" href="https://www.tinkercad.com/things/6WmG2aV9CUI-rc-led-flash" target="_blank" rel="noopener">→ Apri il progetto originale su TinkerCAD</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 — PROCEDIMENTO -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">05</span>
+        <span class="sezione-titolo-txt">Procedimento</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <ol class="step-lista">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <p><strong>Simulazione virtuale (TinkerCAD):</strong> Prima del montaggio fisico, riprodurre il circuito su TinkerCAD. Verificare la polarità del LED (anodo +, catodo –) e del condensatore elettrolitico (banda – sul terminale negativo). Osservare il comportamento atteso nella simulazione. <em>Questo passaggio è stato svolto dal docente.</em></p>
+            <div class="step-nota">⚠ Non procedere al montaggio fisico senza aver simulato e verificato la correttezza dello schema.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <p><strong>Identificazione dei componenti:</strong> Leggere il valore delle resistenze dal codice a colori. Verificare la capacità del condensatore (stampata sul corpo). Identificare anodo (+) e catodo (–) del LED dalla diversa lunghezza dei terminali.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <p><strong>Assemblaggio sulla breadboard:</strong> Inserire i componenti rispettando le connessioni interne della basetta. Collegare il terminale negativo del condensatore elettrolitico al ramo GND. Posizionare C e LED in parallelo tra il nodo A e GND.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <p><strong>Collegamento ad Arduino:</strong> Collegare il pin 5V di Arduino al ramo della resistenza R e GND al ramo negativo del circuito.</p>
+            <div class="step-nota">⚠ Corrente massima per pin Arduino: 40 mA. Verificare che I = V/R resti entro questo limite prima di alimentare.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <p><strong>Verifica visiva:</strong> Prima di alimentare, controllare ogni connessione. Attenzione alla polarità di C e del LED. Un condensatore elettrolitico invertito può danneggiarsi irreversibilmente.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <p><strong>Prima accensione e misura:</strong> Alimentare il circuito (fase di carica: LED spento). Disconnettere l'alimentazione e misurare con il cronometro la durata del lampo del LED (fase di scarica).</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <p><strong>Variazione di R:</strong> Sostituire la resistenza con un valore diverso. Ripetere la misura e confrontare la durata del lampo con la previsione τ = R × C.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 05b — VIDEO RISULTATO -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)" style="background:#c0392b;">
+      <div class="sezione-header-left">
+        <span class="sezione-num" style="color:rgba(255,255,255,.65);">▶</span>
+        <span class="sezione-titolo-txt">Risultato Finale — Video</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="video-wrap">
+        <div class="video-label">Circuito RC realizzata in laboratorio</div>
+        <video class="video-player" controls preload="metadata">
+          <source src="Circuito_RC.mp4" type="video/mp4">
+          Il tuo browser non supporta la riproduzione video. <a href="Circuito_RC.mp4">Scarica il video</a>.
+        </video>
+        <div class="video-didascalia">
+          Il video mostra il circuito RC montato su breadboard con Arduino come sorgente di tensione. Si osserva la fase di carica (LED spento) e la fase di scarica dopo la disconnessione (LED acceso per una durata proporzionale a τ = R × C).
+        </div>
+      </div>
+
+      <div class="video-wrap" style="margin-top:1.2rem;">
+        <div class="video-label">Versione con interruttore reale</div>
+        <video class="video-player" controls preload="metadata">
+          <source src="rc-cass.mp4" type="video/mp4">
+          Il tuo browser non supporta la riproduzione video. <a href="rc-cass.mp4">Scarica il video</a>.
+        </video>
+        <div class="video-didascalia">
+          Questo video mostra la versione del circuito realizzata con un interruttore vero e proprio al posto della disconnessione manuale dell'alimentazione: l'apertura dell'interruttore avvia la fase di scarica del condensatore, accendendo il LED per la durata τ = R × C.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05c — SAGGIO ALLA FIAMMA DEL MAGNESIO -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)" style="background:#b07d20;">
+      <div class="sezione-header-left">
+        <span class="sezione-num" style="color:rgba(255,255,255,.65);">▶</span>
+        <span class="sezione-titolo-txt">Approfondimento Storico — Saggio alla Fiamma del Magnesio</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="nota-storica" style="margin-bottom:1rem;">
+        <span class="ns-label">Contesto storico</span>
+        Prima dell'avvento dei circuiti elettronici, i fotografi utilizzavano la combustione del <strong>magnesio</strong> per produrre il lampo necessario all'esposizione. La reazione di ossidazione del magnesio è estremamente rapida e produce una luce bianca intensa:<br><br>
+        <strong>2 Mg + O₂ → 2 MgO</strong><br><br>
+        Il lampo è però istantaneo, non controllabile e non ripetibile. Questa dimostrazione permette di confrontare direttamente la tecnologia chimica del passato con quella elettronica del circuito RC realizzato in laboratorio.
+      </div>
+      <div class="video-wrap">
+        <div class="video-label">Combustione del filamento di magnesio</div>
+        <video class="video-player" controls preload="metadata">
+          <source src="Magnesio.mp4" type="video/mp4">
+          Il tuo browser non supporta la riproduzione video. <a href="Magnesio.mp4">Scarica il video</a>.
+        </video>
+        <div class="video-didascalia">
+          Il video mostra la combustione di un filamento di magnesio. Si osserva la reazione 2 Mg + O₂ → 2 MgO: la luce prodotta è intensa, bianca e di brevissima durata, del tutto incontrollabile. A differenza del circuito RC, non è possibile regolare la durata né ripetere il lampo senza sostituire il filamento.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 — RACCOLTA DATI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">06</span>
+        <span class="sezione-titolo-txt">Raccolta Dati e Analisi</span>
+      </div>
+      <span class="sezione-chevron">▾</span>
+    </div>
+    <div class="sezione-body">
+
+      <div class="obiettivo-box">
+        Questa esperienza ha carattere <strong>dimostrativo</strong> e non quantitativo: l'obiettivo era osservare qualitativamente il funzionamento del circuito RC come simulatore di flash fotografico, non effettuare misure di precisione della costante di tempo. Per questo motivo non è prevista una raccolta sistematica di dati numerici né un'analisi quantitativa dei risultati.
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 — OSSERVAZIONI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">07</span>
+        <span class="sezione-titolo-txt">Osservazioni</span>
+      </div>
+      <span class="sezione-chevron">▾</span>
+    </div>
+    <div class="sezione-body">
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Comportamento durante la carica:</strong> Con il circuito alimentato, la corrente nel ramo del LED è praticamente nulla. Il condensatore, caricandosi, porta il potenziale ai suoi capi fino a quello della sorgente, azzerando la differenza di tensione disponibile per il LED.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Polarità dei componenti:</strong> L'inversione della polarità del LED ha impedito il funzionamento del circuito, confermando l'importanza critica dell'orientamento corretto dei componenti polarizzati.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Variazione dei componenti:</strong> Modificando il valore della resistenza R o della capacità C è stato possibile osservare la variazione della durata del lampo, confermando in modo diretto la relazione τ = R × C.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Confronto con il flash al magnesio:</strong> Il filamento di magnesio ha prodotto un lampo istantaneo, non controllabile né ripetibile. Il circuito RC produce invece un lampo di durata precisa e modificabile: il progresso tecnologico ha trasformato un processo chimico unidirezionale in uno strumento programmabile.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 — CONCLUSIONI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">08</span>
+        <span class="sezione-titolo-txt">Conclusioni</span>
+      </div>
+      <span class="sezione-chevron">▾</span>
+    </div>
+    <div class="sezione-body">
+      <div class="conclusione-box">
+        <span class="c-label">Risposta all'obiettivo</span>
+        <p>L'obiettivo è stato raggiunto: il circuito RC realizzato simula correttamente il funzionamento di un flash fotografico.</p>
+        <p>La variazione della resistenza di un ordine di grandezza ha prodotto una variazione equivalente del tempo di accensione, confermando sperimentalmente la relazione τ ∝ R.</p>
+        <p>L'esperienza ha reso concreta la connessione tra i principi dell'elettrotecnica (resistenza, capacità, costante di tempo) e un dispositivo di uso comune.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- fine main-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <strong>lorenzogandini.it</strong> · Il Laboratorio di Fisica · REL EXP 05 · Elettromagnetismo · A.S. 2025/26<br>
+  ITSOS Albe e Lica Steiner
+</footer>
+
+<script>
+  function toggleSezione(header) {
+    const chevron = header.querySelector('.sezione-chevron');
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    chevron.classList.toggle('open', !isOpen);
+  }
+
+  // Animazione progress bar all'avvio
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.prog-fill').forEach(el => {
+      const w = el.dataset.w || '0';
+      setTimeout(() => el.style.width = w + '%', 100);
+    });
+  });
+</script>
+</body>
+</html>
