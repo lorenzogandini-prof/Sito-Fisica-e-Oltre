@@ -13,10 +13,22 @@
   --verde:#0F6E56;--verde-p:#E1F5EE;--arancio:#BA7517;--arancio-p:#FAEEDA;
   --rosso:#A32D2D;--rosso-p:#FCEBEB;
 }
+[data-theme="dark"]{
+  --blu:#5B9BD9;--blu-s:#E8F1FB;--blu-m:#7FB3E8;
+  --blu-c:#2C4A6B;--blu-p:#1A2E42;--blu-pp:#16273A;
+  --testo:#E4EAF0;--testo-s:#9AAEC4;--bordo:#2A3C52;--bg:#0E1A28;--w:#16273A;
+  --verde:#4ADE9C;--verde-p:#1A3329;--arancio:#F0B860;--arancio-p:#3A2E16;
+  --rosso:#F08080;--rosso-p:#3A1E1E;
+}
+html{transition:background-color .3s}
 html{-webkit-text-size-adjust:100%}
-body{font-family:'Arial',sans-serif;background:var(--bg);color:var(--testo);min-height:100vh}
+body{font-family:'Arial',sans-serif;background:var(--bg);color:var(--testo);min-height:100vh;transition:background-color .3s,color .3s}
 button{cursor:pointer;-webkit-appearance:none;touch-action:manipulation}
-nav{background:var(--w);border-bottom:1px solid var(--bordo);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+nav{background:var(--w);border-bottom:1px solid var(--bordo);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;transition:background-color .3s,border-color .3s}
+.theme-toggle{background:var(--bg);border:1px solid var(--bordo);border-radius:20px;width:44px;height:24px;position:relative;flex-shrink:0;padding:2px;transition:background-color .3s,border-color .3s}
+.theme-toggle .knob{width:18px;height:18px;border-radius:50%;background:var(--blu);display:flex;align-items:center;justify-content:center;transition:transform .3s,background-color .3s;transform:translateX(0)}
+[data-theme="dark"] .theme-toggle .knob{transform:translateX(20px)}
+.theme-toggle .knob svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.2}
 .nav-brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .nav-dot{width:9px;height:9px;border-radius:50%;background:var(--blu);flex-shrink:0}
 .nav-title{font-size:14px;color:var(--blu-s);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -54,7 +66,7 @@ nav{background:var(--w);border-bottom:1px solid var(--bordo);padding:0 2rem;disp
 .prog-sub{font-size:11px;color:var(--testo-s);margin-top:2px}
 .prog-note{font-size:11px;color:var(--testo-s);margin-top:.6rem;font-style:italic;line-height:1.5}
 .sec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem}
-.sec-card{background:var(--w);border:1px solid var(--bordo);border-radius:10px;padding:1.4rem 1.2rem;touch-action:manipulation}
+.sec-card{background:var(--w);border:1px solid var(--bordo);border-radius:10px;padding:1.4rem 1.2rem;touch-action:manipulation;transition:background-color .3s,border-color .3s}
 .sec-card:active{border-color:var(--blu);background:var(--blu-pp)}
 @media(hover:hover){.sec-card:hover{border-color:var(--blu);transform:translateY(-3px);transition:all .2s}}
 .sec-ico{width:38px;height:38px;border-radius:8px;background:var(--blu-p);display:flex;align-items:center;justify-content:center;margin-bottom:.85rem}
@@ -119,7 +131,7 @@ nav{background:var(--w);border-bottom:1px solid var(--bordo);padding:0 2rem;disp
 .cat-ott{color:var(--verde)}.cat-ele{color:var(--arancio)}.cat-ter{color:var(--rosso)}
 .overlay{display:none;position:fixed;inset:0;background:rgba(4,44,83,.5);z-index:200;align-items:center;justify-content:center;padding:1rem}
 .overlay.open{display:flex}
-.modal{background:var(--w);border-radius:14px;max-width:620px;width:100%;max-height:88vh;overflow-y:auto;padding:1.75rem;-webkit-overflow-scrolling:touch}
+.modal{background:var(--w);border-radius:14px;max-width:620px;width:100%;max-height:88vh;overflow-y:auto;padding:1.75rem;-webkit-overflow-scrolling:touch;transition:background-color .3s}
 .modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;gap:.75rem}
 .modal-head h2{font-size:1rem;color:var(--blu-s);font-weight:600;line-height:1.3}
 .modal-close{font-size:22px;color:var(--testo-s);background:none;border:none;line-height:1;flex-shrink:0;padding:2px 6px}
@@ -164,6 +176,11 @@ footer a{color:var(--blu)}
     <button data-page="vocabolario">Vocabolario</button>
     <button data-page="ricettario">Ricettario</button>
   </div>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Cambia tema">
+    <div class="knob">
+      <svg id="theme-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </div>
+  </button>
   <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 <div class="nav-mobile" id="nav-mobile">
@@ -859,6 +876,16 @@ function goPageById(id){
 function toggleMenu(){document.getElementById('burger').classList.toggle('open');document.getElementById('nav-mobile').classList.toggle('open');}
 function closeMenu(){document.getElementById('burger').classList.remove('open');document.getElementById('nav-mobile').classList.remove('open');}
 
+const ICON_SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+const ICON_MOON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+let currentTheme='light';
+function setTheme(theme){
+  currentTheme=theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('theme-icon').innerHTML = theme==='dark' ? ICON_MOON : ICON_SUN;
+}
+function toggleTheme(){ setTheme(currentTheme==='dark' ? 'light' : 'dark'); }
+
 function initProgress(){
   const keys=Object.keys(PROGETTO);let totPrev=0,totPub=0;
   const c=document.getElementById('prog-items');c.innerHTML='';
@@ -962,6 +989,7 @@ function stampaScheda(){
 
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('burger').addEventListener('click',toggleMenu);
+  document.getElementById('theme-toggle').addEventListener('click',toggleTheme);
   document.querySelectorAll('#nav-desktop button,#nav-mobile button').forEach(btn=>{
     btn.addEventListener('click',()=>goPageById(btn.dataset.page));
   });
