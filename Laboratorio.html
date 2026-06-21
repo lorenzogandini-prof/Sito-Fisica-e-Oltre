@@ -1,683 +1,989 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laboratorio di Fisica — Schede Sperimentali</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Il Laboratorio di Fisica di Lorenzo Gandini</title>
 <style>
-/* ═══════════════════════════════════════════
-   DESIGN SYSTEM
-   Palette: schede EXP (#1a3a5c / #2e6da4 / #c0392b)
-   Layout/componenti: stile emergent-prova.html
-   (Inter font · rounded-xl · border shadow · sezioni alternate · footer slate-900)
-═══════════════════════════════════════════ */
-:root {
-  --blu:          #1a3a5c;
-  --blu-chiaro:   #2e6da4;
-  --blu-medio:    #1d4f7c;
-  --blu-scuro:    #0f2440;
-  --accento:      #c0392b;
-  --grigio-linea: #b0bec5;
-  --grigio-sfondo:#f0f4f8;
-  --grigio-tab:   #dce8f3;
-  --testo:        #1c2a38;
-  --border:       #e2e8f0;
-  --muted-fg:     #64748b;
-  --radius:       0.75rem;
-  --nav-h:        64px;
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --blu:#185FA5;--blu-s:#042C53;--blu-m:#0C447C;
+  --blu-c:#B5D4F4;--blu-p:#E6F1FB;--blu-pp:#f0f7fd;
+  --testo:#1a2a3a;--testo-s:#4a6080;--bordo:#ccdded;--bg:#f7fbff;--w:#fff;
+  --verde:#0F6E56;--verde-p:#E1F5EE;--arancio:#BA7517;--arancio-p:#FAEEDA;
+  --rosso:#A32D2D;--rosso-p:#FCEBEB;
 }
-
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:var(--testo);-webkit-font-smoothing:antialiased;line-height:1.5}
-::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:4px}
-::selection{background:rgba(46,109,164,.22)}
-a{color:inherit;text-decoration:none}
-
-/* ── NAV ── */
-header{position:fixed;inset-x:0;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:var(--nav-h)}
-nav{max-width:1280px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-weight:800;font-size:1.05rem;color:var(--blu);display:flex;align-items:center;gap:9px;letter-spacing:-.02em}
-.nav-badge{background:var(--blu);color:#fff;font-family:'Source Code Pro',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;padding:2px 8px;border-radius:4px}
-.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
-.nav-links a{font-size:.875rem;font-weight:500;color:var(--muted-fg);padding:6px 14px;border-radius:6px;transition:background .15s,color .15s}
-.nav-links a:hover{background:#f1f5f9;color:var(--testo)}
-.nav-links a.active{color:var(--blu);background:var(--grigio-sfondo);font-weight:600}
-
-/* ── HERO ── */
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(140deg,var(--blu-scuro) 0%,var(--blu) 55%,var(--blu-medio) 100%);padding-top:var(--nav-h)}
-.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.04) 40px);pointer-events:none}
-.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 62% 38%,rgba(46,109,164,.38) 0%,transparent 70%);pointer-events:none}
-.hero-inner{position:relative;z-index:1;text-align:center;padding:4rem 1.5rem 5rem;max-width:880px;width:100%}
-.hero-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-family:'Source Code Pro',monospace;font-size:10.5px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;padding:5px 14px;border-radius:99px;margin-bottom:26px;animation:fadeUp .6s ease both}
-.hero h1{font-size:clamp(2.4rem,6vw,4.6rem);font-weight:800;color:#fff;line-height:1.07;letter-spacing:-.03em;margin-bottom:18px;animation:fadeUp .7s ease .1s both}
-.hero h1 span{color:#7bb8e8}
-.hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:rgba(255,255,255,.58);font-weight:300;max-width:540px;margin:0 auto 38px;line-height:1.7;animation:fadeUp .7s ease .2s both}
-.hero-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s ease .3s both}
-
-/* ── BOTTONI ── */
-.btn{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:.875rem;font-weight:600;padding:10px 22px;border-radius:8px;border:none;cursor:pointer;transition:all .2s ease;white-space:nowrap}
-.btn-white{background:#fff;color:var(--blu);box-shadow:0 1px 3px rgba(0,0,0,.14)}
-.btn-white:hover{background:#f0f4f8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.14)}
-.btn-ghost{background:transparent;color:rgba(255,255,255,.78);border:1.5px solid rgba(255,255,255,.28)}
-.btn-ghost:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.5)}
-.btn-blue{background:var(--blu-chiaro);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.btn-blue:hover{background:var(--blu-medio);transform:translateY(-1px)}
-
-/* ── STAT STRIP ── */
-.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:3.5rem;animation:fadeUp .7s ease .42s both}
-.hero-stat{background:#fff;padding:1.4rem;text-align:center}
-.stat-num{font-size:1.9rem;font-weight:800;color:var(--blu);letter-spacing:-.04em;line-height:1;margin-bottom:3px}
-.stat-label{font-size:.75rem;color:var(--muted-fg);font-weight:500}
-
-/* ── SEZIONI ── */
-main{padding-top:var(--nav-h)}
-.section{padding:5rem 1.5rem}
-.section-white{background:#fff}
-.section-gray{background:#f8fafc}
-.section-dark{background:var(--blu-scuro)}
-.section-inner{max-width:1100px;margin:0 auto}
-.section-label{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blu-chiaro);margin-bottom:7px}
-.section-label-light{color:rgba(123,184,232,.9)}
-.section-title{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--blu);letter-spacing:-.025em;line-height:1.13;margin-bottom:10px}
-.section-title-light{color:#fff}
-.section-desc{font-size:1rem;color:var(--muted-fg);max-width:580px;line-height:1.65;margin-bottom:2.8rem}
-.section-desc-light{color:rgba(255,255,255,.5)}
-
-/* ── RIASSUNTO CARDS ── */
-.rias-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.15rem;margin-bottom:1.4rem}
-.rias-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.35rem 1.25rem;border-top:3px solid var(--blu-chiaro);box-shadow:0 1px 4px rgba(0,0,0,.05);transition:box-shadow .2s,transform .2s}
-.rias-card:hover{box-shadow:0 6px 18px rgba(26,58,92,.1);transform:translateY(-2px)}
-.rias-icon{font-size:1.75rem;margin-bottom:9px;display:block}
-.rias-card h3{font-family:'Source Code Pro',monospace;font-size:10px;font-weight:600;color:var(--accento);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:7px}
-.rias-card p{font-size:.83rem;color:var(--muted-fg);line-height:1.62}
-.rias-card p strong{color:var(--testo)}
-.rias-note{background:var(--blu);color:rgba(255,255,255,.88);border-radius:var(--radius);padding:1.25rem 1.4rem;border-left:4px solid var(--accento);font-size:.875rem;line-height:1.7}
-.rias-note strong{color:#fff}
-
-/* ── EXP CARDS ── */
-.exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
-.exp-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .25s,transform .25s;display:flex;flex-direction:column}
-.exp-card:hover{box-shadow:0 10px 28px rgba(26,58,92,.12);transform:translateY(-3px)}
-.exp-card-head{background:linear-gradient(135deg,var(--blu) 0%,var(--blu-medio) 100%);padding:1.1rem 1.2rem 1rem;display:flex;align-items:flex-start;gap:11px}
-.exp-badge{background:rgba(192,57,43,.82);color:#fff;font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:4px;flex-shrink:0;margin-top:2px}
-.exp-card-title{font-size:.875rem;font-weight:700;color:#fff;line-height:1.35}
-.exp-body{padding:1.1rem 1.2rem;flex:1;display:flex;flex-direction:column;gap:11px}
-.exp-desc{font-size:.82rem;color:var(--muted-fg);line-height:1.65;flex:1}
-.exp-desc strong{color:var(--testo);font-weight:600}
-.exp-tags{display:flex;flex-wrap:wrap;gap:5px}
-.exp-tag{font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:500;color:var(--blu-chiaro);background:var(--grigio-sfondo);border:1px solid var(--grigio-tab);padding:2px 8px;border-radius:4px}
-.exp-foot{padding:.7rem 1.2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fafcff}
-.exp-link{font-size:.79rem;font-weight:600;color:var(--blu-chiaro);display:flex;align-items:center;gap:5px;transition:color .15s,gap .15s}
-.exp-link:hover{color:var(--blu);gap:8px}
-.exp-link svg{width:13px;height:13px}
-.exp-pages{font-family:'Source Code Pro',monospace;font-size:9.5px;color:var(--muted-fg)}
-
-/* ── GLOSSARIO ── */
-.gl-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.7rem}
-.fl-btn{font-size:.8rem;font-weight:500;padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--muted-fg);cursor:pointer;transition:all .15s}
-.fl-btn:hover{border-color:var(--blu-chiaro);color:var(--blu-chiaro)}
-.fl-btn.active{background:var(--blu);color:#fff;border-color:var(--blu)}
-.gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
-.gl-entry{background:#fff;border:1px solid var(--border);border-left:3px solid var(--grigio-linea);border-radius:8px;padding:.95rem 1.05rem;transition:box-shadow .2s}
-.gl-entry:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.cat-strumenti{border-left-color:var(--blu-chiaro)}
-.cat-errori{border-left-color:var(--accento)}
-.cat-formule{border-left-color:#c49a3c}
-.cat-leggi{border-left-color:#27ae60}
-.gl-term{font-family:'Source Code Pro',monospace;font-size:11px;font-weight:600;color:var(--blu);margin-bottom:5px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
-.g-badge{font-size:9px;font-weight:500;letter-spacing:.8px;padding:1px 7px;border-radius:3px}
-.gb-str{background:rgba(46,109,164,.1);color:var(--blu-chiaro)}
-.gb-err{background:rgba(192,57,43,.1);color:var(--accento)}
-.gb-for{background:rgba(196,154,60,.12);color:#8a6c20}
-.gb-leg{background:rgba(39,174,96,.1);color:#1a7a44}
-.gl-formula{font-family:'Source Code Pro',monospace;font-size:10.5px;color:var(--blu-chiaro);background:var(--grigio-sfondo);border:1px solid var(--grigio-tab);padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:6px}
-.gl-def{font-size:.8rem;line-height:1.62;color:var(--muted-fg)}
-
-/* ── LIBRO DIGITALE ── */
-.libro-box{background:rgba(255,255,255,.04);border:1px dashed rgba(123,184,232,.28);border-radius:var(--radius);padding:2.2rem;text-align:center;max-width:560px;margin:0 auto 2.2rem}
-.libro-box-icon{font-size:2.8rem;margin-bottom:.8rem;display:block;opacity:.65}
-.libro-box h3{font-size:1.2rem;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:8px}
-.libro-box p{font-size:.85rem;color:rgba(255,255,255,.42);line-height:1.7;margin-bottom:1.1rem}
-.ch-list{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:3px}
-.ch-row{display:flex;align-items:center;gap:14px;padding:12px 15px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;transition:background .2s}
-a.ch-row{cursor:pointer}
-a.ch-row:hover{background:rgba(39,174,96,.07);border-color:rgba(39,174,96,.22)}
-.ch-num{font-family:'Source Code Pro',monospace;font-size:9.5px;font-weight:700;color:var(--accento);letter-spacing:1px;width:40px;flex-shrink:0}
-.ch-title{flex:1;font-size:.85rem;color:rgba(255,255,255,.48);font-style:italic;line-height:1.4}
-a.ch-row .ch-title{color:rgba(255,255,255,.82);font-style:normal;font-weight:500}
-.ch-status{font-family:'Source Code Pro',monospace;font-size:8.5px;letter-spacing:1px;padding:3px 9px;border-radius:3px;white-space:nowrap}
-.st-ok{border:1px solid rgba(39,174,96,.5);color:rgba(39,174,96,.95);background:rgba(39,174,96,.07)}
-.st-wip{border:1px solid rgba(196,154,60,.4);color:rgba(196,154,60,.8)}
-.st-plan{border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.24)}
-/* risorse pills */
-.risorse{display:flex;gap:11px;flex-wrap:wrap;margin-top:1.8rem;max-width:620px;margin-left:auto;margin-right:auto}
-.ris-pill{flex:1;min-width:210px;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.04);border:1px solid rgba(196,154,60,.24);border-radius:8px;padding:11px 14px;transition:background .2s,border-color .2s}
-.ris-pill:hover{background:rgba(196,154,60,.07);border-color:rgba(196,154,60,.48)}
-.ris-icon{font-size:1.3rem;flex-shrink:0}
-.ris-label{font-family:'Source Code Pro',monospace;font-size:8.5px;color:#c49a3c;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:3px}
-.ris-name{font-size:.78rem;color:rgba(255,255,255,.62);display:block;line-height:1.35}
-.ris-arrow{font-size:.95rem;color:rgba(196,154,60,.42);flex-shrink:0}
-
-/* ── FOOTER ── */
-footer{background:#0f172a;color:#cbd5e1;padding:3rem 1.5rem}
-.ft-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem}
-.ft-brand-name{font-weight:800;font-size:1.05rem;color:#fff;display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.ft-brand-badge{background:var(--blu);color:#fff;font-family:'Source Code Pro',monospace;font-size:9px;font-weight:600;letter-spacing:1.5px;padding:2px 7px;border-radius:3px}
-.ft-desc{font-size:.8rem;color:#475569;line-height:1.65}
-.ft-col-title{font-size:.8rem;font-weight:700;color:#fff;margin-bottom:11px}
-.ft-links{list-style:none;display:flex;flex-direction:column;gap:7px}
-.ft-links a{font-size:.8rem;color:#475569;transition:color .15s}
-.ft-links a:hover{color:#94a3b8}
-.ft-bottom{max-width:1100px;margin:2.2rem auto 0;padding-top:1.3rem;border-top:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:#334155}
-
-/* ── ANIMAZIONI ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── RESPONSIVE ── */
-@media(max-width:768px){
-  nav{padding:0 1rem}
-  .nav-links{display:none}
-  .hero-stats{grid-template-columns:repeat(2,1fr)}
-  .ft-inner{grid-template-columns:1fr;gap:2rem}
-  .ft-bottom{flex-direction:column;gap:6px;text-align:center}
-  .exp-grid,.rias-grid{grid-template-columns:1fr}
-  .gl-grid{grid-template-columns:1fr}
-}
-@media(max-width:480px){
-  .hero-stats{grid-template-columns:repeat(2,1fr)}
-}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Arial',sans-serif;background:var(--bg);color:var(--testo);min-height:100vh}
+button{cursor:pointer;-webkit-appearance:none;touch-action:manipulation}
+nav{background:var(--w);border-bottom:1px solid var(--bordo);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+.nav-brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.nav-dot{width:9px;height:9px;border-radius:50%;background:var(--blu);flex-shrink:0}
+.nav-title{font-size:14px;color:var(--blu-s);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-links{display:flex;gap:1.75rem;flex-shrink:0}
+.nav-links button{font-size:13px;color:var(--testo-s);background:none;border:none;padding:4px 0;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.nav-links button:hover,.nav-links button.active{color:var(--blu);border-bottom-color:var(--blu)}
+.nav-burger{display:none;background:none;border:none;padding:6px;flex-shrink:0}
+.nav-burger span{display:block;width:22px;height:2px;background:var(--blu-s);margin:5px 0;border-radius:2px;transition:all .25s}
+.nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-mobile{display:none;position:fixed;top:58px;left:0;right:0;background:var(--w);border-bottom:2px solid var(--bordo);z-index:99;padding:.4rem 0;box-shadow:0 4px 16px rgba(4,44,83,.12)}
+.nav-mobile.open{display:block}
+.nav-mobile button{display:block;width:100%;text-align:left;padding:.8rem 1.5rem;font-size:15px;color:var(--testo-s);background:none;border:none;border-left:3px solid transparent}
+.nav-mobile button.active{color:var(--blu);border-left-color:var(--blu);background:var(--blu-pp)}
+.page{display:none;max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+.page.active{display:block}
+.hero{display:grid;grid-template-columns:1fr 310px;gap:2.5rem;align-items:start;margin-bottom:2.5rem}
+.hero-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--blu);margin-bottom:.5rem}
+.hero h1{font-size:1.45rem;font-weight:400;line-height:1.45;color:var(--blu-s);margin-bottom:.4rem;font-family:'Georgia',serif}
+.hero h1 em{font-style:italic;color:var(--blu)}
+.hero-quote{font-size:.8rem;color:var(--testo-s);font-family:'Georgia',serif;font-style:italic;margin:.2rem 0 .75rem}
+.hero-desc{font-size:.9rem;color:var(--testo-s);line-height:1.75;font-family:'Georgia',serif}
+.prog-card{background:var(--blu-p);border:1px solid var(--blu-c);border-radius:12px;padding:1.4rem}
+.prog-card h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blu);margin-bottom:1.1rem}
+.prog-item{margin-bottom:.9rem}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:4px}
+.prog-row span{font-size:12px;color:var(--testo-s)}
+.prog-row strong{font-size:12px;color:var(--blu-s)}
+.prog-bg{height:5px;background:var(--blu-c);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--blu);border-radius:3px;width:0%;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.prog-indef{font-size:10px;color:var(--testo-s);font-style:italic;margin-top:2px}
+.prog-sep{border-top:1px solid var(--blu-c);margin-top:1rem;padding-top:.9rem}
+.prog-num{font-size:1.8rem;font-weight:300;color:var(--blu-s)}
+.prog-sub{font-size:11px;color:var(--testo-s);margin-top:2px}
+.prog-note{font-size:11px;color:var(--testo-s);margin-top:.6rem;font-style:italic;line-height:1.5}
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem}
+.sec-card{background:var(--w);border:1px solid var(--bordo);border-radius:10px;padding:1.4rem 1.2rem;touch-action:manipulation}
+.sec-card:active{border-color:var(--blu);background:var(--blu-pp)}
+@media(hover:hover){.sec-card:hover{border-color:var(--blu);transform:translateY(-3px);transition:all .2s}}
+.sec-ico{width:38px;height:38px;border-radius:8px;background:var(--blu-p);display:flex;align-items:center;justify-content:center;margin-bottom:.85rem}
+.sec-ico svg{width:19px;height:19px;stroke:var(--blu);stroke-width:1.6;fill:none}
+.sec-card h2{font-size:14px;font-weight:600;color:var(--blu-s);margin-bottom:.3rem}
+.sec-card p{font-size:12px;color:var(--testo-s);line-height:1.6}
+.sec-link{display:inline-block;margin-top:.6rem;font-size:11px;color:var(--blu)}
+.page-header{border-bottom:1px solid var(--bordo);padding-bottom:1.4rem;margin-bottom:1.75rem}
+.page-header .label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--blu);margin-bottom:.35rem}
+.page-header h1{font-size:1.5rem;font-weight:400;color:var(--blu-s);font-family:'Georgia',serif}
+.page-header p{font-size:.88rem;color:var(--testo-s);margin-top:.35rem;line-height:1.65}
+.libro-layout{display:grid;grid-template-columns:220px 1fr;gap:1.75rem;align-items:start}
+.libro-sidebar{background:var(--w);border:1px solid var(--bordo);border-radius:10px;overflow:hidden;position:sticky;top:70px}
+.sidebar-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--testo-s);padding:.85rem 1rem;border-bottom:1px solid var(--bordo)}
+.cap-item{padding:.65rem 1rem;font-size:12px;color:var(--testo-s);border-left:3px solid transparent;display:flex;justify-content:space-between;align-items:center;gap:.4rem;touch-action:manipulation}
+.cap-item.active{background:var(--blu-p);color:var(--blu);border-left-color:var(--blu);font-weight:600}
+@media(hover:hover){.cap-item:hover{background:var(--blu-pp);color:var(--blu)}}
+.cap-badge{font-size:10px;padding:2px 6px;border-radius:10px;background:var(--blu-c);color:var(--blu-m);white-space:nowrap;flex-shrink:0}
+.cap-badge.wip{background:var(--arancio-p);color:var(--arancio)}
+.cap-badge.todo{background:#f1efe8;color:#888}
+.libro-content{background:var(--w);border:1px solid var(--bordo);border-radius:10px;padding:1.75rem}
+.cap-content{display:none}.cap-content.active{display:block}
+.cap-content h2{font-size:1.15rem;font-weight:400;color:var(--blu-s);margin-bottom:.25rem;font-family:'Georgia',serif}
+.cap-meta{font-size:11px;color:var(--testo-s);margin-bottom:1.2rem}
+.cap-intro{font-size:.9rem;color:var(--testo-s);line-height:1.75;font-family:'Georgia',serif;border-left:3px solid var(--blu-c);padding-left:.85rem;margin-bottom:1.2rem}
+.cap-sezioni h3{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--testo-s);margin-bottom:.65rem}
+.argomento{background:var(--bg);border:1px solid var(--bordo);border-radius:8px;padding:.7rem .9rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.arg-text{font-size:12px;color:var(--testo)}
+.arg-stato{font-size:11px;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.stato-pub{background:var(--verde-p);color:var(--verde)}
+.stato-wip{background:var(--arancio-p);color:var(--arancio)}
+.stato-todo{background:#f1efe8;color:#888}
+.cap-accordion{display:none}
+.cap-acc-item{border:1px solid var(--bordo);border-radius:8px;margin-bottom:.6rem;overflow:hidden}
+.cap-acc-head{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1rem;background:var(--w);gap:.5rem;touch-action:manipulation}
+.cap-acc-head span.title{font-size:13px;color:var(--blu-s);font-weight:600;flex:1}
+.cap-acc-head .arr{font-size:12px;color:var(--testo-s);transition:transform .2s}
+.cap-acc-item.open .cap-acc-head{background:var(--blu-p)}
+.cap-acc-item.open .arr{transform:rotate(180deg)}
+.cap-acc-body{display:none;padding:.85rem 1rem;border-top:1px solid var(--bordo)}
+.cap-acc-item.open .cap-acc-body{display:block}
+.placeholder-msg{text-align:center;padding:3rem 1rem;color:var(--testo-s)}
+.placeholder-msg .icon{font-size:2rem;margin-bottom:.65rem;opacity:.4}
+.placeholder-msg p{font-size:.9rem;line-height:1.6}
+.filtri{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.filtro-btn{font-size:12px;padding:5px 13px;border-radius:20px;border:1px solid var(--bordo);background:var(--w);color:var(--testo-s);white-space:nowrap;touch-action:manipulation}
+.filtro-btn.active{background:var(--blu-p);border-color:var(--blu);color:var(--blu);font-weight:600}
+@media(hover:hover){.filtro-btn:hover{border-color:var(--blu);color:var(--blu)}}
+.schede-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.scheda{background:var(--w);border:1px solid var(--bordo);border-radius:10px;overflow:hidden;touch-action:manipulation}
+.scheda:active{border-color:var(--blu);background:var(--blu-pp)}
+@media(hover:hover){.scheda:hover{border-color:var(--blu);transform:translateY(-2px);transition:all .2s}}
+.scheda-header{padding:.8rem 1rem;border-bottom:1px solid var(--bordo);display:flex;justify-content:space-between;align-items:center}
+.scheda-categoria{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.scheda-diff{font-size:11px;color:var(--testo-s)}
+.scheda-body{padding:.9rem 1rem}
+.scheda-body h3{font-size:13px;color:var(--blu-s);margin-bottom:.25rem;font-weight:600;line-height:1.35}
+.scheda-body p{font-size:12px;color:var(--testo-s);line-height:1.55}
+.scheda-footer{padding:.6rem 1rem;border-top:1px solid var(--bordo);display:flex;gap:.4rem;flex-wrap:wrap}
+.tag{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--bg);color:var(--testo-s);border:1px solid var(--bordo)}
+.cat-mis{color:#5B3FA6}.cat-mec{color:var(--blu)}.cat-cin{color:#0A6E8A}
+.cat-ott{color:var(--verde)}.cat-ele{color:var(--arancio)}.cat-ter{color:var(--rosso)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(4,44,83,.5);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.overlay.open{display:flex}
+.modal{background:var(--w);border-radius:14px;max-width:620px;width:100%;max-height:88vh;overflow-y:auto;padding:1.75rem;-webkit-overflow-scrolling:touch}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;gap:.75rem}
+.modal-head h2{font-size:1rem;color:var(--blu-s);font-weight:600;line-height:1.3}
+.modal-close{font-size:22px;color:var(--testo-s);background:none;border:none;line-height:1;flex-shrink:0;padding:2px 6px}
+.modal-cat{font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;font-weight:600}
+.modal-section{margin-bottom:1.1rem}
+.modal-section h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--testo-s);margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--bordo)}
+.modal-section ul{padding-left:1.1rem}
+.modal-section li{font-size:13px;color:var(--testo);line-height:1.7}
+.modal-section p{font-size:13px;color:var(--testo);line-height:1.75}
+.step{display:flex;gap:.65rem;margin-bottom:.5rem;align-items:flex-start}
+.step-n{min-width:22px;height:22px;border-radius:50%;background:var(--blu-p);color:var(--blu);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px;flex-shrink:0}
+.step-t{font-size:13px;color:var(--testo);line-height:1.6}
+.principi-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.2rem}
+.principio-item{background:var(--blu-pp);border:1px solid var(--blu-c);border-radius:6px;padding:.55rem .7rem}
+.principio-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--blu);font-weight:600;margin-bottom:.2rem}
+.principio-formula{display:block;font-family:'Courier New',monospace;font-size:11px;color:var(--blu-s);background:var(--blu-p);padding:3px 6px;border-radius:4px;margin-bottom:.25rem}
+.principio-desc{font-size:11px;color:var(--testo-s);line-height:1.5}
+.scheda-link-box{background:var(--blu-pp);border:1px solid var(--blu-c);border-radius:6px;padding:.65rem .9rem}
+.scheda-link-box span{font-size:12px;color:var(--testo-s);display:block;margin-bottom:.4rem}
+.btn-apri{background:var(--blu);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:13px;letter-spacing:.04em;touch-action:manipulation;display:inline-block}
+.scheda-overlay{display:none;position:fixed;inset:0;background:rgba(4,44,83,.6);z-index:300;align-items:center;justify-content:center;padding:.5rem}
+.scheda-overlay.open{display:flex}
+.scheda-viewer{background:#f7fbff;border-radius:12px;width:100%;max-width:820px;height:94vh;display:flex;flex-direction:column;overflow:hidden}
+.scheda-viewer-bar{background:var(--blu-s);display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.1rem;flex-shrink:0;gap:.5rem}
+.scheda-viewer-bar h3{font-size:12px;color:#fff;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scheda-viewer-bar button{background:rgba(255,255,255,.18);border:none;color:#fff;font-size:12px;padding:5px 12px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.scheda-viewer-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+footer{border-top:1px solid var(--bordo);padding:1.2rem 2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;max-width:1100px;margin:1rem auto 0;align-items:center}
+footer span,footer a{font-size:12px;color:var(--testo-s)}
+footer a{color:var(--blu)}
+@media(max-width:860px){nav{padding:0 1.2rem}.nav-links{display:none}.nav-burger{display:block}.hero{grid-template-columns:1fr}.libro-layout{grid-template-columns:1fr}.libro-sidebar{display:none}.cap-accordion{display:block}.libro-content{display:none}.principi-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.page{padding:1.25rem 1rem}nav{padding:0 1rem}.nav-title{font-size:12px}.hero h1{font-size:1.2rem}.sec-grid{grid-template-columns:1fr 1fr}.sec-card{padding:1rem .9rem}.schede-grid{grid-template-columns:1fr}.filtri{gap:.35rem}.filtro-btn{font-size:11px;padding:4px 10px}.modal{padding:1.1rem;border-radius:10px}.modal-head h2{font-size:.9rem}.prog-num{font-size:1.5rem}.page-header h1{font-size:1.2rem}footer{padding:1rem}}
 </style>
 </head>
 <body>
+<nav>
+  <div class="nav-brand"><div class="nav-dot"></div><div class="nav-title">Il Laboratorio di Fisica di Lorenzo Gandini</div></div>
+  <div class="nav-links" id="nav-desktop">
+    <button class="active" data-page="home">Home</button>
+    <button data-page="libro">Libro Digitale</button>
+    <button data-page="animazioni">Animazioni</button>
+    <button data-page="vocabolario">Vocabolario</button>
+    <button data-page="ricettario">Ricettario</button>
+  </div>
+  <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <button data-page="home" class="active">Home</button>
+  <button data-page="libro">Libro Digitale</button>
+  <button data-page="animazioni">Animazioni</button>
+  <button data-page="vocabolario">Vocabolario</button>
+  <button data-page="ricettario">Ricettario</button>
+</div>
 
-<!-- ════════════ NAV ════════════ -->
-<header>
-  <nav>
-    <a href="#" class="nav-logo">
-      <span class="nav-badge">FIS·LAB</span>
-      Laboratorio di Fisica
-    </a>
-    <ul class="nav-links">
-      <li><a href="#riassunto">Riassunto</a></li>
-      <li><a href="#esperienze">Esperienze</a></li>
-      <li><a href="#glossario">Glossario</a></li>
-      <li><a href="#libro">Libro Digitale</a></li>
-    </ul>
-  </nav>
-</header>
-
-<main>
-
-<!-- ════════════ HERO ════════════ -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-chip">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
-      Schede Sperimentali · EXP 01 – 04
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div>
+      <div class="hero-label">Fisica Sperimentale · Risorse Didattiche</div>
+      <h1>"Ho sempre tentato. Ho sempre fallito.<br>Prova ancora. Fallisci ancora. <em>Fallisci meglio.</em>"</h1>
+      <p class="hero-quote">— Samuel Beckett</p>
+      <p class="hero-desc">Una risorsa didattica per studenti e docenti: libro digitale, animazioni, vocabolario scientifico e schede di laboratorio per esplorare il mondo fisico con metodo e curiosità.</p>
     </div>
-    <h1>Misura, Analisi<br><span>&amp; Scoperta</span></h1>
-    <p class="hero-sub">Quattro esperienze di laboratorio dalla misura diretta alla verifica di leggi fisiche. Strumenti, errori, analisi statistica, grafici.</p>
-    <div class="hero-cta">
-      <a href="#esperienze" class="btn btn-white">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
-        Apri le Schede
-      </a>
-      <a href="#glossario" class="btn btn-ghost">Glossario</a>
-      <a href="#libro" class="btn btn-ghost">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
-        Libro Digitale
-      </a>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="stat-num">4</div><div class="stat-label">Esperienze</div></div>
-      <div class="hero-stat"><div class="stat-num">16</div><div class="stat-label">Voci glossario</div></div>
-      <div class="hero-stat"><div class="stat-num">2</div><div class="stat-label">PDF disponibili</div></div>
-      <div class="hero-stat"><div class="stat-num">8</div><div class="stat-label">Pagine schede</div></div>
+    <div class="prog-card">
+      <h3>Avanzamento del progetto</h3>
+      <div id="prog-items"></div>
+      <div class="prog-sep">
+        <div class="prog-num" id="prog-tot">0%</div>
+        <div class="prog-sub">completamento complessivo</div>
+        <div class="prog-note" id="prog-detail"></div>
+      </div>
     </div>
   </div>
-</section>
-
-
-<!-- ════════════ RIASSUNTO ════════════ -->
-<section class="section section-white" id="riassunto">
-  <div class="section-inner">
-    <div class="section-label">Panoramica del corso</div>
-    <h2 class="section-title">Di cosa trattano<br>le esperienze</h2>
-    <p class="section-desc">Ogni scheda segue la stessa struttura: obiettivo, principi teorici, materiali e strumenti, procedimento passo-passo, tabelle di raccolta dati, osservazioni e conclusioni guidate.</p>
-
-    <div class="rias-grid">
-      <div class="rias-card">
-        <span class="rias-icon">📏</span>
-        <h3>EXP 01 — Strumenti</h3>
-        <p>Righello (sens. 1&nbsp;mm) vs calibro ventesimale (sens. 0,05&nbsp;mm) su un parallelepipedo. Formula chiave: <strong>E% = (Δx/|x|)×100</strong>. Classificazione errori casuali e sistematici.</p>
-      </div>
-      <div class="rias-card">
-        <span class="rias-icon">⏱️</span>
-        <h3>EXP 02 — Pendolo</h3>
-        <p><strong>Metodo 1</strong> (analogico): T = T₁₀/10, ΔT = Δt/10. <strong>Metodo 2</strong> (digitale): valor medio + semi-dispersione massima ΔT = (t_max – t_min)/2 da 5 misure.</p>
-      </div>
-      <div class="rias-card">
-        <span class="rias-icon">⚖️</span>
-        <h3>EXP 03 — Forza Peso</h3>
-        <p>Verifica sperimentale di <strong>P = g·m</strong> con bilancia + dinamometro. Determinazione di g come media dei rapporti Pᵢ/mᵢ; confronto con g_teorico = 9,81&nbsp;N/kg.</p>
-      </div>
-      <div class="rias-card">
-        <span class="rias-icon">🧪</span>
-        <h3>EXP 04 — Volume</h3>
-        <p>Verifica di <strong>A·h = V = cost.</strong> con cilindri di diametro diverso. Propagazione errori: ΔA/A = 2·Δd/d. Grafici: iperbole (A–h), parabola (h–d²), retta (d–A).</p>
-      </div>
-    </div>
-
-    <div class="rias-note">
-      <strong>Competenze sviluppate.</strong> Al termine lo studente sarà in grado di: scegliere lo strumento adeguato; esprimere ogni misura nella forma <em>(valore ± Δx) u.m.</em>; calcolare E% e valutarne la qualità; distinguere errori casuali da sistematici; applicare la propagazione degli errori su grandezze derivate; costruire grafici e identificare la legge fisica sottostante (retta, iperbole, parabola).
-    </div>
+  <div class="sec-grid">
+    <div class="sec-card" data-page="libro"><div class="sec-ico"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h2>Libro Digitale</h2><p>Testi, schemi e approfondimenti strutturati in capitoli navigabili per lo studio autonomo.</p><div class="sec-link">→ Sfoglia i capitoli</div></div>
+    <div class="sec-card" data-page="animazioni"><div class="sec-ico"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><h2>Animazioni</h2><p>Simulazioni originali per visualizzare fenomeni fisici difficili da osservare direttamente.</p><div class="sec-link">→ Guarda le animazioni</div></div>
+    <div class="sec-card" data-page="vocabolario"><div class="sec-ico"><svg viewBox="0 0 24 24"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg></div><h2>Vocabolario</h2><p>Dizionario dei termini scientifici con definizioni chiare e collegamenti tra concetti.</p><div class="sec-link">→ Cerca un termine</div></div>
+    <div class="sec-card" data-page="ricettario"><div class="sec-ico"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0H5"/><path d="M2 9h18"/><path d="M3 9v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/></svg></div><h2>Ricettario di Laboratorio</h2><p>Schede dettagliate: materiali, procedura, analisi dati e note didattiche per ogni esperienza.</p><div class="sec-link">→ Scegli un esperimento</div></div>
   </div>
-</section>
+</div>
 
-
-<!-- ════════════ ESPERIENZE ════════════ -->
-<section class="section section-gray" id="esperienze">
-  <div class="section-inner">
-    <div class="section-label">Schede sperimentali</div>
-    <h2 class="section-title">Le Esperienze<br>di Laboratorio</h2>
-    <p class="section-desc">Clicca su "Apri scheda" per accedere alla versione interattiva mobile-friendly di ogni esperienza.</p>
-
-    <div class="exp-grid">
-
-      <!-- EXP 01 -->
-      <div class="exp-card">
-        <div class="exp-card-head">
-          <span class="exp-badge">EXP 01</span>
-          <span class="exp-card-title">Misure Dirette di Lunghezze e Confronto di Strumenti</span>
-        </div>
-        <div class="exp-body">
-          <p class="exp-desc">Misurare le tre dimensioni (L, A, S) di un parallelepipedo con <strong>righello</strong> (sens. 1&nbsp;mm) e <strong>calibro ventesimale</strong> (sens. 0,05&nbsp;mm). Per ogni misura: valore, Δx, misura completa (val ± Δx) mm, E% = (Δx/|x|)×100. Pag.&nbsp;2: confronto tabellare sullo Spessore, classificazione errori casuali vs sistematici, 4 domande conclusive.</p>
-          <div class="exp-tags">
-            <span class="exp-tag">righello 1&nbsp;mm</span>
-            <span class="exp-tag">calibro 0,05&nbsp;mm</span>
-            <span class="exp-tag">E% = (Δx/x)×100</span>
-            <span class="exp-tag">errori casuali</span>
-            <span class="exp-tag">errori sistematici</span>
-          </div>
-        </div>
-        <div class="exp-foot">
-          <a href="EXP01_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
-            Apri scheda
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <span class="exp-pages">2 pagine</span>
-        </div>
-      </div>
-
-      <!-- EXP 02 -->
-      <div class="exp-card">
-        <div class="exp-card-head">
-          <span class="exp-badge">EXP 02</span>
-          <span class="exp-card-title">Misura del Periodo del Pendolo con Metodi Diversi</span>
-        </div>
-        <div class="exp-body">
-          <p class="exp-desc"><strong>Metodo 1</strong> — cronometro analogico (sens. 0,1&nbsp;s): misura T₁₀ di 10 oscillazioni consecutive, calcolo T = T₁₀/10 e ΔT = Δt_analogico/10. <strong>Metodo 2</strong> — cronometro digitale (sens. 0,01&nbsp;s): 5 misure singole t₁…t₅, calcolo T_medio = Σtᵢ/5 e semi-dispersione ΔT = (t_max − t_min)/2. Pag.&nbsp;2: confronto tra i due metodi con calcolo E%.</p>
-          <div class="exp-tags">
-            <span class="exp-tag">T = t_N/N</span>
-            <span class="exp-tag">semi-dispersione</span>
-            <span class="exp-tag">valor medio</span>
-            <span class="exp-tag">tempo di reazione</span>
-            <span class="exp-tag">cronometro analogico/digitale</span>
-          </div>
-        </div>
-        <div class="exp-foot">
-          <a href="EXP02_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
-            Apri scheda
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <span class="exp-pages">2 pagine</span>
-        </div>
-      </div>
-
-      <!-- EXP 03 -->
-      <div class="exp-card">
-        <div class="exp-card-head">
-          <span class="exp-badge">EXP 03</span>
-          <span class="exp-card-title">Proporzionalità Diretta tra Massa e Forza Peso</span>
-        </div>
-        <div class="exp-body">
-          <p class="exp-desc">5 assemblaggi (supporto + masse campione): misura massa con <strong>bilancia elettronica</strong> (in g → kg) e peso con <strong>dinamometro</strong> (in N). Per ogni coppia: gᵢ = Pᵢ/mᵢ. Calcolo di ḡ (media aritmetica) e Δg = (g_max − g_min)/2. Risultato: g = ḡ ± Δg vs g_teorico = 9,81&nbsp;N/kg. Pag.&nbsp;2: grafico P–m su carta millimetrata (retta per l'origine, pendenza = g).</p>
-          <div class="exp-tags">
-            <span class="exp-tag">P = g·m</span>
-            <span class="exp-tag">bilancia elettronica</span>
-            <span class="exp-tag">dinamometro</span>
-            <span class="exp-tag">retta per l'origine</span>
-            <span class="exp-tag">g = ḡ ± Δg</span>
-          </div>
-        </div>
-        <div class="exp-foot">
-          <a href="EXP03_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
-            Apri scheda
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <span class="exp-pages">2 pagine</span>
-        </div>
-      </div>
-
-      <!-- EXP 04 -->
-      <div class="exp-card">
-        <div class="exp-card-head">
-          <span class="exp-badge">EXP 04</span>
-          <span class="exp-card-title">Proporzionalità Inversa e Volume del Cilindro</span>
-        </div>
-        <div class="exp-body">
-          <p class="exp-desc">Trasvasare un volume fisso d'acqua in 5 contenitori (cil. 100&nbsp;mL, 250&nbsp;mL, 1000&nbsp;mL, 2 cristallizzatori). Per ciascuno: altezza h con scala graduata, diametro interno d con <strong>calibro</strong>. Calcolo A = π·(d/2)² con propagazione ΔA/A = 2·Δd/d, poi V_calc = A·h. Pag.&nbsp;2: 3 grafici su carta millimetrata — A vs h (iperbole), h vs d (quadratica inversa), d vs A (parabola A∝d²).</p>
-          <div class="exp-tags">
-            <span class="exp-tag">V = A·h = cost.</span>
-            <span class="exp-tag">A = π(d/2)²</span>
-            <span class="exp-tag">ΔA/A = 2·Δd/d</span>
-            <span class="exp-tag">iperbole equilatera</span>
-            <span class="exp-tag">calibro + cilindri</span>
-          </div>
-        </div>
-        <div class="exp-foot">
-          <a href="EXP04_2_Scheda_Laboratorio__versione_mobile_.html" class="exp-link" target="_blank">
-            Apri scheda
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <span class="exp-pages">2 pagine</span>
-        </div>
-      </div>
-
-    </div><!-- /exp-grid -->
+<div class="page" id="page-libro">
+  <div class="page-header"><div class="label">Sezione 01</div><h1>Libro Digitale</h1><p>Struttura modulare organizzata per capitoli. I contenuti vengono pubblicati progressivamente.</p></div>
+  <div class="libro-layout">
+    <div class="libro-sidebar"><div class="sidebar-title">Indice dei capitoli</div><div id="cap-list"></div></div>
+    <div class="libro-content" id="cap-panels"></div>
   </div>
-</section>
+  <div class="cap-accordion" id="cap-accordion"></div>
+</div>
 
+<div class="page" id="page-animazioni">
+  <div class="page-header"><div class="label">Sezione 02</div><h1>Animazioni</h1></div>
+  <div class="placeholder-msg"><div class="icon">▷</div><p>Le animazioni sono in fase di elaborazione.</p></div>
+</div>
 
-<!-- ════════════ GLOSSARIO ════════════ -->
-<section class="section section-white" id="glossario">
-  <div class="section-inner">
-    <div class="section-label">Vocabolario della fisica sperimentale</div>
-    <h2 class="section-title">Glossario dei<br>Termini Chiave</h2>
-    <p class="section-desc">Tutti i concetti presenti nelle schede EXP&nbsp;01–04. Filtra per categoria.</p>
+<div class="page" id="page-vocabolario">
+  <div class="page-header"><div class="label">Sezione 03</div><h1>Vocabolario Scientifico</h1></div>
+  <div class="placeholder-msg"><div class="icon">T</div><p>Il vocabolario è in fase di compilazione.</p></div>
+</div>
 
-    <div class="gl-filter">
-      <button class="fl-btn active" onclick="filterGL('all',this)">Tutti</button>
-      <button class="fl-btn" onclick="filterGL('strumenti',this)">Strumenti</button>
-      <button class="fl-btn" onclick="filterGL('errori',this)">Errori</button>
-      <button class="fl-btn" onclick="filterGL('formule',this)">Formule</button>
-      <button class="fl-btn" onclick="filterGL('leggi',this)">Leggi fisiche</button>
-    </div>
-
-    <div class="gl-grid" id="gl-grid">
-
-      <!-- STRUMENTI -->
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Sensibilità <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-formula">Δx = più piccola divisione della scala</div>
-        <div class="gl-def">La più piccola variazione che uno strumento riesce a rilevare; coincide con l'incertezza assoluta nella misura singola diretta. Righello → 1&nbsp;mm; calibro ventesimale → 0,05&nbsp;mm; cronometro digitale → 0,01&nbsp;s.</div>
-      </div>
-
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Portata <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-def">Valore massimo misurabile senza danneggiare lo strumento o uscire dal campo di linearità. Va verificata prima di ogni misura. Esempio: un dinamometro da 5&nbsp;N non si usa con masse che producono P > 5&nbsp;N.</div>
-      </div>
-
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Calibro ventesimale <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-formula">sens. = 1/20 mm = 0,05 mm</div>
-        <div class="gl-def">Strumento di precisione per lunghezze esterne, interne e profondità. La lettura combina scala principale (mm interi) + nonio/verniero (ventesimi di mm). Usato in EXP&nbsp;01 (confronto con righello) e EXP&nbsp;04 (misura del diametro d dei cilindri).</div>
-      </div>
-
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Righello <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-formula">sens. = 1 mm = 0,1 cm</div>
-        <div class="gl-def">Strumento semplice per misure di lunghezza. La sensibilità coincide con la distanza tra due tacche consecutive. In EXP&nbsp;01 viene confrontato con il calibro ventesimale sulle stesse dimensioni del parallelepipedo.</div>
-      </div>
-
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Dinamometro <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-def">Misura le forze in Newton sfruttando la legge di Hooke (F = k·x). In EXP&nbsp;03 viene usato per misurare il peso P degli assemblaggi (supporto + masse campione). Lettura con il corpo in quiete, in posizione verticale.</div>
-      </div>
-
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Bilancia elettronica <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-def">Misura la massa in grammi. Distinta dal dinamometro: la bilancia misura la massa (proprietà intrinseca del corpo), il dinamometro misura la forza peso (dipende da g). In EXP&nbsp;03 il valore in g va convertito in kg per calcolare gᵢ = Pᵢ/mᵢ.</div>
-      </div>
-
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Cronometro analogico <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-formula">sens. = 0,1 s</div>
-        <div class="gl-def">Usato nel Metodo 1 di EXP&nbsp;02: misura T₁₀ (tempo di 10 oscillazioni). Dividendo per 10 si ottiene T con una precisione "apparente" di 0,01&nbsp;s, riducendo l'incertezza strumentale di un fattore 10.</div>
-      </div>
-
-      <div class="gl-entry cat-strumenti">
-        <div class="gl-term">Cronometro digitale <span class="g-badge gb-str">Strumenti</span></div>
-        <div class="gl-formula">sens. = 0,01 s</div>
-        <div class="gl-def">Usato nel Metodo 2 di EXP&nbsp;02 per 5 misure singole di T. La dispersione dei valori è dovuta principalmente al <strong>tempo di reazione</strong> dell'operatore — fonte di errore casuale ben più grande della sensibilità strumentale.</div>
-      </div>
-
-      <!-- ERRORI -->
-      <div class="gl-entry cat-errori">
-        <div class="gl-term">Incertezza assoluta <span class="g-badge gb-err">Errori</span></div>
-        <div class="gl-formula">Δx  [stessa u.m. di x]</div>
-        <div class="gl-def">Ampiezza dell'intervallo di incertezza attorno al valore misurato. Per misura singola diretta: Δx = sensibilità dello strumento. Per misure ripetute: Δx = semi-dispersione massima. Ha sempre le stesse unità di misura della grandezza misurata.</div>
-      </div>
-
-      <div class="gl-entry cat-errori">
-        <div class="gl-term">Errore casuale <span class="g-badge gb-err">Errori</span></div>
-        <div class="gl-formula">distribuito ± attorno al valore vero</div>
-        <div class="gl-def">Imprevedibile, alterna misure per eccesso e per difetto. Cause tipiche: variazioni ambientali, parallasse, tempo di reazione dell'operatore. Si <em>riduce</em> ripetendo le misure e calcolando il valor medio (EXP&nbsp;02, Metodo 2; EXP&nbsp;03).</div>
-      </div>
-
-      <div class="gl-entry cat-errori">
-        <div class="gl-term">Errore sistematico <span class="g-badge gb-err">Errori</span></div>
-        <div class="gl-formula">sempre per eccesso o sempre per difetto</div>
-        <div class="gl-def">Costante e unidirezionale. Causato da strumenti non tarati, difetti del metodo o condizioni ambientali stabili ma scorrette. Non si riduce ripetendo le misure. Esempio: bilancia che a vuoto segna +2&nbsp;g → errore sistematico di +2&nbsp;g su ogni misura (EXP&nbsp;01).</div>
-      </div>
-
-      <div class="gl-entry cat-errori">
-        <div class="gl-term">Propagazione degli errori <span class="g-badge gb-err">Errori</span></div>
-        <div class="gl-formula">ΔA/A = 2 · Δd/d</div>
-        <div class="gl-def">Come l'incertezza di una grandezza misurata si trasferisce sulle grandezze derivate. Per potenze: l'errore relativo si moltiplica per l'esponente. In EXP&nbsp;04: A = π·(d/2)² → l'errore relativo su A è il <em>doppio</em> di quello su d perché d compare al quadrato.</div>
-      </div>
-
-      <!-- FORMULE -->
-      <div class="gl-entry cat-formule">
-        <div class="gl-term">Misura completa <span class="g-badge gb-for">Formule</span></div>
-        <div class="gl-formula">x = (valore ± Δx) u.m.</div>
-        <div class="gl-def">Modo corretto di esprimere qualsiasi misura fisica: valore numerico, incertezza assoluta e unità di misura devono essere sempre indicati. Esempio: L = (45,30 ± 0,05)&nbsp;mm con calibro ventesimale; L = (45 ± 1)&nbsp;mm con righello.</div>
-      </div>
-
-      <div class="gl-entry cat-formule">
-        <div class="gl-term">Errore relativo percentuale <span class="g-badge gb-for">Formule</span></div>
-        <div class="gl-formula">E% = (Δx / |x|) × 100</div>
-        <div class="gl-def">Misura adimensionale della qualità di una misura (%). Più è piccolo, più la misura è precisa. Per la stessa grandezza, il calibro produce sempre un E% molto inferiore al righello: Δx calibro = 0,05&nbsp;mm vs Δx righello = 1&nbsp;mm (EXP&nbsp;01).</div>
-      </div>
-
-      <div class="gl-entry cat-formule">
-        <div class="gl-term">Valor medio <span class="g-badge gb-for">Formule</span></div>
-        <div class="gl-formula">x̄ = (x₁ + x₂ + … + xₙ) / n</div>
-        <div class="gl-def">Media aritmetica di n misure ripetute della stessa grandezza. Riduce l'effetto degli errori casuali avvicinandosi al valore vero. Usato in EXP&nbsp;02 (T_medio da 5 misure digitali) e EXP&nbsp;03 (ḡ da 5 rapporti Pᵢ/mᵢ).</div>
-      </div>
-
-      <div class="gl-entry cat-formule">
-        <div class="gl-term">Semi-dispersione massima <span class="g-badge gb-for">Formule</span></div>
-        <div class="gl-formula">Δx = (x_max – x_min) / 2</div>
-        <div class="gl-def">Stima dell'incertezza da misure ripetute. Tiene conto di tutta la variabilità osservata, inclusa la reazione dell'operatore. Risultato finale: x = x̄ ± Δx. Usata in EXP&nbsp;02 (ΔT del pendolo) e EXP&nbsp;03 (Δg dell'accelerazione di gravità).</div>
-      </div>
-
-      <!-- LEGGI FISICHE -->
-      <div class="gl-entry cat-leggi">
-        <div class="gl-term">Proporzionalità diretta <span class="g-badge gb-leg">Leggi fisiche</span></div>
-        <div class="gl-formula">y = k · x  →  retta per l'origine</div>
-        <div class="gl-def">Al raddoppiare di x, y raddoppia. Il rapporto y/x = k rimane costante. Grafico: retta passante per l'origine con pendenza k. Verificata in EXP&nbsp;03: il grafico P–m è una retta per O con pendenza = g ≈ 9,81&nbsp;N/kg.</div>
-      </div>
-
-      <div class="gl-entry cat-leggi">
-        <div class="gl-term">Proporzionalità inversa <span class="g-badge gb-leg">Leggi fisiche</span></div>
-        <div class="gl-formula">x · y = k  →  iperbole equilatera</div>
-        <div class="gl-def">Al raddoppiare di x, y si dimezza. Il prodotto x·y = k rimane costante. Grafico: ramo di iperbole equilatera. Verificata in EXP&nbsp;04: A·h = V = cost. → al crescere del diametro (area), l'altezza del liquido scende proporzionalmente.</div>
-      </div>
-
-      <div class="gl-entry cat-leggi">
-        <div class="gl-term">Forza peso <span class="g-badge gb-leg">Leggi fisiche</span></div>
-        <div class="gl-formula">P = g · m  [N = N/kg · kg]</div>
-        <div class="gl-def">Forza gravitazionale esercitata sulla massa m. La massa è proprietà intrinseca del corpo; il peso dipende dall'intensità del campo gravitazionale locale. Sulla Terra g ≈ 9,81&nbsp;N/kg. In EXP&nbsp;03 se ne determina il valore sperimentale.</div>
-      </div>
-
-      <div class="gl-entry cat-leggi">
-        <div class="gl-term">Periodo del pendolo <span class="g-badge gb-leg">Leggi fisiche</span></div>
-        <div class="gl-formula">T = t_N / N  ;  ΔT = Δt / N</div>
-        <div class="gl-def">Tempo di una singola oscillazione completa. Misurando N oscillazioni e dividendo per N si riduce l'incertezza relativa su T di un fattore N (Metodo 1 di EXP&nbsp;02). Per piccole ampiezze T dipende solo dalla lunghezza del filo e da g.</div>
-      </div>
-
-      <div class="gl-entry cat-leggi">
-        <div class="gl-term">Volume del cilindro <span class="g-badge gb-leg">Leggi fisiche</span></div>
-        <div class="gl-formula">V = A · h = π · (d/2)² · h</div>
-        <div class="gl-def">Con V costante, A e h sono inversamente proporzionali (EXP&nbsp;04). Poiché A = π·r², un piccolo errore relativo su d si amplifica con fattore 2 su A: ΔA/A = 2·Δd/d. Il grafico d–A mostra una parabola (A∝d²).</div>
-      </div>
-
-    </div><!-- /gl-grid -->
+<div class="page" id="page-ricettario">
+  <div class="page-header"><div class="label">Sezione 04</div><h1>Ricettario di Laboratorio</h1><p>Schede operative per ogni esperienza: materiali, procedura, analisi dei dati e note per i docenti.</p></div>
+  <div class="filtri" id="filtri-bar">
+    <button class="filtro-btn active" data-cat="tutti">Tutte (33)</button>
+    <button class="filtro-btn" data-cat="misure">Misure</button>
+    <button class="filtro-btn" data-cat="meccanica">Meccanica</button>
+    <button class="filtro-btn" data-cat="cinematica">Cinematica</button>
+    <button class="filtro-btn" data-cat="ottica">Ottica</button>
+    <button class="filtro-btn" data-cat="elettricita">Elettricità</button>
+    <button class="filtro-btn" data-cat="termodinamica">Termo</button>
   </div>
-</section>
+  <div class="schede-grid" id="schede-grid"></div>
+</div>
 
-
-<!-- ════════════ LIBRO DIGITALE ════════════ -->
-<section class="section section-dark" id="libro">
-  <div class="section-inner">
-    <div class="section-label section-label-light">Risorse didattiche</div>
-    <h2 class="section-title section-title-light">Il Libro Digitale</h2>
-    <p class="section-desc section-desc-light">Il libro verrà arricchito progressivamente con spiegazioni teoriche, approfondimenti e materiali integrativi alle esperienze. Due PDF sono già disponibili.</p>
-
-    <div class="libro-box">
-      <span class="libro-box-icon">📖</span>
-      <h3>Contenuti in arrivo</h3>
-      <p>I capitoli saranno pubblicati seguendo l'ordine delle esperienze, con riferimenti incrociati alle schede EXP.</p>
-      <a href="#esperienze" class="btn btn-ghost" style="font-size:.82rem;padding:8px 18px;">Esplora le schede nel frattempo →</a>
-    </div>
-
-    <div class="ch-list">
-      <a href="Capitolo_1__Concetti_Fondamentali_del_Laboratorio_di_Fisica.pdf" class="ch-row" target="_blank">
-        <span class="ch-num">CAP 1</span>
-        <span class="ch-title">Concetti Fondamentali del Laboratorio di Fisica</span>
-        <span class="ch-status st-ok">PDF ↗</span>
-      </a>
-      <a href="Analisi_statistica.pdf" class="ch-row" target="_blank">
-        <span class="ch-num">APP</span>
-        <span class="ch-title">Analisi Statistica — errori e incertezze</span>
-        <span class="ch-status st-ok">PDF ↗</span>
-      </a>
-      <div class="ch-row">
-        <span class="ch-num">CAP 2</span>
-        <span class="ch-title">Gli errori di misura: tipologie e gestione statistica</span>
-        <span class="ch-status st-wip">In preparazione</span>
-      </div>
-      <div class="ch-row">
-        <span class="ch-num">CAP 3</span>
-        <span class="ch-title">Le relazioni funzionali: proporzionalità diretta e inversa</span>
-        <span class="ch-status st-plan">Pianificato</span>
-      </div>
-      <div class="ch-row">
-        <span class="ch-num">CAP 4</span>
-        <span class="ch-title">Il moto periodico: forze, massa, peso e il pendolo</span>
-        <span class="ch-status st-plan">Pianificato</span>
-      </div>
-      <div class="ch-row">
-        <span class="ch-num">CAP 5</span>
-        <span class="ch-title">Geometria e fisica: aree, volumi, propagazione degli errori</span>
-        <span class="ch-status st-plan">Pianificato</span>
-      </div>
-    </div>
-
-    <div class="risorse">
-      <a href="Capitolo_1__Concetti_Fondamentali_del_Laboratorio_di_Fisica.pdf" class="ris-pill" target="_blank">
-        <span class="ris-icon">📄</span>
-        <span>
-          <span class="ris-label">PDF disponibile</span>
-          <span class="ris-name">Capitolo 1 — Concetti Fondamentali</span>
-        </span>
-        <span class="ris-arrow">↗</span>
-      </a>
-      <a href="Analisi_statistica.pdf" class="ris-pill" target="_blank">
-        <span class="ris-icon">📊</span>
-        <span>
-          <span class="ris-label">PDF disponibile</span>
-          <span class="ris-name">Appendice — Analisi Statistica</span>
-        </span>
-        <span class="ris-arrow">↗</span>
-      </a>
-    </div>
-
+<div class="overlay" id="overlay"><div class="modal" id="modal-content"></div></div>
+<div class="scheda-overlay" id="scheda-overlay">
+  <div class="scheda-viewer">
+    <div class="scheda-viewer-bar"><h3 id="scheda-viewer-title">Scheda di Laboratorio</h3><button id="btn-chiudi-scheda">✕ Chiudi</button></div>
+    <div class="scheda-viewer-body" id="scheda-viewer-body"></div>
   </div>
-</section>
+</div>
 
-</main><!-- /main -->
-
-
-<!-- ════════════ FOOTER ════════════ -->
 <footer>
-  <div class="ft-inner">
-    <div>
-      <div class="ft-brand-name">
-        <span class="ft-brand-badge">FIS·LAB</span>
-        Laboratorio di Fisica
-      </div>
-      <p class="ft-desc">Schede sperimentali per il biennio. Ogni esperienza guida lo studente attraverso obiettivi, principi teorici, procedimento e analisi dei dati, con attenzione alla misura, agli errori e alle relazioni tra grandezze fisiche.</p>
-    </div>
-    <div>
-      <div class="ft-col-title">Esperienze</div>
-      <ul class="ft-links">
-        <li><a href="EXP01_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 01 — Misure di Lunghezze</a></li>
-        <li><a href="EXP02_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 02 — Periodo del Pendolo</a></li>
-        <li><a href="EXP03_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 03 — Massa e Forza Peso</a></li>
-        <li><a href="EXP04_2_Scheda_Laboratorio__versione_mobile_.html" target="_blank">EXP 04 — Volume del Cilindro</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="ft-col-title">Risorse</div>
-      <ul class="ft-links">
-        <li><a href="Capitolo_1__Concetti_Fondamentali_del_Laboratorio_di_Fisica.pdf" target="_blank">Capitolo 1 (PDF)</a></li>
-        <li><a href="Analisi_statistica.pdf" target="_blank">Analisi Statistica (PDF)</a></li>
-        <li><a href="#riassunto">Riassunto corso</a></li>
-        <li><a href="#glossario">Glossario termini</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="ft-bottom">
-    <span>FIS·LAB — Laboratorio di Fisica · EXP 01–04</span>
-    <span>Misure · Proporzionalità · Pendolo · Volume · Analisi Statistica</span>
-  </div>
+  <span>Lorenzo Gandini</span>
+  <span style="display:flex;align-items:center;gap:.5rem;font-size:12px;color:var(--testo-s)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0">
+      <circle cx="12" cy="12" r="11" fill="none" stroke="#4a6080" stroke-width="1.5"/>
+      <text x="12" y="10.5" text-anchor="middle" font-size="7" font-family="Arial" font-weight="700" fill="#4a6080">CC</text>
+      <text x="12" y="17.5" text-anchor="middle" font-size="7" font-family="Arial" font-weight="700" fill="#4a6080">BY</text>
+    </svg>
+    <a href="https://creativecommons.org/licenses/by/4.0/deed.it" target="_blank">Creative Commons Attribuzione 4.0 (CC BY 4.0)</a>
+  </span>
+  <a href="#">Contatti</a>
 </footer>
 
-
 <script>
-/* Filtro glossario */
-function filterGL(cat, btn) {
-  document.querySelectorAll('.fl-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.gl-entry').forEach(el => {
-    el.style.display = (cat === 'all' || el.classList.contains('cat-' + cat)) ? '' : 'none';
+const PROGETTO={
+  libro:      {nome:"Libro Digitale",           previsti:38,pubblicati:0},
+  animazioni: {nome:"Animazioni",               previsti:0, pubblicati:0},
+  vocabolario:{nome:"Vocabolario",              previsti:0, pubblicati:0},
+  ricettario: {nome:"Ricettario di Laboratorio",previsti:33,pubblicati:0}
+};
+
+const CAPITOLI=[
+  {id:"c1",titolo:"1. Metodo Sperimentale",badge:"todo",
+   intro:"Il metodo scientifico è il fondamento del laboratorio di fisica: dal confronto tra ipotesi e realtà alla costruzione di modelli e leggi fisiche.",
+   argomenti:[
+     {testo:"1.1 Il confronto",stato:"todo"},
+     {testo:"1.2 Il linguaggio naturale e la necessità di un linguaggio tecnico",stato:"todo"},
+     {testo:"1.3 La falsificabilità delle affermazioni",stato:"todo"},
+     {testo:"1.4.1 Definizioni operative e concettuali",stato:"todo"},
+     {testo:"1.4.2 La necessità della matematica",stato:"todo"},
+     {testo:"1.4.3 Il Sistema Internazionale",stato:"todo"},
+     {testo:"1.5.1 Misura",stato:"todo"},
+     {testo:"1.5.2 Relazione",stato:"todo"},
+     {testo:"1.5.3 Modello",stato:"todo"},
+     {testo:"1.5.4 Legge fisica (empirica, euristica, matematica)",stato:"todo"},
+     {testo:"1.5.5 Teoria",stato:"todo"},
+   ]},
+  {id:"c2",titolo:"2. Sicurezza in Laboratorio",badge:"todo",
+   intro:"Prima di ogni attività sperimentale è essenziale conoscere le norme di sicurezza che regolano il lavoro in laboratorio.",
+   argomenti:[
+     {testo:"Norme generali di comportamento in laboratorio",stato:"todo"},
+     {testo:"Dispositivi di protezione individuale (DPI)",stato:"todo"},
+     {testo:"Gestione dei materiali e dei rifiuti",stato:"todo"},
+     {testo:"Rischi specifici: elettricità, sostanze chimiche, strumenti ottici",stato:"todo"},
+   ]},
+  {id:"c3",titolo:"3. Fare una Misura",badge:"todo",
+   intro:"La misura è l'atto fondamentale della fisica sperimentale. Misurare significa stimare l'incertezza, propagarla correttamente e sapere come combinare più misure.",
+   argomenti:[
+     {testo:"3.1 Misure dirette e indirette",stato:"todo"},
+     {testo:"3.2 Incertezza ed errori",stato:"todo"},
+     {testo:"3.3 Propagazione degli errori",stato:"todo"},
+     {testo:"3.4 Medie",stato:"todo"},
+     {testo:"3.5 Deviazione standard",stato:"todo"},
+   ]},
+  {id:"c4",titolo:"4. Strumenti di Misura",badge:"todo",
+   intro:"Ogni strumento di misura ha caratteristiche proprie: sensibilità, portata, risoluzione e incertezza strumentale.",
+   argomenti:[
+     {testo:"Strumenti analogici: righello, calibro, dinamometro, termometro",stato:"todo"},
+     {testo:"Strumenti digitali: multimetro, bilancia elettronica, cronometro",stato:"todo"},
+     {testo:"Sensori e acquisizione dati (Arduino, Phyphox)",stato:"todo"},
+   ]},
+  {id:"c5",titolo:"5. I Software",badge:"todo",
+   intro:"I software scientifici sono strumenti indispensabili nel laboratorio moderno: dall'analisi video all'elaborazione statistica.",
+   argomenti:[
+     {testo:"Fogli di calcolo (Google Sheets, Excel): grafici e regressione",stato:"todo"},
+     {testo:"Tracker: analisi video del moto",stato:"todo"},
+     {testo:"Phyphox: acquisizione dati con smartphone",stato:"todo"},
+     {testo:"GeoGebra e strumenti di simulazione",stato:"todo"},
+   ]},
+  {id:"c6",titolo:"6. Raccolta Dati",badge:"todo",
+   intro:"Raccogliere dati in modo sistematico e rigoroso è una competenza fondamentale del laboratorio.",
+   argomenti:[
+     {testo:"Struttura di una tabella dati",stato:"todo"},
+     {testo:"Unità di misura e notazione scientifica",stato:"todo"},
+     {testo:"Campionamento e ripetibilità delle misure",stato:"todo"},
+   ]},
+  {id:"c7",titolo:"7. Relazioni tra Grandezze Fisiche",badge:"todo",
+   intro:"La fisica studia le relazioni tra grandezze. Saper riconoscere, rappresentare e analizzare graficamente le relazioni funzionali è una competenza centrale.",
+   argomenti:[
+     {testo:"7.1 Proporzionalità (diretta, inversa, quadratica)",stato:"todo"},
+     {testo:"7.2 Relazioni ricavate dal grafico",stato:"todo"},
+     {testo:"7.3 Relazioni integrate nelle formule",stato:"todo"},
+     {testo:"7.4 Grafici, barre di errore e R²",stato:"todo"},
+   ]},
+  {id:"c8",titolo:"8. La Relazione di Laboratorio",badge:"todo",
+   intro:"La relazione di laboratorio è il documento in cui si registra e comunica l'esperimento. Deve essere chiara, completa e replicabile.",
+   argomenti:[
+     {testo:"Struttura della relazione",stato:"todo"},
+     {testo:"Come scrivere il procedimento",stato:"todo"},
+     {testo:"Come presentare i dati e i grafici",stato:"todo"},
+     {testo:"Come scrivere le conclusioni",stato:"todo"},
+   ]},
+  {id:"c9",titolo:"9. Simulazione e Rappresentazione",badge:"todo",
+   intro:"Le simulazioni permettono di esplorare fenomeni fisici difficili da osservare direttamente.",
+   argomenti:[
+     {testo:"Simulazioni interattive (PhET, GeoGebra)",stato:"todo"},
+     {testo:"Animazioni e modelli fisici digitali",stato:"todo"},
+     {testo:"Rappresentazione tridimensionale dei fenomeni",stato:"todo"},
+   ]},
+  {id:"c10",titolo:"10. Ricettario Esperienze di Laboratorio",badge:"todo",
+   intro:"Una raccolta sistematica di tutte le esperienze di laboratorio del corso, con obiettivi, procedimenti, tabelle e domande conclusive.",
+   argomenti:[
+     {testo:"Schede EXP 01–04: misure ed errori",stato:"todo"},
+     {testo:"Schede EXP 05–14: meccanica e fluidi",stato:"todo"},
+     {testo:"Schede EXP 15–20: cinematica ed energia",stato:"todo"},
+     {testo:"Schede EXP 21–25: ottica ed elettricità",stato:"todo"},
+     {testo:"Schede EXTRA: esperienze avanzate",stato:"todo"},
+   ]},
+];
+
+const SCHEDE=[
+  {id:1, cat:"misure",       num:"01",diff:"Base",      titolo:"EXP 01 — Misure dirette di lunghezze e tempi",                   desc:"Misure dirette con righello e cronometro. Calcolo dell'incertezza, errore relativo e percentuale.",              tags:["misure dirette","incertezza","errore relativo"],  procedura:["Misura le dimensioni di un parallelepipedo con righello e calibro.","Calcola Δx = sensibilità dello strumento.","Calcola E% = (Δx/|x|)×100.","Confronta E% dei due strumenti.","Misura un intervallo di tempo."],note:"Prima esperienza del corso."},
+  {id:2, cat:"misure",       num:"02",diff:"Base",      titolo:"EXP 02 — Periodo del pendolo con metodi diversi",                desc:"Misura del periodo con cronometro analogico (10 oscillazioni) e digitale (5 misure + semidispersione).",         tags:["pendolo","semidispersione","metodi a confronto"], procedura:["Costruisci il pendolo e misura L.","Metodo 1: misura T₁₀, calcola T=T₁₀/10.","Metodo 2: misura 5 volte il tempo di 1 oscillazione.","Calcola T_medio e ΔT=(t_max−t_min)/2.","Confronta i due risultati."],note:"Il tempo di reazione domina l'incertezza nel Metodo 2."},
+  {id:3, cat:"misure",       num:"03",diff:"Base",      titolo:"EXP 03 — Proporzionalità diretta: massa e forza peso",           desc:"Verifica di P = mg con grafico in scala a mano su carta millimetrata.",                                         tags:["proporzionalità diretta","forza peso","grafico"], procedura:["Misura la massa del supporto con la bilancia.","Misura il peso con il dinamometro.","Aggiungi masse e ripeti per 5 coppie (m,P).","Calcola gᵢ=Pᵢ/mᵢ.","Calcola ḡ e Δg. Confronta con 9,81 N/kg."],note:"Far distinguere massa e peso."},
+  {id:4, cat:"misure",       num:"04",diff:"Base",      titolo:"EXP 04 — Proporzionalità inversa: h e A dell'acqua travasata",   desc:"Travaso della stessa acqua in contenitori di sezione diversa. Verifica di A·h = V = costante.",                  tags:["proporzionalità inversa","volume","iperbole"],    procedura:["Misura il diametro interno d di ciascun contenitore con il calibro.","Versa acqua nel primo cilindro e annota V.","Registra l'altezza h per ogni contenitore.","Calcola A=π(d/2)² e V_calc=A·h.","Traccia h vs A, h vs d, d vs A."],note:"Tre grafici: iperbole, prop. quadratica inversa, prop. quadratica."},
+  {id:5, cat:"meccanica",    num:"05",diff:"Base",      titolo:"EXP 05 — Realizzazione di un dinamometro",                      desc:"Costruzione di un dinamometro artigianale con molla e scala graduata.",                                          tags:["dinamometro","taratura","Hooke"],                 procedura:["Scegli una molla e fissala verticalmente.","Appendi masse campione e segna la posizione.","Disegna la scala graduata in Newton.","Verifica la linearità.","Misura oggetti di massa ignota."],note:"Lo studente costruisce lo strumento."},
+  {id:6, cat:"meccanica",    num:"06",diff:"Intermedio",titolo:"EXP 06 — Legge di Hooke con retta di regressione",               desc:"Verifica di F = kΔx con grafico su foglio di calcolo e retta di regressione.",                                  tags:["Hooke","regressione lineare","foglio di calcolo"],procedura:["Appendi la molla e registra la posizione di riposo.","Aggiungi masse progressive e misura Δx.","Inserisci i dati in un foglio di calcolo.","Aggiungi retta di regressione: pendenza = k.","Osserva il comportamento oltre il limite elastico."],note:"Non usare il dinamometro per misurare la forza."},
+  {id:7, cat:"meccanica",    num:"07",diff:"Base",      titolo:"EXP 07 — Regola del parallelogramma con 3 dinamometri",         desc:"Verifica grafica della composizione vettoriale con tre dinamometri in equilibrio.",                               tags:["vettori","parallelogramma","equilibrio"],         procedura:["Fissa tre dinamometri a un anello su tavola millimetrata.","Porta il sistema in equilibrio.","Registra modulo e direzione di ciascun vettore.","Costruisci il parallelogramma.","Verifica la coincidenza con il terzo vettore."],note:"Usare carta millimetrata."},
+  {id:8, cat:"meccanica",    num:"08",diff:"Intermedio",titolo:"EXP 08 — Coefficiente di attrito statico",                      desc:"Determinazione sperimentale di μs tramite trazione e piano inclinato.",                                         tags:["attrito statico","piano inclinato","μs"],         procedura:["Misura la forza di trazione minima.","Calcola μs=F/mg.","Trova l'angolo critico θ.","Calcola μs=tan(θ).","Ripeti con superfici diverse."],note:"Far distinguere attrito statico e dinamico."},
+  {id:9, cat:"meccanica",    num:"09",diff:"Base",      titolo:"EXP 09 — Equilibrio delle leve di primo genere",                desc:"Verifica di F₁·d₁ = F₂·d₂ per una leva con fulcro al centro.",                                                  tags:["leva 1° genere","momento","equilibrio"],          procedura:["Appendi la leva al punto medio.","Appendi una massa a d₁.","Trova d₂ per l'equilibrio.","Verifica m₁·d₁=m₂·d₂ per 5 configurazioni.","Calcola l'errore relativo."],note:"Introduzione al momento di una forza."},
+  {id:10,cat:"meccanica",    num:"10",diff:"Base",      titolo:"EXP 10 — Equilibrio delle leve di secondo genere",              desc:"Verifica dell'equilibrio per una leva con fulcro a un'estremità.",                                               tags:["leva 2° genere","momento","carriola"],            procedura:["Fulcro a un'estremità, massa al centro.","Applica forza verso l'alto con il dinamometro.","Verifica F·d_F=P·d_P.","Ripeti spostando la massa.","Calcola il vantaggio meccanico."],note:"Esempi: carriola, schiaccianoci."},
+  {id:11,cat:"meccanica",    num:"11",diff:"Intermedio",titolo:"EXP 11 — Baricentro di una figura piana",                       desc:"Determinazione sperimentale del baricentro tramite filo a piombo.",                                              tags:["baricentro","equilibrio","figure piane"],         procedura:["Ritaglia una figura irregolare da cartoncino.","Pratica 3 fori sul bordo.","Appendi e traccia la verticale da ciascun foro.","Trova l'intersezione: è il baricentro.","Verifica l'equilibrio."],note:"Estendere a figure composte."},
+  {id:12,cat:"meccanica",    num:"12",diff:"Intermedio",titolo:"EXP 12 — Esperimento di Torricelli con acqua colorata",         desc:"Riproduzione dell'esperimento di Torricelli. Misura della pressione atmosferica.",                                tags:["Torricelli","pressione atmosferica","fluidi"],    procedura:["Riempi un tubo con acqua colorata.","Capovolgi con l'estremità aperta in una bacinella.","Rimuovi il tappo.","Misura h della colonna.","Calcola P_atm=ρ·g·h."],note:"Con acqua serve un tubo di ~10 m."},
+  {id:13,cat:"termodinamica",num:"13",diff:"Intermedio",titolo:"EXP 13 — Evaporazione dell'acqua con Phyphox",                  desc:"Monitoraggio continuo della perdita di massa per evaporazione.",                                                 tags:["evaporazione","Phyphox","termodinamica"],         procedura:["Versa acqua in una capsula di Petri.","Collega Phyphox alla bilancia.","Registra per 3–4 ore.","Traccia il grafico m(t).","Calcola la velocità di evaporazione."],note:"Phyphox automatizza l'acquisizione."},
+  {id:14,cat:"meccanica",    num:"14",diff:"Intermedio",titolo:"EXP 14 — Spinta di Archimede e volume di un solido irregolare",  desc:"Utilizzo del principio di Archimede per determinare il volume di un solido.",                                    tags:["Archimede","spinta idrostatica","volume"],        procedura:["Misura P_aria.","Immergi in acqua e misura P_acqua.","Calcola S=P_aria−P_acqua.","Ricava V=S/(ρ·g).","Confronta con il cilindro graduato."],note:"Collegare alla storia della corona."},
+  {id:15,cat:"cinematica",   num:"15",diff:"Intermedio",titolo:"EXP 15 — Moto rettilineo uniforme sulla monorotaia",            desc:"Studio del MRU con monorotaia a cuscino d'aria. Verifica di x=x₀+vt.",                                          tags:["MRU","cuscino d'aria","I legge Newton"],          procedura:["Livella la monorotaia.","Attiva il cuscino e lancia il carrello.","Registra le posizioni.","Traccia x(t): verifica la linearità.","Calcola v dalla pendenza."],note:"Il cuscino elimina l'attrito."},
+  {id:16,cat:"cinematica",   num:"16",diff:"Intermedio",titolo:"EXP 16 — Moto uniformemente accelerato con Tracker",            desc:"Analisi video del MRUA con Tracker. Verifica di x=½at².",                                                       tags:["MRUA","Tracker","analisi video"],                 procedura:["Registra un video su piano inclinato.","Importa in Tracker.","Traccia la posizione frame per frame.","Ottieni i grafici x(t), v(t), a(t).","Confronta a con g·sinθ."],note:"Tracker è gratuito."},
+  {id:17,cat:"cinematica",   num:"17",diff:"Intermedio",titolo:"EXP 17 — II principio della dinamica (attività di classe)",     desc:"Verifica di F=ma variando forza e massa. Attività collettiva.",                                                 tags:["II legge Newton","F=ma","classe"],                procedura:["Dividi la classe in gruppi.","Collega il carrello a masse tramite carrucola.","Varia F a massa costante.","Varia massa a F costante.","Raccogli i dati di tutti i gruppi."],note:"La massa totale deve restare costante."},
+  {id:18,cat:"cinematica",   num:"18",diff:"Avanzato",  titolo:"EXP 18 — Conservazione energia meccanica con monorotaia",      desc:"Verifica che Em=Ec+Ep=costante su piano inclinato senza attrito.",                                               tags:["energia meccanica","conservazione","monorotaia"], procedura:["Inclina la monorotaia.","Misura la velocità in diversi punti.","Misura le quote.","Calcola Ec=½mv² ed Ep=mgh.","Verifica Em=costante."],note:"Discutere l'attrito."},
+  {id:19,cat:"cinematica",   num:"19",diff:"Avanzato",  titolo:"EXP 19 — Moto parabolico con Tracker (ispirato AIF)",          desc:"Studio del moto parabolico tramite analisi video con Tracker.",                                                 tags:["moto parabolico","Tracker","AIF"],                procedura:["Lancia un proiettile con velocità orizzontale.","Registra la traiettoria.","Analizza con Tracker.","Verifica x(t) lineare e y(t) parabolico.","Confronta gittata misurata e teorica."],note:"Decomposizione del moto."},
+  {id:20,cat:"meccanica",    num:"20",diff:"Base",      titolo:"EXP 20 — Lavoro compiuto percorrendo le scale",                 desc:"Misura del lavoro compiuto contro la gravità e calcolo della potenza.",                                          tags:["lavoro","potenza","fisica del corpo"],            procedura:["Misura la propria massa.","Misura il dislivello h.","Sali le scale cronometrando.","Calcola L=mgh.","Calcola P=L/t."],note:"Fisica vissuta."},
+  {id:21,cat:"ottica",       num:"21",diff:"Intermedio",titolo:"EXP 21 — Verifica della legge di Snell tramite Arduino",        desc:"Misura degli angoli di rifrazione con sensore Arduino.",                                                        tags:["Snell","rifrazione","Arduino"],                   procedura:["Posiziona il semicerchio di vetro.","Usa il sensore Arduino.","Registra coppie (θ₁,θ₂).","Traccia sinθ₁ vs sinθ₂.","Calcola n dalla pendenza."],note:"Discutere la riflessione totale interna."},
+  {id:22,cat:"elettricita",  num:"22",diff:"Intermedio",titolo:"EXP 22 — Condensatore piano con introduzione al multimetro",    desc:"Costruzione di un condensatore piano e misura della capacità.",                                                 tags:["condensatore","capacità","multimetro"],           procedura:["Costruisci il condensatore con fogli di alluminio.","Misura C con il multimetro.","Varia A: verifica C∝A.","Varia d: verifica C∝1/d.","Stima ε=C·d/A."],note:"Costruire il condensatore rende concreto il concetto."},
+  {id:23,cat:"elettricita",  num:"23",diff:"Avanzato",  titolo:"EXP 23 — Flash con circuito RC, LED e magnesio",               desc:"Esperienza dimostrativa: simulazione di un flash fotografico con circuito RC e confronto con il magnesio.",      tags:["RC","flash","magnesio","LED","τ=RC"],             procedura:["Assembla il circuito RC su breadboard con Arduino.","Verifica polarità di LED e condensatore.","Alimenta: fase di carica, LED spento.","Disconnetti e misura la durata del lampo.","Varia R e confronta con τ=R·C.","Confronta con la combustione del magnesio."],note:"Esperienza qualitativa, non quantitativa."},
+  {id:24,cat:"elettricita",  num:"24",diff:"Base",      titolo:"EXP 24 — Prima legge di Ohm su breadboard",                    desc:"Verifica di V=RI su breadboard.",                                                                               tags:["Ohm","breadboard","Kirchhoff"],                   procedura:["Assembla il circuito su breadboard.","Varia la tensione da 1V a 9V.","Registra la corrente.","Traccia V vs I.","Calcola R dalla pendenza."],note:"Discutere conduttori ohmici e non."},
+  {id:25,cat:"elettricita",  num:"25",diff:"Intermedio",titolo:"EXP 25 — Seconda legge di Ohm tramite grafite",                desc:"Verifica della dipendenza di R da lunghezza e sezione con grafite su carta.",                                  tags:["II legge Ohm","resistività","grafite"],           procedura:["Disegna strisce di grafite.","Misura R con il multimetro.","Traccia R vs L.","Varia la larghezza.","Calcola ρ."],note:"Bassissimo costo."},
+  {id:26,cat:"misure",       num:"E1",diff:"Intermedio",titolo:"EXTRA — Proporzionalità quadratica: T² e lunghezza pendolo",    desc:"Verifica T²∝L tramite misure sistematiche. Ricava g.",                                                          tags:["T²","linearizzazione","pendolo"],                 procedura:["Prepara il pendolo per L=20,30,45,60,80,100 cm.","Misura il tempo di 20 oscillazioni per ogni L.","Costruisci la tabella con L, T, T².","Traccia T² vs L.","Calcola g dalla pendenza."],note:"Linearizzazione del grafico."},
+  {id:27,cat:"misure",       num:"E2",diff:"Intermedio",titolo:"EXTRA — Misura di π e propagazione degli errori",               desc:"Misura di π tramite circonferenza e diametro.",                                                                 tags:["π","propagazione errori","misura indiretta"],     procedura:["Misura C di 5 oggetti cilindrici.","Misura D con il calibro.","Calcola π=C/D.","Applica Δπ/π=ΔC/C+ΔD/D.","Confronta con 3,14159."],note:"La precisione su D influenza il risultato."},
+  {id:28,cat:"cinematica",   num:"E3",diff:"Avanzato",  titolo:"EXTRA — Piano inclinato con Arduino e HC-SR04",                 desc:"Misura dinamica del moto con sensore ultrasonico HC-SR04.",                                                     tags:["Arduino","HC-SR04","acquisizione dati"],          procedura:["Monta HC-SR04 in cima al piano.","Carica lo sketch Arduino.","Avvia l'acquisizione.","Esporta i dati e traccia x(t).","Calcola l'accelerazione."],note:"Introduce la sensoristica digitale."},
+  {id:29,cat:"ottica",       num:"E4",diff:"Avanzato",  titolo:"EXTRA — Verifica della legge di Lambert-Beer",                  desc:"Verifica dell'attenuazione della luce in soluzioni a concentrazione variabile.",                                 tags:["Lambert-Beer","assorbanza","colorimetro"],        procedura:["Prepara soluzioni a concentrazione scalare.","Misura A con il colorimetro.","Traccia A vs c.","Determina ε dalla pendenza.","Misura la concentrazione ignota."],note:"Applicazioni in biologia e medicina."},
+  {id:30,cat:"elettricita",  num:"E5",diff:"Avanzato",  titolo:"EXTRA — Pixel RGB con diodo LED (3 metodi)",                   desc:"Simulazione di un pixel tramite LED RGB.",                                                                      tags:["LED RGB","pixel","PWM","Arduino"],                procedura:["Metodo 1: resistori fissi.","Metodo 2: potenziometri.","Metodo 3: Arduino PWM.","Implementa un ciclo di scorrimento colori.","Misura corrente e tensione."],note:"Introduce il PWM."},
+  {id:31,cat:"elettricita",  num:"E6",diff:"Base",      titolo:"EXTRA — Accensione di un LED tramite circuito di carta",        desc:"Realizzazione di un circuito funzionante su carta conduttiva.",                                                 tags:["circuito","LED","paper circuit"],                 procedura:["Disegna il circuito su carta.","Posiziona batteria CR2032 e LED.","Chiudi il circuito.","Inserisci un interruttore di carta.","Discuti circuito aperto/chiuso."],note:"Prima esperienza di elettricità."},
+  {id:32,cat:"ottica",       num:"E7",diff:"Intermedio",titolo:"EXTRA — Misura di c con cioccolato e microonde",                desc:"Misura della velocità della luce: c=f·λ.",                                                                      tags:["velocità luce","microonde","onde stazionarie"],   procedura:["Rimuovi il piatto rotante.","Scalda il cioccolato 20–30 s.","Misura la distanza tra punti fusi: è λ/2.","Calcola λ=2·d.","Calcola c=f·λ."],note:"~10% di errore."},
+  {id:33,cat:"elettricita",  num:"E8",diff:"Avanzato",  titolo:"EXTRA — Misura di h tramite diodi LED",                        desc:"Determinazione della costante di Planck tramite tensione di soglia di LED.",                                     tags:["Planck","LED","fisica moderna"],                  procedura:["Raccogli LED di 4+ colori.","Misura la tensione di soglia V₀.","Trova λ e calcola f=c/λ.","Traccia V₀ vs f.","Moltiplica per e per ottenere h."],note:"Fisica moderna in laboratorio."},
+];
+
+const SCHEDE_DETAIL={
+  1:{
+    obiettivo:"Misurare le dimensioni di un parallelepipedo con righello e calibro ventesimale e confrontare i risultati. Calcolare l'errore relativo percentuale per ciascuna misura.",
+    principi:[
+      {label:"Misura Diretta",   formula:"x = (valore ± Δx) u.m.",desc:"L'incertezza Δx coincide con la sensibilità dello strumento."},
+      {label:"Errore Relativo %",formula:"E% = (Δx / |x|) × 100", desc:"Più è piccolo, più la misura è precisa."},
+      {label:"Sensibilità",      formula:"Δx = divisione minima",  desc:"Righello: 1 mm. Calibro ventesimale: 0,05 mm."},
+    ],
+    materiali:["Parallelepipedo","Righello millimetrato","Calibro ventesimale","Tabella dati"],
+    procedura:["Identifica LARGHEZZA (L), ALTEZZA (A), SPESSORE (S).","Misura con il RIGHELLO: registra Δx = sensibilità.","Misura con il CALIBRO VENTESIMALE: registra Δx = sensibilità.","Calcola E% = (Δx/|x|)×100 per ogni misura.","Confronta i valori di E% dei due strumenti."],
+    conclusioni:["Quale strumento produce E% più piccolo? Perché?","Se si misura 1 mm con il righello, quale sarebbe E%?","Cosa si intende per 'cifre significative'?"],
+    note:"Prima esperienza del corso.",
+  },
+  2:{
+    obiettivo:"Misurare il periodo di oscillazione di un pendolo con due metodi e confrontare i risultati.",
+    principi:[
+      {label:"Periodo del Pendolo",     formula:"T = t_N / N",                 desc:"Misurando N oscillazioni l'incertezza si riduce di N volte."},
+      {label:"Metodo 1 — Osc. Multiple",formula:"T = T₁₀/10 · ΔT = ΔT₁₀/10", desc:"Cronometro analogico (sens. 0,1 s)."},
+      {label:"Metodo 2 — Valor Medio",  formula:"T_med=(t₁+t₂+t₃+t₄+t₅)/5",  desc:"5 misure ripetute. La dispersione include il tempo di reazione."},
+      {label:"Semi-dispersione",        formula:"ΔT = (t_max – t_min) / 2",    desc:"Stima dell'incertezza. Risultato: T = T_medio ± ΔT."},
+    ],
+    materiali:["Filo inestensibile","Massa (bob)","Supporto con morsetto","Metro","Cronometro analogico","Cronometro digitale"],
+    procedura:["Monta il pendolo e misura L.","Metodo 1: misura T₁₀, calcola T=T₁₀/10 e ΔT=Δt/10.","Scrivi il risultato nella forma T ± ΔT.","Metodo 2: misura 5 volte t di 1 oscillazione.","Calcola T_medio e ΔT=(t_max−t_min)/2. Confronta i due risultati."],
+    conclusioni:["I due metodi danno risultati compatibili?","Quale metodo produce l'incertezza minore?","Qual è la principale fonte di errore casuale nel Metodo 2?"],
+    note:"Il tempo di reazione domina l'incertezza nel Metodo 2.",
+  },
+  3:{
+    obiettivo:"Verificare la relazione di proporzionalità diretta tra la massa (m) e il peso (P), determinare g sperimentalmente e confrontarlo con 9,81 N/kg.",
+    principi:[
+      {label:"Proporzionalità Diretta",   formula:"P / m = g = cost.",          desc:"Al raddoppiare di m, anche P raddoppia. Grafico: retta per l'origine."},
+      {label:"Massa e Peso",              formula:"P = g · m",                  desc:"Massa (kg): intrinseca al corpo. Peso (N): dipende dal campo gravitazionale."},
+      {label:"Costante g",                formula:"ḡ = (g₁+g₂+…+g₅)/5",        desc:"Media dei rapporti P/m. Valore atteso: g ≈ 9,81 N/kg."},
+      {label:"Stima dell'Errore",         formula:"Δg = (g_max – g_min) / 2",   desc:"Semi-dispersione. Risultato: g = ḡ ± Δg N/kg."},
+    ],
+    materiali:["Supporto porta-masse","Masse campione (almeno 4)","Gancio","Bilancia elettronica","Dinamometro"],
+    procedura:["Misura la massa del solo supporto con la bilancia. Converti in kg.","Misura il peso del solo supporto con il dinamometro.","Aggiungi una massa alla volta. Misura massa totale e peso totale.","Ripeti per 5 coppie (m, P). Calcola gᵢ=Pᵢ/mᵢ per ogni coppia.","Calcola ḡ e Δg. Confronta con 9,81 N/kg."],
+    conclusioni:["Il grafico P vs m è una retta per l'origine?","Quanto è compatibile il valore di g ottenuto con 9,81 N/kg?","Che differenza c'è tra massa e peso? Cambierebbero sulla Luna?"],
+    note:"Far distinguere massa (proprietà del corpo) e peso (forza).",
+  },
+  4:{
+    obiettivo:"Verificare la relazione di proporzionalità inversa tra l'area della base (A) e l'altezza del liquido (h) in contenitori di diverso diametro, con volume V costante. Mostrare che A·h = V = costante.",
+    principi:[
+      {label:"Proporzionalità Inversa",formula:"x · y = k = cost.",      desc:"Al raddoppiare di x, y si dimezza. Grafico: iperbole equilatera."},
+      {label:"Volume del Cilindro",    formula:"V = A · h = π·(d/2)²·h", desc:"Con V costante, A e h sono inversamente proporzionali."},
+      {label:"Calcolo dell'Area",      formula:"A = π · (d/2)²",         desc:"Il diametro d si misura con il calibro. L'area dipende dal quadrato del diametro."},
+      {label:"Relazione h–d",          formula:"h ∝ 1/d²",               desc:"L'altezza è inversamente proporzionale al quadrato del diametro: h = V/(π·(d/2)²)."},
+    ],
+    materiali:["Cilindro graduato 100 mL","Cilindro graduato 250 mL","Cilindro graduato 1000 mL","Cristallizzatore piccolo","Cristallizzatore grande","Calibro","Acqua"],
+    procedura:["Misura il diametro interno d di ciascun contenitore con il calibro.","Versa acqua nel cilindro da 100 mL: annota il volume V.","Leggi e registra l'altezza h per ogni contenitore dopo il travaso.","Calcola A=π(d/2)² per ciascun contenitore.","Calcola V_calc=A·h. Verifica la costanza. Calcola V_medio e ΔV.","Traccia i tre grafici: h vs A (iperbole), h vs d (prop. quadratica inversa), d vs A (prop. quadratica)."],
+    conclusioni:["Il prodotto A·h è rimasto costante? Commenta V_medio e ΔV.","Come si spiega un'eventuale diminuzione progressiva del volume?","Che relazione esiste tra A e d? Perché A∝d²?"],
+    note:"Tre grafici da costruire: iperbole (h vs A), prop. quadratica inversa (h vs d), prop. quadratica (d vs A).",
+  },
+  23:{
+    obiettivo:"Realizzare un circuito temporizzato RC che simula il funzionamento del flash fotografico tramite un diodo LED, sfruttando la carica e scarica di un condensatore. Verificare il legame tra la costante di tempo τ=R·C e la durata dell'impulso luminoso, confrontando il risultato con il flash storico al magnesio.",
+    principi:[
+      {label:"Resistenza Elettrica",formula:"R [Ω = V/A]",   desc:"Ostacola il flusso di corrente. Determina, con C, la velocità di carica/scarica."},
+      {label:"Condensatore",        formula:"C [F = C/V]",   desc:"Immagazzina energia tra le armature come campo elettrico."},
+      {label:"Costante di Tempo",   formula:"τ = R × C [s]", desc:"Carica: dopo τ raggiunge il 63,2% della carica max. Scarica: dopo τ scende al 36,8%."},
+      {label:"Diodo LED",           formula:"I → solo polariz. diretta", desc:"Componente polarizzato (anodo +, catodo –): emette luce solo nel verso diretto."},
+    ],
+    materiali:["Resistore fisso","Condensatore elettrolitico polarizzato","Diodo LED","Breadboard","Cavi di collegamento","Arduino (5V continua)","Multimetro digitale","Cronometro","Filamento di magnesio"],
+    procedura:["Verifica la capacità del condensatore e identifica anodo/catodo del LED.","Assembla il circuito sulla breadboard: C e LED in parallelo tra il nodo A e GND.","Collega 5V e GND di Arduino. Verifica che I=V/R resti entro 40 mA.","Controlla la polarità di C e LED prima di alimentare.","Alimenta (carica: LED spento). Disconnetti e misura la durata del lampo.","Sostituisci R e confronta con la previsione τ=R·C.","Confronta con la combustione del magnesio: istantanea, non ripetibile."],
+    conclusioni:["Perché durante la carica la corrente nel LED è praticamente nulla?","Cosa succede invertendo la polarità del LED o del condensatore?","Come cambia la durata del lampo variando R o C?","Quali vantaggi ha il circuito RC rispetto al flash al magnesio?"],
+    note:"Esperienza dimostrativa e qualitativa: non è prevista raccolta sistematica di dati numerici né analisi quantitativa.",
+  },
+};
+
+const CSS_SCHEDA=`
+  .sv{font-family:'Arial',sans-serif;font-size:13px;color:#1a2a3a;background:#f7fbff;padding:1.25rem}
+  .print-bar{max-width:700px;margin:0 auto .75rem;display:flex;justify-content:flex-end}
+  .btn-print{background:#185FA5;color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:.04em}
+  .btn-print:hover{background:#042C53}
+  .btn-print svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+  .pagina{background:#fff;max-width:700px;margin:0 auto 1.5rem;padding:1.75rem;border:1px solid #ccdded;border-radius:10px}
+  .int{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding-bottom:.9rem;margin-bottom:1.1rem;border-bottom:2px solid #B5D4F4;flex-wrap:wrap}
+  .cod{font-family:'Courier New',monospace;font-size:11px;font-weight:700;color:#185FA5;background:#E6F1FB;padding:3px 10px;border-radius:20px;white-space:nowrap}
+  .tit{font-size:14px;font-weight:600;color:#042C53;flex:1;text-align:center;font-family:'Georgia',serif;min-width:160px}
+  .dn{font-size:11px;color:#4a6080;line-height:2}.dn span{display:block;border-bottom:1px solid #ccdded;min-width:80px}
+  .sez{margin-bottom:1rem}
+  .sez-t{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#185FA5;padding:4px 10px;background:#E6F1FB;border-left:3px solid #185FA5;margin-bottom:.55rem}
+  .sez-t.sec{background:#f0f7fd;border-left-color:#B5D4F4;color:#4a6080}
+  .sez-b{padding:0 2px}
+  .obj{font-size:13px;line-height:1.7;padding:.6rem .8rem;border-left:3px solid #B5D4F4;background:#f0f7fd;font-family:'Georgia',serif}
+  .pg{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+  .pb{background:#f0f7fd;border:1px solid #B5D4F4;padding:.55rem .7rem;border-radius:6px}
+  .lb{font-size:10px;font-weight:600;color:#185FA5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem}
+  .fm{font-family:'Courier New',monospace;font-size:12px;color:#042C53;background:#E6F1FB;padding:3px 7px;border-radius:4px;display:block;text-align:center;margin-bottom:.25rem}
+  .ds{font-size:12px;color:#4a6080;line-height:1.5}
+  .mg{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+  .sr{display:flex;align-items:center;border-bottom:1px solid #ccdded;padding:4px 0;gap:4px;font-size:12px;flex-wrap:wrap}
+  .sn{flex:0 0 150px;font-weight:600;color:#042C53}
+  .cc{display:flex;align-items:center;gap:3px;flex:1}.cc label{font-size:11px;color:#4a6080;white-space:nowrap}
+  .lv{flex:1;border-bottom:1px solid #B5D4F4;min-width:24px;height:14px}
+  .un{font-size:11px;color:#4a6080;font-family:'Courier New',monospace}
+  .ml{list-style:none;padding:0}.ml li{font-size:12px;padding:3px 0 3px 13px;border-bottom:1px solid #E6F1FB;position:relative}
+  .ml li::before{content:'›';position:absolute;left:2px;color:#185FA5;font-weight:700}
+  .sl{list-style:none;padding:0;counter-reset:st}
+  .sl li{counter-increment:st;display:flex;gap:.55rem;align-items:flex-start;padding:4px 0;border-bottom:1px solid #E6F1FB;font-size:13px;line-height:1.5}
+  .sl li::before{content:counter(st);background:#185FA5;color:#fff;font-size:11px;font-weight:600;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.dt{width:100%;border-collapse:collapse;font-size:12px;min-width:360px}
+  table.dt th{background:#185FA5;color:#fff;padding:5px;text-align:center;font-weight:600;font-size:11px;border:1px solid #185FA5}
+  table.dt th .ut{display:block;font-family:'Courier New',monospace;font-size:9px;font-weight:400;opacity:.85;margin-top:1px}
+  table.dt td{border:1px solid #ccdded;padding:0;height:22px;vertical-align:middle}
+  table.dt td.cv{background:#E6F1FB;font-size:12px;font-weight:600;color:#042C53;padding:3px 5px}
+  table.dt tr:nth-child(even) td.cv{background:#d8ebf8}
+  table.dt td.vu{background:#fff}
+  table.dt tr:nth-child(even) td.vu{background:#f7fbff}
+  table.dt td.mr{background:#B5D4F4;font-style:italic;color:#042C53;font-size:11px;padding:3px 6px;font-weight:600;text-align:right}
+  .rs{border-bottom:1px solid #ccdded;height:22px;margin-bottom:2px}
+  .cq{list-style:none;padding:0}
+  .cq li{font-size:12px;padding:5px 0 2px;border-bottom:1px dashed #B5D4F4;line-height:1.5}
+  .cq li .rl{border-bottom:1px solid #ccdded;height:20px;margin-top:4px}
+  .p2hd{border-bottom:2px solid #B5D4F4;display:flex;justify-content:space-between;align-items:baseline;padding-bottom:.55rem;margin-bottom:1rem;flex-wrap:wrap;gap:.35rem}
+  .cod2{font-family:'Courier New',monospace;font-size:11px;font-weight:700;color:#185FA5;background:#E6F1FB;padding:2px 8px;border-radius:20px}
+  .ttl2{font-size:13px;font-weight:600;color:#042C53;font-family:'Georgia',serif}
+  .nm{font-size:11px;color:#4a6080}
+  .lun-box{background:#f0f7fd;border:1px solid #B5D4F4;border-radius:6px;padding:.5rem .75rem;display:flex;align-items:center;gap:1rem;margin-bottom:.75rem;flex-wrap:wrap}
+  .lun-box span{font-size:12px;color:#042C53;font-weight:600}
+  .lun-box .lf{flex:1;border-bottom:1px solid #B5D4F4;min-width:80px;height:16px}
+  .obs-item{display:flex;gap:.5rem;padding:.45rem 0;border-bottom:1px solid #E6F1FB;font-size:12px;line-height:1.55}
+  .obs-arrow{color:#185FA5;font-weight:700;flex-shrink:0}
+  .nota-storica{background:#FAEEDA;border:1px solid #e8c98a;border-radius:6px;padding:.65rem .85rem;font-size:12px;line-height:1.6;color:#5a4220}
+  .dimostrativo-box{background:#FCEBEB;border-left:3px solid #A32D2D;border-radius:6px;padding:.65rem .85rem;font-size:12px;line-height:1.6;color:#5a2020}
+  @media(max-width:560px){.pg,.mg{grid-template-columns:1fr}.pagina{padding:1.1rem}.int{flex-direction:column;align-items:flex-start}.tit{text-align:left}}
+`;
+
+function svgGriglia(id, xLabel, yLabel){
+  const W=262, H=190;
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block;background:#fff;border:1px solid #ccdded">
+    <defs>
+      <pattern id="mm${id}" width="5.2" height="5" patternUnits="userSpaceOnUse"><path d="M 5.2 0 L 0 0 0 5" fill="none" stroke="#d8eaf7" stroke-width="0.4"/></pattern>
+      <pattern id="cm${id}" width="26" height="25" patternUnits="userSpaceOnUse"><rect width="26" height="25" fill="url(#mm${id})"/><path d="M 26 0 L 0 0 0 25" fill="none" stroke="#9ec5e8" stroke-width="0.7"/></pattern>
+    </defs>
+    <rect x="30" y="8" width="${W-40}" height="${H-22}" fill="url(#cm${id})"/>
+    <rect x="30" y="8" width="${W-40}" height="${H-22}" fill="none" stroke="#185FA5" stroke-width="1"/>
+    <line x1="30" y1="${H-14}" x2="${W-8}" y2="${H-14}" stroke="#185FA5" stroke-width="1.5"/>
+    <line x1="30" y1="8" x2="30" y2="${H-14}" stroke="#185FA5" stroke-width="1.5"/>
+    <polygon points="${W-6},${H-14} ${W-14},${H-19} ${W-14},${H-9}" fill="#185FA5"/>
+    <polygon points="30,6 25,14 35,14" fill="#185FA5"/>
+    <text x="${W-4}" y="${H-9}" font-size="10" fill="#185FA5" font-family="Georgia,serif" font-style="italic" font-weight="600">${xLabel}</text>
+    <text x="6" y="12" font-size="10" fill="#185FA5" font-family="Georgia,serif" font-style="italic" font-weight="600">${yLabel}</text>
+    <text x="22" y="${H-6}" font-size="8" fill="#4a6080" font-family="Arial">O</text>
+  </svg>`;
+}
+
+const BTN_PRINT=`<div class="print-bar"><button class="btn-print" onclick="stampaScheda()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Stampa / Salva PDF</button></div>`;
+
+const SCHEDE_HTML={
+  1:{
+    titolo:"EXP 01 — Misure Dirette di Lunghezze e Confronto di Strumenti",
+    html:`<style>${CSS_SCHEDA}</style><div class="sv">${BTN_PRINT}
+    <div class="pagina">
+      <div class="int"><div class="cod">EXP 01</div><div class="tit">Misure Dirette di Lunghezze e Confronto di Strumenti</div><div class="dn">Nome:<span>&nbsp;</span>Data:<span>&nbsp;</span>Classe:<span>&nbsp;</span></div></div>
+      <div class="sez"><div class="sez-t">Obiettivo</div><div class="sez-b"><p class="obj">Misurare le dimensioni di un parallelepipedo con due strumenti a sensibilità diversa e confrontare i risultati. Calcolare l'<strong>errore relativo percentuale</strong> per ciascuna misura.</p></div></div>
+      <div class="sez"><div class="sez-t">Principi Teorici</div><div class="sez-b"><div class="pg">
+        <div class="pb"><div class="lb">Misura Diretta</div><div class="fm">x = (valore ± Δx) u.m.</div><div class="ds">L'incertezza Δx coincide con la <strong>sensibilità</strong> dello strumento.</div></div>
+        <div class="pb"><div class="lb">Errore Relativo %</div><div class="fm">E% = (Δx / |x|) × 100</div><div class="ds">Più è piccolo, più la misura è precisa.</div></div>
+        <div class="pb"><div class="lb">Righello</div><div class="fm">sensibilità = 1 mm</div><div class="ds">Strumento analogico a scala graduata.</div></div>
+        <div class="pb"><div class="lb">Calibro Ventesimale</div><div class="fm">sensibilità = 0,05 mm</div><div class="ds">20× più preciso del righello.</div></div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Materiali e Strumenti</div><div class="sez-b"><div class="mg">
+        <div><div class="sez-t sec" style="margin-bottom:4px">Materiali</div><ul class="ml"><li>Parallelepipedo (riga, libro, scatola)</li><li>Tabella dati</li></ul></div>
+        <div><div class="sez-t sec" style="margin-bottom:4px">Strumenti</div>
+          <div class="sr"><span class="sn">Righello millimetrato</span><div class="cc"><label>Port.:</label><div class="lv"></div><span class="un">mm</span></div><div class="cc" style="margin-left:3px"><label>Sens.:</label><div class="lv"></div><span class="un">mm</span></div></div>
+          <div class="sr" style="border:none"><span class="sn">Calibro ventesimale</span><div class="cc"><label>Port.:</label><div class="lv"></div><span class="un">mm</span></div><div class="cc" style="margin-left:3px"><label>Sens.:</label><div class="lv"></div><span class="un">mm</span></div></div>
+        </div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Procedimento</div><div class="sez-b"><ol class="sl">
+        <li>Identifica le tre dimensioni: LARGHEZZA (L), ALTEZZA (A), SPESSORE (S).</li>
+        <li>Misura ciascuna con il RIGHELLO; registra Δx = sensibilità del righello.</li>
+        <li>Misura ciascuna con il CALIBRO; registra Δx = sensibilità del calibro.</li>
+        <li>Per ogni misura calcola E% = (Δx / |x|) × 100.</li>
+        <li>Confronta i valori di E% dei due strumenti per la stessa dimensione.</li>
+      </ol></div></div>
+      <div class="sez"><div class="sez-t">Raccolta Dati — Righello</div><div class="sez-b"><div class="tw"><table class="dt">
+        <thead><tr><th style="width:22%">Dimensione</th><th>Valore<span class="ut">[mm]</span></th><th>Δx<span class="ut">[mm]</span></th><th>Misura completa<span class="ut">val.±Δx</span></th><th>E%<span class="ut">[%]</span></th></tr></thead>
+        <tbody><tr><td class="cv">Larghezza (L)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr><tr><td class="cv">Altezza (A)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr><tr><td class="cv">Spessore (S)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr></tbody>
+      </table></div></div></div>
+      <div class="sez"><div class="sez-t">Raccolta Dati — Calibro Ventesimale</div><div class="sez-b"><div class="tw"><table class="dt">
+        <thead><tr><th style="width:22%">Dimensione</th><th>Valore<span class="ut">[mm]</span></th><th>Δx<span class="ut">[mm]</span></th><th>Misura completa<span class="ut">val.±Δx</span></th><th>E%<span class="ut">[%]</span></th></tr></thead>
+        <tbody><tr><td class="cv">Larghezza (L)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr><tr><td class="cv">Altezza (A)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr><tr><td class="cv">Spessore (S)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr></tbody>
+      </table></div></div></div>
+    </div>
+    <div class="pagina">
+      <div class="p2hd"><span class="cod2">EXP 01</span><span class="ttl2">Osservazioni e Conclusioni</span><span class="nm">Nome:___________________________</span></div>
+      <div class="sez"><div class="sez-t">Tabella di Confronto — Spessore (S)</div><div class="sez-b"><div class="tw"><table class="dt">
+        <thead><tr><th style="width:30%">Strumento</th><th>Sensibilità<span class="ut">[mm]</span></th><th>Valore<span class="ut">[mm]</span></th><th>Δx<span class="ut">[mm]</span></th><th>E%<span class="ut">[%]</span></th></tr></thead>
+        <tbody><tr><td class="cv">Righello</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr><tr><td class="cv">Calibro ventesimale</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr></tbody>
+      </table></div></div></div>
+      <div class="sez"><div class="sez-t">Classificazione degli Errori</div><div class="sez-b"><div class="pg">
+        <div class="pb"><div class="lb">Errori Casuali</div><div class="fm">distribuiti ±</div><div class="ds">Imprevedibili, riducibili ripetendo le misure.</div></div>
+        <div class="pb"><div class="lb">Errori Sistematici</div><div class="fm">sempre nella stessa direzione</div><div class="ds">Non si riducono ripetendo le misure.</div></div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Osservazioni</div><div class="sez-b">${Array(5).fill('<div class="rs"></div>').join('')}</div></div>
+      <div class="sez"><div class="sez-t">Conclusioni</div><div class="sez-b"><ul class="cq">
+        <li>Quale strumento produce E% più piccolo? Perché?<div class="rl"></div><div class="rl"></div></li>
+        <li>Se si misura 1 mm con il righello, quale sarebbe E%? È accettabile?<div class="rl"></div><div class="rl"></div></li>
+        <li>Cosa si intende per "cifre significative"?<div class="rl"></div><div class="rl"></div></li>
+      </ul></div></div>
+    </div></div>`
+  },
+  2:{
+    titolo:"EXP 02 — Misura del Periodo del Pendolo con Metodi Diversi",
+    html:`<style>${CSS_SCHEDA}</style><div class="sv">${BTN_PRINT}
+    <div class="pagina">
+      <div class="int"><div class="cod">EXP 02</div><div class="tit">Misura del Periodo del Pendolo con Metodi Diversi</div><div class="dn">Nome:<span>&nbsp;</span>Data:<span>&nbsp;</span>Classe:<span>&nbsp;</span></div></div>
+      <div class="sez"><div class="sez-t">Obiettivo</div><div class="sez-b"><p class="obj">Misurare il periodo di un pendolo con due metodi e confrontare i risultati. <strong>Metodo 1:</strong> 10 oscillazioni con cronometro analogico. <strong>Metodo 2:</strong> 5 misure ripetute con cronometro digitale e semi-dispersione.</p></div></div>
+      <div class="sez"><div class="sez-t">Principi Teorici</div><div class="sez-b"><div class="pg">
+        <div class="pb"><div class="lb">Periodo del Pendolo</div><div class="fm">T = t_N / N</div><div class="ds">Misurando N oscillazioni l'incertezza si riduce di N volte.</div></div>
+        <div class="pb"><div class="lb">Metodo 1</div><div class="fm">T = T₁₀/10 · ΔT = ΔT₁₀/10</div><div class="ds">Cronometro analogico (sens. 0,1 s). Precisione apparente 0,01 s.</div></div>
+        <div class="pb"><div class="lb">Metodo 2</div><div class="fm">T_med=(t₁+t₂+t₃+t₄+t₅)/5</div><div class="ds">5 misure ripetute. La dispersione include il tempo di reazione.</div></div>
+        <div class="pb"><div class="lb">Semi-dispersione</div><div class="fm">ΔT = (t_max – t_min) / 2</div><div class="ds">Stima dell'incertezza. Risultato: T = T_medio ± ΔT.</div></div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Materiali e Strumenti</div><div class="sez-b"><div class="mg">
+        <div><div class="sez-t sec" style="margin-bottom:4px">Materiali</div><ul class="ml"><li>Filo inestensibile</li><li>Massa (bob del pendolo)</li><li>Supporto con morsetto</li><li>Righello o metro</li></ul></div>
+        <div><div class="sez-t sec" style="margin-bottom:4px">Strumenti</div>
+          <div class="sr"><span class="sn">Cronometro analogico</span><div class="cc"><label>Port.:</label><div class="lv"></div><span class="un">s</span></div><div class="cc" style="margin-left:3px"><label>Sens.:</label><div class="lv"></div><span class="un">s</span></div></div>
+          <div class="sr" style="border:none"><span class="sn">Cronometro digitale</span><div class="cc"><label>Port.:</label><div class="lv"></div><span class="un">s</span></div><div class="cc" style="margin-left:3px"><label>Sens.:</label><div class="lv"></div><span class="un">s</span></div></div>
+        </div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Procedimento</div><div class="sez-b"><ol class="sl">
+        <li>Monta il pendolo e misura la lunghezza L dal punto di sospensione al centro della massa.</li>
+        <li>METODO 1 — cronometro analogico: misura il tempo di 10 oscillazioni consecutive (T₁₀).</li>
+        <li>Calcola T = T₁₀/10 e ΔT = Δt_analogico/10. Scrivi T ± ΔT.</li>
+        <li>METODO 2 — cronometro digitale: misura 5 volte il tempo di UNA oscillazione (t₁…t₅).</li>
+        <li>Calcola T_medio e ΔT = (t_max−t_min)/2. Confronta i due risultati.</li>
+        <li>Quale metodo produce l'incertezza maggiore? Quale è più realistico?</li>
+      </ol></div></div>
+      <div class="sez"><div class="sez-t">Lunghezza del Pendolo</div><div class="sez-b">
+        <div class="lun-box"><span>L =</span><div class="lf"></div><span>mm</span><span style="margin-left:1rem">ΔL =</span><div class="lf"></div><span>mm</span><span style="margin-left:1rem">L ± ΔL =</span><div class="lf"></div><span>mm</span></div>
+      </div></div>
+      <div class="sez"><div class="sez-t">Raccolta Dati — Metodo 1 (Cronometro Analogico)</div><div class="sez-b"><div class="tw"><table class="dt">
+        <thead><tr><th style="width:36%">Grandezza</th><th>Valore<span class="ut">[s]</span></th><th>Δt<span class="ut">[s]</span></th><th>Misura completa<span class="ut">(val.±Δt) s</span></th></tr></thead>
+        <tbody>
+          <tr><td class="cv">Tempo 10 oscillazioni (T₁₀)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="mr" colspan="3">Periodo T = T₁₀/10 =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+          <tr><td class="mr" colspan="3">Incertezza ΔT = Δt/10 =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+          <tr><td class="mr" colspan="3">Risultato: T ± ΔT =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+        </tbody>
+      </table></div></div></div>
+    </div>
+    <div class="pagina">
+      <div class="p2hd"><span class="cod2">EXP 02</span><span class="ttl2">Metodo 2 — Confronto e Conclusioni</span><span class="nm">Nome:___________________________</span></div>
+      <div class="sez"><div class="sez-t">Raccolta Dati — Metodo 2 (Cronometro Digitale, 5 misure)</div><div class="sez-b">
+        <div class="tw" style="margin-bottom:.5rem"><table class="dt">
+          <thead><tr><th style="width:22%">Misura</th><th>t₁<span class="ut">[s]</span></th><th>t₂<span class="ut">[s]</span></th><th>t₃<span class="ut">[s]</span></th><th>t₄<span class="ut">[s]</span></th><th>t₅<span class="ut">[s]</span></th></tr></thead>
+          <tbody><tr><td class="cv">Tempo oscillazione</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr></tbody>
+        </table></div>
+        <div class="tw"><table class="dt">
+          <thead><tr><th style="width:18%">Calcolo</th><th>t_max<span class="ut">[s]</span></th><th>t_min<span class="ut">[s]</span></th><th>T_medio<span class="ut">[s]</span></th><th>ΔT=(t_max−t_min)/2<span class="ut">[s]</span></th><th>T ± ΔT<span class="ut">[s]</span></th></tr></thead>
+          <tbody><tr><td class="cv">Metodo 2</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr></tbody>
+        </table></div>
+      </div></div>
+      <div class="sez"><div class="sez-t">Confronto tra i Due Metodi</div><div class="sez-b"><div class="tw"><table class="dt">
+        <thead><tr><th style="width:32%">Metodo</th><th>Strumento</th><th>T<span class="ut">[s]</span></th><th>ΔT<span class="ut">[s]</span></th><th>E%<span class="ut">[%]</span></th></tr></thead>
+        <tbody>
+          <tr><td class="cv">Metodo 1 (10 oscillazioni)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Metodo 2 (5 misure ripetute)</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+        </tbody>
+      </table></div></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.25rem">
+        <div class="sez" style="margin-bottom:0"><div class="sez-t">Osservazioni</div><div class="sez-b">${Array(8).fill('<div class="rs"></div>').join('')}</div></div>
+        <div class="sez" style="margin-bottom:0"><div class="sez-t">Conclusioni</div><div class="sez-b"><ul class="cq">
+          <li>I due metodi danno risultati compatibili?<div class="rl"></div><div class="rl"></div></li>
+          <li>Quale metodo produce l'incertezza minore?<div class="rl"></div><div class="rl"></div></li>
+          <li>Principale fonte di errore nel Metodo 2?<div class="rl"></div><div class="rl"></div></li>
+          <li>Quando è preferibile il Metodo 1? E il Metodo 2?<div class="rl"></div><div class="rl"></div></li>
+        </ul></div></div>
+      </div>
+    </div></div>`
+  },
+  3:{
+    titolo:"EXP 03 — Proporzionalità Diretta tra Massa e Forza Peso",
+    html:`<style>${CSS_SCHEDA}</style><div class="sv">${BTN_PRINT}
+    <div class="pagina">
+      <div class="int"><div class="cod">EXP 03</div><div class="tit">Proporzionalità Diretta tra Massa e Forza Peso</div><div class="dn">Nome:<span>&nbsp;</span>Data:<span>&nbsp;</span>Classe:<span>&nbsp;</span></div></div>
+      <div class="sez"><div class="sez-t">Obiettivo</div><div class="sez-b"><p class="obj">Verificare empiricamente la <strong>proporzionalità diretta</strong> tra la massa (<em>m</em>) e il peso (<em>P</em>), determinare sperimentalmente <em>g</em> e confrontarlo con il valore teorico <strong>9,81 N/kg</strong>.</p></div></div>
+      <div class="sez"><div class="sez-t">Principi Teorici</div><div class="sez-b"><div class="pg">
+        <div class="pb"><div class="lb">Proporzionalità Diretta</div><div class="fm">P / m = g = cost.</div><div class="ds">Al raddoppiare di m, anche P raddoppia. Grafico: <strong>retta per l'origine</strong>.</div></div>
+        <div class="pb"><div class="lb">Massa e Peso</div><div class="fm">P = g · m</div><div class="ds"><strong>Massa</strong> (kg): intrinseca. <strong>Peso</strong> (N): dipende dal campo gravitazionale.</div></div>
+        <div class="pb"><div class="lb">Costante g</div><div class="fm">ḡ = (g₁+g₂+…+g₅)/5</div><div class="ds">Media dei rapporti P/m. Valore atteso: g ≈ 9,81 N/kg.</div></div>
+        <div class="pb"><div class="lb">Stima dell'Errore</div><div class="fm">Δg = (g_max – g_min)/2</div><div class="ds">Semi-dispersione. Risultato: <em>g = ḡ ± Δg</em> N/kg.</div></div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Materiali e Strumenti</div><div class="sez-b"><div class="mg">
+        <div><div class="sez-t sec" style="margin-bottom:4px">Materiali</div><ul class="ml"><li>Supporto porta-masse</li><li>Masse campione (almeno 4)</li><li>Gancio di collegamento</li></ul></div>
+        <div><div class="sez-t sec" style="margin-bottom:4px">Strumenti</div>
+          <div class="sr"><span class="sn">Bilancia elettronica</span><div class="cc"><label>Port.:</label><div class="lv"></div><span class="un">g</span></div><div class="cc" style="margin-left:3px"><label>Sens.:</label><div class="lv"></div><span class="un">g</span></div></div>
+          <div class="sr" style="border:none"><span class="sn">Dinamometro</span><div class="cc"><label>Port.:</label><div class="lv"></div><span class="un">N</span></div><div class="cc" style="margin-left:3px"><label>Sens.:</label><div class="lv"></div><span class="un">N</span></div></div>
+        </div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Procedimento</div><div class="sez-b"><ol class="sl">
+        <li>Misura con la bilancia la massa del SOLO SUPPORTO (m₁). Converti da g a kg.</li>
+        <li>Misura con il dinamometro il PESO DEL SOLO SUPPORTO (P₁) in Newton.</li>
+        <li>Aggiungi una massa alla volta. Per ogni assemblaggio misura massa totale e peso totale.</li>
+        <li>Ripeti per 5 coppie (m, P). Calcola gᵢ = Pᵢ/mᵢ per ogni coppia.</li>
+        <li>Calcola ḡ e Δg. Esprimi g = ḡ ± Δg. Confronta con 9,81 N/kg.</li>
+        <li>Traccia il grafico P vs m su carta millimetrata: verifica la retta per l'origine.</li>
+      </ol></div></div>
+      <div class="sez"><div class="sez-t">Raccolta Dati e Calcoli</div><div class="sez-b"><div class="tw"><table class="dt">
+        <thead><tr><th style="width:26%">Assemblaggio</th><th>m<span class="ut">[g]</span></th><th>Δm<span class="ut">[g]</span></th><th>m<span class="ut">[kg]</span></th><th>P<span class="ut">[N]</span></th><th>ΔP<span class="ut">[N]</span></th><th>gᵢ=P/m<span class="ut">[N/kg]</span></th></tr></thead>
+        <tbody>
+          <tr><td class="cv">Solo supporto</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Supporto + 1 massa</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Supporto + 2 masse</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Supporto + 3 masse</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Supporto + 4 masse</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="mr" colspan="6">ḡ (media) =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+          <tr><td class="mr" colspan="6">Δg (semi-dispersione) =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+          <tr><td class="mr" colspan="6">Risultato: g = ḡ ± Δg =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+        </tbody>
+      </table></div></div></div>
+    </div>
+    <div class="pagina">
+      <div class="p2hd"><span class="cod2">EXP 03</span><span class="ttl2">Rappresentazione Grafica e Conclusioni</span><span class="nm">Nome:___________________________</span></div>
+      <div class="sez"><div class="sez-t">Grafico P vs m — Proporzionalità Diretta (carta millimetrata)</div><div class="sez-b">
+        <div style="border:1px solid #ccdded;border-radius:6px;overflow:hidden;margin-bottom:.4rem">
+          <div style="background:#185FA5;color:#fff;font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px">m (kg) — P (N) · Retta per l'origine · pendenza = g</div>
+          ${svgGriglia('3','m (kg)','P (N)')}
+        </div>
+        <p style="font-size:10px;color:#4a6080;font-style:italic;text-align:center">Riportare i punti (m, P) e tracciare la retta di best-fit per l'origine. La pendenza corrisponde a <em>g</em>.</p>
+      </div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.4rem">
+        <div class="sez" style="margin-bottom:0"><div class="sez-t">Osservazioni</div><div class="sez-b">${Array(6).fill('<div class="rs"></div>').join('')}</div></div>
+        <div class="sez" style="margin-bottom:0"><div class="sez-t">Conclusioni</div><div class="sez-b"><ul class="cq">
+          <li>Il grafico P vs m è una retta per l'origine?<div class="rl"></div><div class="rl"></div></li>
+          <li>Il valore di g è compatibile con 9,81 N/kg?<div class="rl"></div><div class="rl"></div></li>
+          <li>Che differenza c'è tra massa e peso? Cambierebbero sulla Luna?<div class="rl"></div><div class="rl"></div></li>
+          <li>Possibili cause di errore?<div class="rl"></div><div class="rl"></div></li>
+        </ul></div></div>
+      </div>
+    </div></div>`
+  },
+  4:{
+    titolo:"EXP 04 — Proporzionalità Inversa e Volume del Cilindro",
+    html:`<style>${CSS_SCHEDA}
+    .g3top{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem}
+    .g3bot{display:flex;justify-content:center}
+    .gbox{border:1px solid #ccdded;border-radius:6px;overflow:hidden}
+    .gtit{background:#185FA5;color:#fff;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px}
+    .gsub{font-size:10px;color:#4a6080;font-style:italic;text-align:center;padding:2px 4px 4px}
+    @media(max-width:560px){.g3top{grid-template-columns:1fr}}
+    </style><div class="sv">${BTN_PRINT}
+    <div class="pagina">
+      <div class="int"><div class="cod">EXP 04</div><div class="tit">Proporzionalità Inversa e Volume del Cilindro</div><div class="dn">Nome:<span>&nbsp;</span>Data:<span>&nbsp;</span>Classe:<span>&nbsp;</span></div></div>
+      <div class="sez"><div class="sez-t">Obiettivo</div><div class="sez-b"><p class="obj">Verificare la <strong>proporzionalità inversa</strong> tra l'area della base (<em>A</em>) e l'altezza del liquido (<em>h</em>) in contenitori di diverso diametro, con volume (<em>V</em>) costante. Mostrare che <em>A·h = V = costante</em>.</p></div></div>
+      <div class="sez"><div class="sez-t">Principi Teorici</div><div class="sez-b"><div class="pg">
+        <div class="pb"><div class="lb">Proporzionalità Inversa</div><div class="fm">A · h = V = cost.</div><div class="ds">Al raddoppiare di A, h si dimezza. Grafico h vs A: <strong>iperbole equilatera</strong>.</div></div>
+        <div class="pb"><div class="lb">Volume del Cilindro</div><div class="fm">V = A · h = π·(d/2)²·h</div><div class="ds">Con V costante, A e h sono inversamente proporzionali.</div></div>
+        <div class="pb"><div class="lb">Calcolo dell'Area</div><div class="fm">A = π · (d/2)²</div><div class="ds">L'area dipende dal <strong>quadrato</strong> del diametro: A ∝ d².</div></div>
+        <div class="pb"><div class="lb">Relazione h–d</div><div class="fm">h ∝ 1/d²</div><div class="ds">L'altezza è inversamente proporzionale al quadrato del diametro.</div></div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Materiali e Strumenti</div><div class="sez-b"><div class="mg">
+        <div><div class="sez-t sec" style="margin-bottom:4px">Materiali</div><ul class="ml"><li>Cilindro graduato 100 mL</li><li>Cilindro graduato 250 mL</li><li>Cilindro graduato 1000 mL</li><li>Cristallizzatore piccolo</li><li>Cristallizzatore grande</li><li>Acqua</li></ul></div>
+        <div><div class="sez-t sec" style="margin-bottom:4px">Strumenti</div>
+          <div class="sr" style="border:none"><span class="sn">Calibro</span><div class="cc"><label>Port.:</label><div class="lv"></div><span class="un">mm</span></div><div class="cc" style="margin-left:3px"><label>Sens.:</label><div class="lv"></div><span class="un">mm</span></div></div>
+        </div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Procedimento</div><div class="sez-b"><ol class="sl">
+        <li>Misura con il calibro il DIAMETRO INTERNO (d) di ciascun contenitore.</li>
+        <li>Versa acqua nel cilindro da 100 mL: annota il volume V (costante k).</li>
+        <li>Leggi e registra l'ALTEZZA h nel primo cilindro.</li>
+        <li>Travasa la stessa acqua nel contenitore successivo. Leggi h. Ripeti per tutti.</li>
+        <li>Calcola A = π·(d/2)² per ciascun contenitore.</li>
+        <li>Calcola V_calc = A·h. Verifica la costanza. Calcola V_medio e ΔV.</li>
+      </ol></div></div>
+      <div class="sez"><div class="sez-t">Raccolta Dati e Calcoli</div><div class="sez-b"><div class="tw"><table class="dt">
+        <thead><tr>
+          <th style="width:22%">Contenitore</th>
+          <th>h<span class="ut">[mm]</span></th>
+          <th>Δh<span class="ut">[mm]</span></th>
+          <th>d<span class="ut">[mm]</span></th>
+          <th>Δd<span class="ut">[mm]</span></th>
+          <th>A = π(d/2)²<span class="ut">[mm²]</span></th>
+          <th>V = A·h<span class="ut">[mm³]</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="cv">Cilindro 100 mL</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Cilindro 250 mL</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Cilindro 1000 mL</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Cristallizzatore piccolo</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="cv">Cristallizzatore grande</td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td><td class="vu"></td></tr>
+          <tr><td class="mr" colspan="6">V_medio =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+          <tr><td class="mr" colspan="6">ΔV (semi-dispersione) =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+          <tr><td class="mr" colspan="6">V misurato (mL → mm³) =</td><td class="vu" style="background:#E6F1FB"></td></tr>
+        </tbody>
+      </table></div></div></div>
+    </div>
+    <div class="pagina">
+      <div class="p2hd"><span class="cod2">EXP 04</span><span class="ttl2">Rappresentazione Grafica e Conclusioni</span><span class="nm">Nome:___________________________</span></div>
+      <div class="sez"><div class="sez-t">Tre Grafici da Costruire su Carta Millimetrata</div><div class="sez-b">
+        <div class="g3top">
+          <div class="gbox"><div class="gtit">Grafico 1 — h (mm) vs A (mm²)</div>${svgGriglia('4a','A (mm²)','h (mm)')}<div class="gsub">Iperbole equilatera — A·h = cost.</div></div>
+          <div class="gbox"><div class="gtit">Grafico 2 — h (mm) vs d (mm)</div>${svgGriglia('4b','d (mm)','h (mm)')}<div class="gsub">Prop. quadratica inversa — h ∝ 1/d²</div></div>
+        </div>
+        <div class="g3bot">
+          <div class="gbox" style="width:calc(50% - .25rem)"><div class="gtit">Grafico 3 — d (mm) vs A (mm²)</div>${svgGriglia('4c','d (mm)','A (mm²)')}<div class="gsub">Prop. quadratica — A ∝ d²</div></div>
+        </div>
+        <p style="font-size:10px;color:#4a6080;font-style:italic;text-align:center;margin-top:4px">Indicare le scale sugli assi con le unità di misura. Grafico 1: iperbole; Grafico 2: curva decrescente; Grafico 3: parabola.</p>
+      </div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.4rem">
+        <div class="sez" style="margin-bottom:0"><div class="sez-t">Osservazioni</div><div class="sez-b">${Array(5).fill('<div class="rs"></div>').join('')}</div></div>
+        <div class="sez" style="margin-bottom:0"><div class="sez-t">Conclusioni</div><div class="sez-b"><ul class="cq">
+          <li>Il prodotto A·h è rimasto costante? Commenta V_medio e ΔV.<div class="rl"></div><div class="rl"></div></li>
+          <li>Come si spiega un'eventuale diminuzione progressiva del volume?<div class="rl"></div><div class="rl"></div></li>
+          <li>Che relazione esiste tra A e d? Perché A ∝ d²?<div class="rl"></div><div class="rl"></div></li>
+          <li>Che legame esiste tra h e d? Perché h ∝ 1/d²?<div class="rl"></div><div class="rl"></div></li>
+        </ul></div></div>
+      </div>
+    </div></div>`
+  },
+  23:{
+    titolo:"EXP 23 — Flash con Circuito RC, LED e Magnesio",
+    html:`<style>${CSS_SCHEDA}</style><div class="sv">${BTN_PRINT}
+    <div class="pagina">
+      <div class="int"><div class="cod">EXP 23</div><div class="tit">Flash con Circuito RC, LED e Magnesio</div><div class="dn">Nome:<span>&nbsp;</span>Data:<span>&nbsp;</span>Classe:<span>&nbsp;</span></div></div>
+      <div class="sez"><div class="sez-t">Obiettivo</div><div class="sez-b"><p class="obj">Realizzare un circuito temporizzato <strong>RC</strong> che simula il funzionamento del flash fotografico tramite un diodo LED, sfruttando la carica e scarica di un condensatore. Verificare il legame tra la costante di tempo <strong>τ = R·C</strong> e la durata dell'impulso luminoso, confrontando il risultato con il flash storico al magnesio.</p></div></div>
+      <div class="sez"><div class="sez-t">Principi Teorici</div><div class="sez-b"><div class="pg">
+        <div class="pb"><div class="lb">Resistenza Elettrica</div><div class="fm">R [Ω = V/A]</div><div class="ds">Ostacola il flusso di corrente. Determina, insieme a C, la velocità di carica/scarica.</div></div>
+        <div class="pb"><div class="lb">Condensatore</div><div class="fm">C [F = C/V]</div><div class="ds">Immagazzina energia tra le armature come campo elettrico. Accumulatore a scarica rapida.</div></div>
+        <div class="pb"><div class="lb">Costante di Tempo</div><div class="fm">τ = R × C [s]</div><div class="ds">Carica: dopo τ il condensatore raggiunge il 63,2% della carica max. Scarica: dopo τ scende al 36,8%.</div></div>
+        <div class="pb"><div class="lb">Diodo LED</div><div class="fm">I → solo polariz. diretta</div><div class="ds">Componente polarizzato (anodo +, catodo –): emette luce solo nel verso diretto.</div></div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Nota Storica — Il Flash al Magnesio</div><div class="sez-b">
+        <div class="nota-storica">I primi flash fotografici (fine '800) sfruttavano la combustione di polvere di <strong>magnesio</strong>: 2 Mg + O₂ → 2 MgO. La reazione era rapidissima e intensamente luminosa, ma non controllabile né ripetibile. L'evoluzione verso i circuiti RC ha reso il lampo programmabile, sicuro e preciso.</div>
+      </div></div>
+      <div class="sez"><div class="sez-t">Materiali e Strumenti</div><div class="sez-b"><div class="mg">
+        <div><div class="sez-t sec" style="margin-bottom:4px">Componenti del circuito</div><ul class="ml"><li>Resistore fisso — valore: ___ Ω</li><li>Condensatore elettrolitico polarizzato — C: ___ μF</li><li>Diodo LED — colore: ___</li></ul></div>
+        <div><div class="sez-t sec" style="margin-bottom:4px">Strumenti e infrastruttura</div><ul class="ml"><li>Breadboard</li><li>Cavi di collegamento</li><li>Arduino (sorgente 5V continua)</li><li>Multimetro digitale</li><li>Cronometro</li><li>Filamento di magnesio</li></ul></div>
+      </div></div></div>
+      <div class="sez"><div class="sez-t">Procedimento</div><div class="sez-b"><ol class="sl">
+        <li>Verifica la capacità del condensatore (stampata sul corpo) e identifica anodo/catodo del LED dalla lunghezza dei terminali.</li>
+        <li>Assembla il circuito sulla breadboard: collega il terminale negativo del condensatore al ramo GND, posiziona C e LED in parallelo tra il nodo A e GND.</li>
+        <li>Collega il pin 5V di Arduino al ramo della resistenza R e GND al ramo negativo. Verifica che I = V/R resti entro 40 mA.</li>
+        <li>Controlla ogni connessione prima di alimentare: attenzione alla polarità di C e del LED.</li>
+        <li>Alimenta il circuito (fase di carica: LED spento). Disconnetti l'alimentazione e misura con il cronometro la durata del lampo.</li>
+        <li>Sostituisci la resistenza con un valore diverso. Ripeti la misura e confronta con la previsione τ = R·C.</li>
+        <li>Confronta il lampo del circuito RC con la combustione di un filamento di magnesio: istantanea, non controllabile, non ripetibile.</li>
+      </ol></div></div>
+      <div class="sez"><div class="sez-t">Raccolta Dati e Analisi</div><div class="sez-b">
+        <div class="dimostrativo-box">Questa esperienza ha carattere <strong>dimostrativo</strong> e non quantitativo: l'obiettivo è osservare qualitativamente il funzionamento del circuito RC come simulatore di flash fotografico, non effettuare misure di precisione della costante di tempo. Non è prevista una raccolta sistematica di dati numerici né un'analisi quantitativa dei risultati.</div>
+      </div></div>
+    </div>
+    <div class="pagina">
+      <div class="p2hd"><span class="cod2">EXP 23</span><span class="ttl2">Osservazioni e Conclusioni</span><span class="nm">Nome:___________________________</span></div>
+      <div class="sez"><div class="sez-t">Osservazioni Attese</div><div class="sez-b">
+        <div class="obs-item"><span class="obs-arrow">→</span><div><strong>Comportamento durante la carica:</strong> con il circuito alimentato, la corrente nel ramo del LED è praticamente nulla: il condensatore, caricandosi, azzera la differenza di tensione disponibile per il LED.</div></div>
+        <div class="obs-item"><span class="obs-arrow">→</span><div><strong>Polarità dei componenti:</strong> l'inversione della polarità del LED impedisce il funzionamento del circuito, confermando l'importanza dell'orientamento corretto dei componenti polarizzati.</div></div>
+        <div class="obs-item"><span class="obs-arrow">→</span><div><strong>Variazione dei componenti:</strong> modificando R o C si osserva la variazione della durata del lampo, confermando in modo diretto la relazione τ = R × C.</div></div>
+        <div class="obs-item"><span class="obs-arrow">→</span><div><strong>Confronto con il flash al magnesio:</strong> il filamento di magnesio produce un lampo istantaneo, non controllabile né ripetibile, a differenza del circuito RC.</div></div>
+      </div></div>
+      <div class="sez"><div class="sez-t">Osservazioni Personali</div><div class="sez-b">${Array(5).fill('<div class="rs"></div>').join('')}</div></div>
+      <div class="sez"><div class="sez-t">Conclusioni</div><div class="sez-b"><ul class="cq">
+        <li>Perché durante la carica la corrente nel ramo del LED è praticamente nulla?<div class="rl"></div><div class="rl"></div></li>
+        <li>Cosa succede se si inverte la polarità del LED o del condensatore elettrolitico?<div class="rl"></div><div class="rl"></div></li>
+        <li>Come cambia la durata del lampo aumentando o diminuendo R o C? È coerente con τ = R·C?<div class="rl"></div><div class="rl"></div></li>
+        <li>Quali vantaggi ha il circuito RC rispetto al flash al magnesio?<div class="rl"></div><div class="rl"></div></li>
+      </ul></div></div>
+    </div></div>`
+  }
+};
+
+function goPageById(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('[data-page]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('[data-page="'+id+'"]').forEach(b=>b.classList.add('active'));
+  closeMenu();window.scrollTo(0,0);
+}
+function toggleMenu(){document.getElementById('burger').classList.toggle('open');document.getElementById('nav-mobile').classList.toggle('open');}
+function closeMenu(){document.getElementById('burger').classList.remove('open');document.getElementById('nav-mobile').classList.remove('open');}
+
+function initProgress(){
+  const keys=Object.keys(PROGETTO);let totPrev=0,totPub=0;
+  const c=document.getElementById('prog-items');c.innerHTML='';
+  keys.forEach(k=>{
+    const s=PROGETTO[k];const indef=s.previsti===0;
+    const pct=indef?0:Math.round(s.pubblicati/s.previsti*100);
+    if(!indef){totPrev+=s.previsti;totPub+=s.pubblicati;}
+    c.innerHTML+=`<div class="prog-item"><div class="prog-row"><span>${s.nome}</span><strong>${indef?'—':pct+'%'}</strong></div><div class="prog-bg"><div class="prog-fill" id="pf-${k}" style="width:0%"></div></div>${indef?'<div class="prog-indef">Progetto da definire</div>':''}</div>`;
+  });
+  const totPct=totPrev>0?Math.round(totPub/totPrev*100):0;
+  document.getElementById('prog-detail').textContent=`${totPub} contenuti pubblicati su ${totPrev} previsti`;
+  setTimeout(()=>{
+    keys.forEach(k=>{
+      const s=PROGETTO[k];const indef=s.previsti===0;
+      const pct=indef?0:Math.round(s.pubblicati/s.previsti*100);
+      const el=document.getElementById('pf-'+k);
+      if(el){el.style.width=pct+'%';if(indef)el.style.background='var(--blu-c)';}
+    });
+    let cnt=0;const t=setInterval(()=>{document.getElementById('prog-tot').textContent=cnt+'%';cnt++;if(cnt>totPct){clearInterval(t);document.getElementById('prog-tot').textContent=totPct+'%';}},18);
+  },350);
+}
+
+function bClass(b){return b==='pub'?'':b==='wip'?'wip':'todo'}
+function bLabel(b){return b==='pub'?'Pubblicato':b==='wip'?'In corso':'In arrivo'}
+function sClass(s){return s==='pub'?'stato-pub':s==='wip'?'stato-wip':'stato-todo'}
+function sLabel(s){return s==='pub'?'Pubblicato':s==='wip'?'In corso':'In arrivo'}
+function capBodyHTML(c,i){
+  return `<h2>${c.titolo}</h2><div class="cap-meta">Capitolo ${i+1} · ${c.argomenti.filter(a=>a.stato==='pub').length}/${c.argomenti.length} pubblicati</div><div class="cap-intro">${c.intro}</div><div class="cap-sezioni"><h3>Argomenti</h3>${c.argomenti.map(a=>`<div class="argomento"><span class="arg-text">${a.testo}</span><span class="arg-stato ${sClass(a.stato)}">${sLabel(a.stato)}</span></div>`).join('')}</div>`;
+}
+function initLibro(){
+  const list=document.getElementById('cap-list'),panels=document.getElementById('cap-panels');
+  list.innerHTML='';panels.innerHTML='';
+  CAPITOLI.forEach((c,i)=>{
+    const item=document.createElement('div');item.className='cap-item'+(i===0?' active':'');
+    item.innerHTML=`${c.titolo}<span class="cap-badge ${bClass(c.badge)}">${bLabel(c.badge)}</span>`;
+    item.addEventListener('click',()=>{document.querySelectorAll('.cap-item').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.cap-content').forEach(e=>e.classList.remove('active'));item.classList.add('active');document.getElementById(c.id).classList.add('active');});
+    list.appendChild(item);
+    const panel=document.createElement('div');panel.className='cap-content'+(i===0?' active':'');panel.id=c.id;panel.innerHTML=capBodyHTML(c,i);panels.appendChild(panel);
+  });
+  const acc=document.getElementById('cap-accordion');acc.innerHTML='';
+  CAPITOLI.forEach((c,i)=>{
+    const wrap=document.createElement('div');wrap.className='cap-acc-item';
+    const head=document.createElement('div');head.className='cap-acc-head';
+    head.innerHTML=`<span class="title">${c.titolo}</span><span class="cap-badge ${bClass(c.badge)}" style="margin-right:.3rem">${bLabel(c.badge)}</span><span class="arr">▼</span>`;
+    head.addEventListener('click',()=>wrap.classList.toggle('open'));
+    const body=document.createElement('div');body.className='cap-acc-body';body.innerHTML=capBodyHTML(c,i);
+    wrap.appendChild(head);wrap.appendChild(body);acc.appendChild(wrap);
   });
 }
 
-/* Highlight nav attivo su scroll */
-const secs = document.querySelectorAll('section[id]');
-const nls  = document.querySelectorAll('.nav-links a');
-new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting)
-      nls.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+const CAT_LABEL={misure:'Misure ed errori',meccanica:'Meccanica',cinematica:'Cinematica',ottica:'Ottica e onde',elettricita:'Elettricità',termodinamica:'Termodinamica'};
+const CAT_CLASS={misure:'cat-mis',meccanica:'cat-mec',cinematica:'cat-cin',ottica:'cat-ott',elettricita:'cat-ele',termodinamica:'cat-ter'};
+function renderSchede(filter){
+  const grid=document.getElementById('schede-grid');
+  const list=filter==='tutti'?SCHEDE:SCHEDE.filter(s=>s.cat===filter);
+  grid.innerHTML='';
+  list.forEach(s=>{
+    const card=document.createElement('div');card.className='scheda';
+    card.innerHTML=`<div class="scheda-header"><span class="scheda-categoria ${CAT_CLASS[s.cat]}">${CAT_LABEL[s.cat]}</span><span class="scheda-diff">${s.diff}</span></div><div class="scheda-body"><h3><span style="font-size:10px;color:var(--testo-s);font-weight:400;margin-right:4px">EXP ${s.num}</span>${s.titolo.replace(/^EXP \w+ — /,'')}</h3><p>${s.desc}</p></div><div class="scheda-footer">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`;
+    card.addEventListener('click',()=>openModal(s.id));grid.appendChild(card);
   });
-}, { threshold: 0.45 }).observe(secs, secs);
+}
 
-// fix: observe each section individually
-secs.forEach(s => new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting)
-      nls.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+function openModal(id){
+  const s=SCHEDE.find(x=>x.id===id),det=SCHEDE_DETAIL[id];
+  let html='';
+  if(det){
+    html+=`<div class="modal-section"><h4>Obiettivo</h4><p>${det.obiettivo}</p></div>`;
+    html+=`<div class="modal-section"><h4>Principi Teorici</h4><div class="principi-grid">${det.principi.map(p=>`<div class="principio-item"><div class="principio-label">${p.label}</div><code class="principio-formula">${p.formula}</code><div class="principio-desc">${p.desc}</div></div>`).join('')}</div></div>`;
+    html+=`<div class="modal-section"><h4>Materiali</h4><ul>${det.materiali.map(m=>`<li>${m}</li>`).join('')}</ul></div>`;
+    html+=`<div class="modal-section"><h4>Procedura</h4>${det.procedura.map((p,i)=>`<div class="step"><div class="step-n">${i+1}</div><div class="step-t">${p}</div></div>`).join('')}</div>`;
+    html+=`<div class="modal-section"><h4>Domande conclusive</h4><ul>${det.conclusioni.map(c=>`<li>${c}</li>`).join('')}</ul></div>`;
+    html+=`<div class="modal-section"><h4>Note per il docente</h4><p>${det.note}</p></div>`;
+    if(SCHEDE_HTML[id]) html+=`<div class="modal-section"><div class="scheda-link-box"><span>📄 Scheda di laboratorio completa (versione mobile)</span><button class="btn-apri" id="btn-open-scheda-${id}">Apri scheda →</button></div></div>`;
+    if(id===23) html+=`<div class="modal-section"><div class="scheda-link-box"><span>🌐 Versione originale completa (con immagini e video) a questo link</span><a class="btn-apri" href="REL23_Circuito_RC_online_v3.html" target="_blank" style="text-decoration:none">Apri scheda →</a></div></div>`;
+  } else {
+    html+=`<div class="modal-section"><h4>Procedura</h4>${s.procedura.map((p,i)=>`<div class="step"><div class="step-n">${i+1}</div><div class="step-t">${p}</div></div>`).join('')}</div>`;
+    html+=`<div class="modal-section"><h4>Note per il docente</h4><p>${s.note}</p></div>`;
+  }
+  document.getElementById('modal-content').innerHTML=`<div class="modal-head"><h2>EXP ${s.num} — ${s.titolo.replace(/^EXP \w+ — /,'')}</h2><button class="modal-close" id="btn-close-modal">✕</button></div><div class="modal-cat ${CAT_CLASS[s.cat]}">${CAT_LABEL[s.cat]} · ${s.diff}</div>${html}`;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('btn-close-modal').addEventListener('click',closeModal);
+  const btnS=document.getElementById('btn-open-scheda-'+id);
+  if(btnS) btnS.addEventListener('click',()=>{closeModal();openSchedaViewer(id);});
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+
+function openSchedaViewer(id){
+  const s=SCHEDE_HTML[id];if(!s)return;
+  document.getElementById('scheda-viewer-title').textContent=s.titolo;
+  document.getElementById('scheda-viewer-body').innerHTML=s.html;
+  document.getElementById('scheda-overlay').classList.add('open');
+}
+function closeSchedaViewer(){document.getElementById('scheda-overlay').classList.remove('open');}
+function stampaScheda(){
+  const body=document.getElementById('scheda-viewer-body');if(!body)return;
+  const win=window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"/><title>Scheda di Laboratorio</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#fff;font-family:'Arial',sans-serif}@page{size:A4;margin:0}@media print{.print-bar{display:none!important}body{background:#fff}.sv{padding:0!important;background:#fff!important}.pagina{page-break-after:always;page-break-inside:avoid;box-shadow:none!important;border:none!important;border-radius:0!important;margin:0!important;padding:10mm 13mm 8mm!important;max-width:100%!important;width:100%!important;height:297mm;overflow:hidden}.pagina:last-of-type{page-break-after:auto}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.sv{font-size:11px!important}.obj{font-size:11px!important;padding:.4rem .7rem!important}.sez{margin-bottom:.6rem!important}.sez-t{padding:3px 8px!important;font-size:9px!important;margin-bottom:.4rem!important}.pg{gap:.4rem!important}.pb{padding:.4rem .6rem!important}.lb{font-size:9px!important}.fm{font-size:10px!important;padding:2px 6px!important}.ds{font-size:10px!important}.mg{gap:.4rem!important}.sr{font-size:10px!important}.ml li{font-size:10px!important;padding:2px 0 2px 12px!important}.sl li{font-size:11px!important;padding:3px 0!important}.sl li::before{min-width:18px!important;height:18px!important;font-size:9px!important}table.dt{font-size:10px!important}table.dt th{padding:3px 4px!important;font-size:9px!important}table.dt td{height:18px!important}table.dt td.cv{font-size:10px!important;padding:2px 4px!important}table.dt td.mr{font-size:10px!important;padding:2px 4px!important}.int{padding-bottom:.6rem!important;margin-bottom:.8rem!important}.tit{font-size:12px!important}.lun-box{padding:.35rem .6rem!important;font-size:10px!important}.g3top{gap:.3rem!important}.g3bot{margin-top:.3rem!important}.obs-item{font-size:10px!important;padding:.3rem 0!important}.nota-storica{font-size:10px!important;padding:.4rem .6rem!important}.dimostrativo-box{font-size:10px!important;padding:.4rem .6rem!important}div[style*="grid-template-columns:1fr 1fr"]{gap:.4rem!important}}</style></head><body>${body.innerHTML}</body></html>`);
+  win.document.close();win.focus();setTimeout(()=>win.print(),600);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('burger').addEventListener('click',toggleMenu);
+  document.querySelectorAll('#nav-desktop button,#nav-mobile button').forEach(btn=>{
+    btn.addEventListener('click',()=>goPageById(btn.dataset.page));
   });
-}, { threshold: 0.45 }).observe(s));
+  document.querySelectorAll('.sec-card[data-page]').forEach(card=>{
+    card.addEventListener('click',()=>goPageById(card.dataset.page));
+  });
+  document.querySelectorAll('#filtri-bar .filtro-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#filtri-bar .filtro-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');renderSchede(btn.dataset.cat);
+    });
+  });
+  document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))closeModal();});
+  document.getElementById('btn-chiudi-scheda').addEventListener('click',closeSchedaViewer);
+  document.getElementById('scheda-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('scheda-overlay'))closeSchedaViewer();});
+
+  const SCHEDE_PUBBLICATE=new Set([1,2,3,4,23]);
+  SCHEDE.forEach(s=>s.pubblicata=SCHEDE_PUBBLICATE.has(s.id));
+  PROGETTO.ricettario.pubblicati=SCHEDE.filter(s=>s.pubblicata).length;
+  PROGETTO.libro.pubblicati=CAPITOLI.flatMap(c=>c.argomenti).filter(a=>a.stato==='pub').length;
+  initProgress();initLibro();renderSchede('tutti');
+});
 </script>
 </body>
 </html>
