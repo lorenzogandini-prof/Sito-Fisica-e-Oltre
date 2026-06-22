@@ -960,7 +960,7 @@ function openModal(id){
     html+=`<div class="modal-section"><h4>Domande conclusive</h4><ul>${det.conclusioni.map(c=>`<li>${c}</li>`).join('')}</ul></div>`;
     html+=`<div class="modal-section"><h4>Note per il docente</h4><p>${det.note}</p></div>`;
     if(SCHEDE_HTML[id]) html+=`<div class="modal-section"><div class="scheda-link-box"><span>📄 Scheda di laboratorio completa (versione mobile)</span><button class="btn-apri" id="btn-open-scheda-${id}">Apri scheda →</button></div></div>`;
-    if(id===23) html+=`<div class="modal-section"><div class="scheda-link-box"><span>🌐 Versione originale completa (con immagini e video) a questo link</span><a class="btn-apri" href="REL23_Circuito_RC_online_v3.html" target="_blank" style="text-decoration:none">Apri scheda →</a></div></div>`;
+    if(id===23) html+=`<div class="modal-section"><div class="scheda-link-box"><span>🌐 Versione originale completa (con immagini e video) a questo link</span><a class="btn-apri" href="REL23_Circuito_RC.html" target="_blank" style="text-decoration:none">Apri scheda →</a></div></div>`;
   } else {
     html+=`<div class="modal-section"><h4>Procedura</h4>${s.procedura.map((p,i)=>`<div class="step"><div class="step-n">${i+1}</div><div class="step-t">${p}</div></div>`).join('')}</div>`;
     html+=`<div class="modal-section"><h4>Note per il docente</h4><p>${s.note}</p></div>`;
