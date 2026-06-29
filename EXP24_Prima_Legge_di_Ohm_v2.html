@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXP 24 – Leggi di Ohm e Verifica Sperimentale · Il Laboratorio di Fisica</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Source+Code+Pro:wght@400;600&display=swap');
+
+  :root {
+    --blu: #1a3a5c;
+    --blu-chiaro: #2e6da4;
+    --blu-pale: #e8f1fa;
+    --blu-pale2: #d0e4f5;
+    --accento: #c0392b;
+    --grigio-linea: #b0bec5;
+    --grigio-sfondo: #f0f4f8;
+    --grigio-tabella: #dce8f3;
+    --testo: #1c2a38;
+    --testo-s: #4a6275;
+    --bianco: #ffffff;
+    --bordo: #ccdded;
+    --bg: #f4f7fb;
+    --verde: #0F6E56;
+    --verde-p: #E1F5EE;
+    --oro: #b07d20;
+    --oro-p: #fdf3dc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--bg);
+    color: var(--testo);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  nav {
+    background: var(--bianco);
+    border-bottom: 1px solid var(--bordo);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 1rem;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blu); }
+  .nav-site { font-family: 'Source Code Pro', monospace; font-size: 10px; color: var(--testo-s); letter-spacing: .1em; }
+  .nav-title { font-size: 13px; color: var(--blu); font-weight: 600; letter-spacing: .01em; }
+  .nav-back {
+    font-family: 'Source Code Pro', monospace; font-size: 11px; color: var(--testo-s);
+    background: none; border: 1px solid var(--bordo); padding: 4px 12px; border-radius: 4px;
+    cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 5px;
+    transition: border-color .15s, color .15s; flex-shrink: 0;
+  }
+  .nav-back:hover { border-color: var(--blu-chiaro); color: var(--blu); }
+
+  .hero { background: var(--bianco); border-bottom: 1px solid var(--bordo); padding: 2.8rem 2rem 2.2rem; }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: .9rem; flex-wrap: wrap; }
+  .codice-badge {
+    font-family: 'Source Code Pro', monospace; font-size: 11px; font-weight: 600;
+    color: var(--accento); background: #fdf0ef; border: 1px solid #f0c0b8;
+    padding: 2px 9px; border-radius: 3px; letter-spacing: .8px;
+  }
+  .area-badge {
+    font-family: 'Source Code Pro', monospace; font-size: 11px; color: var(--blu-chiaro);
+    background: var(--blu-pale); border: 1px solid var(--blu-pale2); padding: 2px 9px; border-radius: 3px; letter-spacing: .5px;
+  }
+  .classe-badge {
+    font-family: 'Source Code Pro', monospace; font-size: 11px; color: var(--testo-s);
+    background: var(--grigio-sfondo); border: 1px solid var(--grigio-linea); padding: 2px 9px; border-radius: 3px;
+  }
+  .hero h1 { font-size: 2rem; font-weight: 600; color: var(--blu); line-height: 1.25; margin-bottom: .55rem; }
+  .hero-sub { font-size: 1rem; color: var(--testo-s); font-style: italic; margin-bottom: 1.4rem; }
+  .hero-meta {
+    display: flex; gap: 2rem; flex-wrap: wrap; border-top: 1px solid var(--bordo);
+    padding-top: 1rem; font-size: .8rem; color: var(--testo-s);
+    font-family: 'Source Code Pro', monospace; letter-spacing: .03em;
+  }
+  .hero-meta span strong { color: var(--blu); font-weight: 600; }
+
+  .main-wrap { max-width: 860px; margin: 0 auto; padding: 2.4rem 2rem 4rem; display: flex; flex-direction: column; gap: 0; }
+
+  .sezione { background: var(--bianco); border: 1px solid var(--bordo); border-radius: 6px; overflow: hidden; margin-bottom: 1rem; }
+  .sezione-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .7rem 1.2rem; background: var(--blu); cursor: pointer; user-select: none; gap: .8rem;
+  }
+  .sezione-header:hover { background: #1e4570; }
+  .sezione-header-left { display: flex; align-items: center; gap: .75rem; }
+  .sezione-num { font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 600; color: rgba(255,255,255,.55); letter-spacing: 1px; flex-shrink: 0; }
+  .sezione-titolo-txt { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--bianco); }
+  .sezione-chevron { color: rgba(255,255,255,.6); font-size: 14px; transition: transform .25s; flex-shrink: 0; }
+  .sezione-chevron.open { transform: rotate(180deg); }
+  .sezione-body { display: none; padding: 1.2rem 1.4rem; border-top: 1px solid var(--bordo); }
+  .sezione-body.open { display: block; }
+
+  .obiettivo-box {
+    border-left: 3px solid var(--accento); background: #fef9f9;
+    padding: .85rem 1rem; font-size: .95rem; line-height: 1.75; color: var(--testo); border-radius: 0 4px 4px 0;
+  }
+
+  .principi-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: .7rem; }
+  .principio-box { background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); padding: .75rem .9rem; border-radius: 4px; }
+  .p-label { font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--accento); text-transform: uppercase; letter-spacing: .8px; margin-bottom: .3rem; }
+  .p-formula { font-family: 'Source Code Pro', monospace; font-size: 1rem; color: var(--blu); text-align: center; padding: .35rem 0; border-bottom: 1px dashed var(--grigio-linea); margin-bottom: .4rem; }
+  .p-desc { font-size: .82rem; color: #445; line-height: 1.55; }
+  .principio-wide {
+    background: #fef9f9; border: 1px solid #f0c0b0; border-left: 3px solid var(--accento);
+    padding: .75rem 1rem; border-radius: 0 4px 4px 0; font-size: .85rem; line-height: 1.65; color: var(--testo);
+  }
+  .principio-wide .p-label { color: var(--accento); margin-bottom: .3rem; }
+
+  .guida-titolo {
+    font-family: 'Source Code Pro', monospace; font-size: 10.5px; font-weight: 600; color: var(--blu);
+    text-transform: uppercase; letter-spacing: 1px; margin: 1.4rem 0 .7rem; padding-bottom: .35rem;
+    border-bottom: 2px solid var(--blu-pale2); display: flex; align-items: center; gap: .5rem;
+  }
+  .guida-titolo::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--blu-chiaro); flex-shrink: 0; }
+
+  .mat-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .mat-gruppo-titolo {
+    font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--blu-chiaro);
+    text-transform: uppercase; letter-spacing: .8px; border-bottom: 1px solid var(--bordo); padding-bottom: .3rem; margin-bottom: .5rem;
+  }
+  .mat-lista { list-style: none; }
+  .mat-lista li { font-size: .85rem; padding: .3rem 0 .3rem 1rem; border-bottom: 1px solid var(--grigio-sfondo); position: relative; color: var(--testo); line-height: 1.4; }
+  .mat-lista li::before { content: '›'; position: absolute; left: 0; color: var(--accento); font-weight: 700; }
+  .mat-lista li em { font-size: .75rem; color: var(--testo-s); font-style: normal; font-family: 'Source Code Pro', monospace; }
+
+  .step-lista { list-style: none; }
+  .step-item { display: flex; gap: .9rem; align-items: flex-start; padding: .8rem 0; border-bottom: 1px solid #edf1f5; }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    background: var(--blu-chiaro); color: white; font-family: 'Source Code Pro', monospace;
+    font-size: 10px; font-weight: 700; min-width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-content strong { color: var(--blu); }
+  .step-content p { font-size: .88rem; line-height: 1.65; color: var(--testo); }
+  .step-nota { margin-top: .3rem; font-size: .78rem; color: var(--accento); font-family: 'Source Code Pro', monospace; background: #fef9f9; border-left: 2px solid var(--accento); padding: .25rem .6rem; border-radius: 0 3px 3px 0; }
+
+  .tabella-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.dati { width: 100%; border-collapse: collapse; font-size: .82rem; margin-top: .3rem; }
+  table.dati th { background: var(--blu); color: white; padding: .45rem .6rem; text-align: center; font-weight: 600; font-size: .78rem; border: 1px solid var(--blu); }
+  table.dati th .u { display: block; font-family: 'Source Code Pro', monospace; font-size: .68rem; font-weight: 400; opacity: .8; margin-top: 1px; }
+  table.dati td { border: 1px solid var(--grigio-linea); padding: .4rem .6rem; vertical-align: middle; text-align: center; }
+  table.dati td.lbl { background: var(--grigio-sfondo); font-weight: 600; color: var(--blu); text-align: left; font-size: .82rem; }
+  table.dati tr:nth-child(even) td.lbl { background: #e3ecf5; }
+  table.dati td.calc { background: #f0f6fb; font-family: 'Source Code Pro', monospace; font-size: .8rem; color: var(--blu-chiaro); font-weight: 600; }
+  table.dati tr:nth-child(even) td.calc { background: #e4f0f8; }
+
+  .formula-block {
+    background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); border-left: 3px solid var(--blu-chiaro);
+    padding: .65rem 1rem; margin: .5rem 0; font-family: 'Source Code Pro', monospace;
+    font-size: .92rem; color: var(--blu); line-height: 1.8; border-radius: 0 4px 4px 0;
+  }
+  .formula-block .fl { font-size: .72rem; color: var(--accento); text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .2rem; font-family: 'Source Serif 4', serif; font-weight: 600; }
+  .formula-block .fr { font-weight: 700; font-size: 1rem; color: var(--blu); }
+
+  .attenzione-box {
+    background: #fff8e1; border: 1px solid #ffe082; border-left: 3px solid #f9a825;
+    padding: .75rem 1rem; border-radius: 0 4px 4px 0; margin: .7rem 0; font-size: .83rem; line-height: 1.65; color: #4a3200;
+  }
+  .attenzione-box .at-label { font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600; color: #f9a825; text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .3rem; }
+
+  .verde-box {
+    background: var(--verde-p); border: 1px solid #a5d6c6; border-left: 3px solid var(--verde);
+    padding: .75rem 1rem; border-radius: 0 4px 4px 0; margin: .5rem 0; font-size: .85rem; line-height: 1.65; color: #0a2e24;
+  }
+  .verde-box .vb-label { font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600; color: var(--verde); text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .3rem; }
+
+  .config-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: .7rem; }
+  .config-box { background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); border-radius: 4px; padding: .75rem .9rem; }
+  .config-box .c-titolo { font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--blu); text-transform: uppercase; letter-spacing: .8px; margin-bottom: .45rem; padding-bottom: .35rem; border-bottom: 1px dashed var(--grigio-linea); }
+  .config-box .c-formula { font-family: 'Source Code Pro', monospace; font-size: .9rem; color: var(--blu-chiaro); margin-bottom: .3rem; font-weight: 600; }
+  .config-box .c-desc { font-size: .8rem; color: var(--testo-s); line-height: 1.5; }
+
+  .obs-item { display: flex; gap: .75rem; align-items: flex-start; padding: .7rem 0; border-bottom: 1px solid #edf1f5; font-size: .88rem; line-height: 1.65; }
+  .obs-item:last-child { border-bottom: none; }
+  .obs-arrow { color: var(--blu-chiaro); font-weight: 700; flex-shrink: 0; margin-top: 2px; font-size: .9rem; }
+
+  .conclusione-box {
+    background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); border-left: 3px solid var(--blu);
+    padding: 1rem 1.2rem; border-radius: 0 4px 4px 0; font-size: .88rem; line-height: 1.72; color: var(--testo);
+  }
+  .conclusione-box .c-label { font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--blu); text-transform: uppercase; letter-spacing: .8px; margin-bottom: .5rem; display: block; }
+  .conclusione-box p { margin-bottom: .6rem; }
+  .conclusione-box p:last-child { margin-bottom: 0; }
+
+  footer { text-align: center; padding: 1.8rem 1rem; font-family: 'Source Code Pro', monospace; font-size: 10.5px; color: var(--testo-s); border-top: 1px solid var(--bordo); background: var(--bianco); letter-spacing: .04em; }
+  footer strong { color: var(--blu); }
+
+  .img-misura {
+    width: 100%;
+    max-width: 340px;
+    border-radius: 5px;
+    border: 1px solid var(--bordo);
+    display: block;
+    margin: .6rem auto 0;
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .nav-title { display: none; }
+    .hero { padding: 1.6rem 1rem 1.4rem; }
+    .hero h1 { font-size: 1.35rem; }
+    .hero-meta { gap: .8rem; font-size: .72rem; }
+    .main-wrap { padding: 1.2rem 1rem 3rem; }
+    .principi-griglia { grid-template-columns: 1fr; }
+    .mat-griglia { grid-template-columns: 1fr; }
+    .config-griglia { grid-template-columns: 1fr; }
+    .sezione-body { padding: 1rem; }
+    table.dati { font-size: .8rem; min-width: 420px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-dot"></div>
+    <div>
+      <div class="nav-site">lorenzogandini.it</div>
+      <div class="nav-title">Il Laboratorio di Fisica</div>
+    </div>
+  </div>
+  <a class="nav-back" href="#">← Ricettario</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="codice-badge">REL · EXP 24</span>
+      <span class="area-badge">Elettromagnetismo</span>
+      <span class="classe-badge">Classe V</span>
+    </div>
+    <h1>Leggi di Ohm e Verifica Sperimentale</h1>
+    <div class="hero-sub">Resistori, configurazioni in serie e in parallelo, misura di corrente a tensione fissa</div>
+    <div class="hero-meta">
+      <span><strong>Scuola:</strong> ITSOS Albe e Lica Steiner</span>
+      <span><strong>Argomenti:</strong> Prima Legge di Ohm · Serie · Parallelo · Multimetro</span>
+      <span><strong>A.S.:</strong> 2025/26</span>
+    </div>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+  <!-- 01 — OBIETTIVO -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">01</span><span class="sezione-titolo-txt">Obiettivo</span></div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="obiettivo-box">
+        Verificare sperimentalmente la <strong>prima legge di Ohm</strong> attraverso la misura della corrente in un circuito a <strong>tensione fissa</strong> con diverse configurazioni resistive (singoli resistori, serie, parallelo). Confrontare la corrente teorica I<sub>teo</sub> = V/R<sub>eq</sub> con la corrente misurata I<sub>mis</sub> per valutare l'accordo tra modello e dato sperimentale. Osservare le regole di composizione delle resistenze e le implicazioni sul comportamento della corrente e della tensione nel circuito.
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 — PRINCIPI TEORICI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">02</span><span class="sezione-titolo-txt">Principi Teorici</span></div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="p-label">Prima Legge di Ohm</div>
+          <div class="p-formula">V = R · I</div>
+          <div class="p-desc">La tensione ai capi di un resistore è direttamente proporzionale alla corrente. <em>R</em> è la costante di proporzionalità: all'aumentare di V, I aumenta nella stessa proporzione.</div>
+          <img src="legge-di-Ohm.jpg" alt="Schema lavagna legge di Ohm: I=V/R e R=V/I" class="img-misura" style="height:180px;object-fit:cover;max-width:100%;width:100%;">
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Resistenza elettrica</div>
+          <div class="p-formula">R  [Ω = V / A]</div>
+          <div class="p-desc">Quantifica l'opposizione al passaggio della corrente. Il resistore è il componente; la resistenza è il suo valore in ohm. La distinzione concettuale è netta anche se i termini vengono spesso usati come sinonimi.</div>
+          <img src="legge-ohm-fumetto.jpg" alt="Illustrazione fumetto legge di Ohm: Volt, Amp e Ohm" class="img-misura" style="height:180px;object-fit:cover;max-width:100%;width:100%;">
+        </div>
+      </div>
+
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="p-label">Serie — R equivalente</div>
+          <div class="p-formula">R<sub>eq</sub> = R₁ + R₂ + …</div>
+          <div class="p-desc">Stessa corrente in ogni resistore. La tensione si ripartisce proporzionalmente tra tutti i resistori. R<sub>eq</sub> è sempre <em>maggiore</em> del valore più grande tra i resistori.</div>
+          <img src="serie.jpg" alt="Resistori in serie su breadboard" class="img-misura" style="height:260px;width:100%;object-fit:cover;">
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Parallelo — R equivalente</div>
+          <div class="p-formula">1/R<sub>eq</sub> = 1/R₁ + 1/R₂ + …</div>
+          <div class="p-desc">Stessa tensione ai capi di ogni resistore. La corrente si ripartisce in modo inversamente proporzionale al valore di ciascun resistore. R<sub>eq</sub> è sempre <em>minore</em> del valore più piccolo tra i resistori.</div>
+          <img src="parallelo.jpg" alt="Resistori in parallelo su breadboard" class="img-misura" style="height:260px;width:100%;object-fit:cover;">
+        </div>
+      </div>
+
+      <div class="principio-wide">
+        <div class="p-label">Corrente a tensione fissa — effetto della resistenza</div>
+        Fissata la tensione di alimentazione V, la corrente nel circuito è I = V / R<sub>eq</sub>. All'aumentare della resistenza equivalente la corrente <em>diminuisce</em> proporzionalmente; al diminuire (come nel parallelo) la corrente <em>aumenta</em>. Questa dipendenza è il nucleo della prima legge di Ohm e la chiave di lettura dei dati raccolti in questa esperienza.
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- 03 — STRUMENTI E MATERIALI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">03</span><span class="sezione-titolo-txt">Strumenti e Materiali</span></div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="mat-griglia">
+        <div>
+          <div class="mat-gruppo-titolo">Strumentazione</div>
+          <ul class="mat-lista">
+            <li>Multimetro digitale <em>misura R, V, I</em></li>
+            <li>Sorgente DC a tensione fissa <em>pile ricaricabili 9V o Arduino 5V</em></li>
+          </ul>
+        </div>
+        <div>
+          <div class="mat-gruppo-titolo">Componenti</div>
+          <ul class="mat-lista">
+            <li>Tre resistori R₁, R₂, R₃ <em>R₁ = R₂ identici; R₃ diverso</em></li>
+            <li>Basetta breadboard <em>senza saldature</em></li>
+            <li>Cavi di collegamento <em>a banana o coccodrillo</em></li>
+          </ul>
+        </div>
+      </div>
+      <div class="attenzione-box" style="margin-top:.8rem;">
+        <span class="at-label">⚠ Tensione fissa — assenza di alimentatore da banco</span>
+        Non era disponibile un alimentatore a tensione variabile. La verifica è condotta mantenendo <strong>V costante</strong> e variando R<sub>eq</sub> tra le diverse configurazioni. La corrente varia di conseguenza, consentendo comunque di verificare la proporzionalità I = V / R<sub>eq</sub>.
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 — IMPOSTAZIONE DEL MULTIMETRO -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">04</span><span class="sezione-titolo-txt">Impostazione del Multimetro</span></div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="p-label">Misura della resistenza (Ω)</div>
+          <div class="p-formula">Circuito disalimentato</div>
+          <div class="p-desc">Cavo nero nel terminale <strong>COM</strong>, rosso nel terminale <strong>Ω</strong>. Misurare con il circuito scollegato dalla sorgente. Puntali ai capi del componente o della combinazione.</div>
+          <img src="01-Misura_R1.jpg" alt="Misura di R1 con multimetro" class="img-misura" style="height:200px;width:100%;object-fit:cover;">
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Misura della corrente (mA)</div>
+          <div class="p-formula">Multimetro in serie</div>
+          <div class="p-desc">Cavo rosso nel terminale <strong>mA</strong>, nero nel <strong>COM</strong>. Modalità <strong>DC mA</strong>. Il multimetro interrompe il filo e va inserito nel ramo del circuito: tutta la corrente lo attraversa.</div>
+          <img src="04-Misura_I.jpg" alt="Misura della corrente con multimetro in serie" class="img-misura" style="height:200px;width:100%;object-fit:cover;">
+        </div>
+      </div>
+      <div class="verde-box">
+        <span class="vb-label">Scelta del fondo scala</span>
+        Partire sempre da un fondo scala <strong>alto</strong> (es. 2 A) e passare alla scala più piccola solo dopo aver stimato la I<sub>teo</sub>. Selezionare il fondo scala più basso che contenga la misura per massimizzare la risoluzione e proteggere lo strumento (di solito 3 cifre significative).
+      </div>
+      <div class="attenzione-box" style="margin-top:.5rem;">
+        <span class="at-label">⚠ Effetto Joule — riscaldamento dei resistori</span>
+        Correnti elevate su resistenze piccole riscaldano il componente. Il riscaldamento modifica il valore di R, introduce un errore nella misura e può danneggiare il resistore. Scegliere valori adeguati di R, e in caso di surriscaldamento, togliere l'alimentazione il prima possibile e usare un altro resistore.
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 — PROCEDURA -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">05</span><span class="sezione-titolo-txt">Procedura Sperimentale</span></div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <ol class="step-lista">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <p><strong>Misura preliminare dei resistori singoli:</strong> A circuito disalimentato, misurare R₁, R₂ (scelti identici) e R₃ (diverso) in ohm con il multimetro in modalità Ω. Annotare i valori: serviranno come riferimento per il calcolo di R<sub>eq</sub> teorica.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <p><strong>Misura delle combinazioni equivalenti:</strong> Montare su breadboard le quattro configurazioni previste (R₁+R₂ serie, R₁+R₃ serie, R₁∥R₂ parallelo, R₂∥R₃ parallelo). Per ciascuna, misurare R<sub>eq</sub> a circuito disalimentato con il multimetro in modalità Ω.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <p><strong>Calcolo della corrente attesa:</strong> Per ciascuna configurazione, calcolare la corrente teorica I<sub>teo</sub> = V<sub>fissa</sub> / R<sub>eq</sub>, dove V<sub>fissa</sub> è la tensione della sorgente utilizzata (es. 5 V da Arduino o 9 V da pila).</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <p><strong>Misura della corrente:</strong> Inserire il multimetro in serie al circuito con fondo scala prudenziale. Alimentare il circuito, leggere I<sub>mis</sub>, disalimentare. Ripetere per tutte le configurazioni.</p>
+            <div class="step-nota">⚠ Disalimentare sempre prima di riconfigurare il circuito sulla breadboard.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <p><strong>Registrazione e confronto:</strong> Confrontare I<sub>teo</sub> con I<sub>mis</sub>. Annotare deviazioni e interpretarle in termini di tolleranza dei resistori, resistenze parassite dei collegamenti e riscaldamento localizzato.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 06 — RACCOLTA DATI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">06</span><span class="sezione-titolo-txt">Raccolta Dati</span></div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+
+      <div class="attenzione-box">
+        <span class="at-label">⚠ Condizioni sperimentali — tensione fissa</span>
+        Sorgente DC a tensione costante · Tre resistori (R₁ = R₂ identici; R₃ diverso) · Misura di R<sub>eq</sub> a circuito disalimentato con multimetro in modalità Ω · Misura di I<sub>mis</sub> con multimetro in serie al circuito alimentato.
+      </div>
+
+      <div class="formula-block" style="margin-top:.8rem;">
+        <span class="fl">Verifica della prima legge di Ohm</span>
+        I<sub>teo</sub> = V<sub>fissa</sub> / R<sub>eq</sub> &nbsp;→&nbsp; confrontare con I<sub>mis</sub> per ogni configurazione
+      </div>
+
+      <div class="tabella-scroll" style="margin-top:.9rem;">
+        <table class="dati">
+          <thead>
+            <tr>
+              <th>Configurazione<span class="u">—</span></th>
+              <th>R<sub>eq</sub> misurata<span class="u">Ω / kΩ</span></th>
+              <th>I<sub>teo</sub> = V/R<span class="u">mA</span></th>
+              <th>I<sub>mis</sub><span class="u">mA</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="lbl">R₁ singola</td>
+              <td>218 Ω</td>
+              <td>15,138</td>
+              <td>21,1</td>
+            </tr>
+            <tr>
+              <td class="lbl">R₂ singola</td>
+              <td>9,83 kΩ</td>
+              <td>0,509</td>
+              <td>0,467</td>
+            </tr>
+            <tr>
+              <td class="lbl">R₁ in serie con R₂</td>
+              <td>10,04 kΩ</td>
+              <td>0,498</td>
+              <td>0,459</td>
+            </tr>
+            <tr>
+              <td class="lbl">R₁ in serie con R₃</td>
+              <td>433 Ω</td>
+              <td>11,547</td>
+              <td>9,61</td>
+            </tr>
+            <tr>
+              <td class="lbl">R₁ in parallelo con R₂</td>
+              <td>108 Ω</td>
+              <td>46,296</td>
+              <td>39,4</td>
+            </tr>
+            <tr>
+              <td class="lbl">R₁ in parallelo con R₃</td>
+              <td>213 Ω</td>
+              <td>23,474</td>
+              <td>19,5</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 07 — OSSERVAZIONI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">07</span><span class="sezione-titolo-txt">Osservazioni</span></div>
+      <span class="sezione-chevron">▾</span>
+    </div>
+    <div class="sezione-body">
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Resistenza equivalente in serie:</strong> Le misure confermano che R<sub>eq</sub> serie è sempre maggiore del valore più grande tra i resistori. La corrente è unica e più bassa rispetto ai singoli componenti: aggiungere un resistore in serie aumenta l'opposizione totale.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Resistenza equivalente in parallelo:</strong> R<sub>eq</sub> parallelo è sempre inferiore al valore più piccolo tra i resistori. La corrente totale aumenta rispetto ai singoli rami: ogni percorso in parallelo aggiunge una via alla circolazione della corrente.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Accordo tra I<sub>teo</sub> e I<sub>mis</sub>:</strong> Le correnti misurate seguono la tendenza prevista dalla prima legge di Ohm. Le deviazioni sono attribuibili alla tolleranza dei resistori (tipicamente ±5 %), alle resistenze parassite dei cavi e dei contatti sulla breadboard, e al riscaldamento nelle configurazioni a bassa R<sub>eq</sub>.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Caso R₁ singola (218 Ω):</strong> La corrente misurata (21,1 mA) risulta superiore alla teorica (15,1 mA). Lo scarto è significativo e suggerisce un possibile riscaldamento del resistore durante la misura o una resistenza effettiva del componente inferiore al valore misurato a freddo con il multimetro.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Effetto Joule nelle configurazioni a bassa resistenza:</strong> Nei casi R₁∥R₂ (108 Ω) e R₁ singola (218 Ω) la corrente è nell'ordine delle decine di milliampere, con una potenza dissipata che può raggiungere frazioni di watt. Il riscaldamento è osservabile al tatto e introduce deriva nella misura se il circuito rimane alimentato a lungo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 — CONCLUSIONI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left"><span class="sezione-num">08</span><span class="sezione-titolo-txt">Conclusioni</span></div>
+      <span class="sezione-chevron">▾</span>
+    </div>
+    <div class="sezione-body">
+      <div class="conclusione-box">
+        <span class="c-label">Risposta all'obiettivo</span>
+        <p>L'esperienza ha verificato sperimentalmente la prima legge di Ohm in un contesto a tensione fissa: al variare della configurazione resistiva, la corrente segue in modo coerente la relazione I = V / R<sub>eq</sub>, confermando la proporzionalità inversa tra corrente e resistenza a tensione costante.</p>
+        <p>Le regole di composizione delle resistenze sono rispettate: la resistenza equivalente in serie è sempre superiore al valore più grande, quella in parallelo sempre inferiore al più piccolo. La corrente si comporta di conseguenza, diminuendo in serie e aumentando in parallelo rispetto ai singoli componenti.</p>
+        <p>Le deviazioni tra valori teorici e misurati sono interpretabili con le fonti di incertezza tipiche del laboratorio: tolleranza dei componenti, resistenze di contatto sulla breadboard e riscaldamento per effetto Joule. L'esperienza offre una base concreta per l'analisi dei circuiti resistivi e l'estensione verso partitori di tensione, corrente e dimensionamento degli alimentatori.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>lorenzogandini.it</strong> · Il Laboratorio di Fisica · REL EXP 24 · Elettromagnetismo · A.S. 2025/26<br>
+  ITSOS Albe e Lica Steiner
+</footer>
+
+<script>
+  function toggleSezione(header) {
+    const chevron = header.querySelector('.sezione-chevron');
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    chevron.classList.toggle('open', !isOpen);
+  }
+</script>
+</body>
+</html>
