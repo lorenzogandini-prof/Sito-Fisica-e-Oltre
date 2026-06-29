@@ -456,6 +456,19 @@ const SCHEDE_DETAIL={
     conclusioni:["Il prodotto A·h è rimasto costante? Commenta V_medio e ΔV.","Come si spiega un'eventuale diminuzione progressiva del volume?","Che relazione esiste tra A e d? Perché A∝d²?"],
     note:"Tre grafici da costruire: iperbole (h vs A), prop. quadratica inversa (h vs d), prop. quadratica (d vs A).",
   },
+  24:{
+    obiettivo:"Verificare sperimentalmente la prima legge di Ohm attraverso la misura della corrente in un circuito a tensione fissa con diverse configurazioni resistive (singoli resistori, serie, parallelo). Confrontare la corrente teorica I_teo = V/R_eq con la corrente misurata I_mis per valutare l'accordo tra modello e dato sperimentale.",
+    principi:[
+      {label:"Prima Legge di Ohm",    formula:"V = R · I",                   desc:"La tensione ai capi di un resistore è direttamente proporzionale alla corrente. R è la costante di proporzionalità."},
+      {label:"Resistenza Elettrica",  formula:"R [Ω = V/A]",                 desc:"Quantifica l'opposizione al passaggio della corrente. Il resistore è il componente; la resistenza è il suo valore in ohm."},
+      {label:"Serie",                 formula:"R_eq = R₁ + R₂ + …",          desc:"Stessa corrente in ogni resistore. R_eq è sempre maggiore del valore più grande tra i resistori."},
+      {label:"Parallelo",             formula:"1/R_eq = 1/R₁ + 1/R₂ + …",   desc:"Stessa tensione ai capi di ogni resistore. R_eq è sempre minore del valore più piccolo tra i resistori."},
+    ],
+    materiali:["Tre resistori R₁, R₂ (identici) e R₃","Basetta breadboard","Multimetro digitale","Sorgente DC a tensione fissa (Arduino 5V o pila 9V)","Cavi di collegamento"],
+    procedura:["Misurare R₁, R₂, R₃ singolarmente con il multimetro a circuito disalimentato.","Montare le configurazioni in serie (R₁+R₂, R₁+R₃) e in parallelo (R₁∥R₂, R₁∥R₃). Misurare R_eq per ciascuna.","Per ogni configurazione calcolare la corrente teorica I_teo = V_fissa / R_eq.","Inserire il multimetro in serie al circuito, alimentare e leggere I_mis. Disalimentare prima di riconfigurare.","Confrontare I_teo con I_mis e interpretare le deviazioni (tolleranza resistori, resistenze parassite, effetto Joule)."],
+    conclusioni:["Le correnti misurate seguono la tendenza prevista dalla prima legge di Ohm?","Come cambia R_eq passando dalla serie al parallelo? Quali effetti ha sulla corrente?","Quali sono le principali fonti di discrepanza tra I_teo e I_mis?","Come si potrebbe migliorare l'accuratezza dell'esperienza con strumenti diversi?"],
+    note:"Verifica condotta a tensione fissa (no alimentatore variabile): si varia R_eq invece di V. Le configurazioni includono R₁, R₂ singoli, R₁+R₂ serie, R₁+R₃ serie, R₁∥R₂ parallelo, R₁∥R₃ parallelo.",
+  },
   23:{
     obiettivo:"Realizzare un circuito temporizzato RC che simula il funzionamento del flash fotografico tramite un diodo LED, sfruttando la carica e scarica di un condensatore. Verificare il legame tra la costante di tempo τ=R·C e la durata dell'impulso luminoso, confrontando il risultato con il flash storico al magnesio.",
     principi:[
@@ -961,6 +974,7 @@ function openModal(id){
     html+=`<div class="modal-section"><h4>Note per il docente</h4><p>${det.note}</p></div>`;
     if(SCHEDE_HTML[id]) html+=`<div class="modal-section"><div class="scheda-link-box"><span>📄 Scheda di laboratorio completa (versione mobile)</span><button class="btn-apri" id="btn-open-scheda-${id}">Apri scheda →</button></div></div>`;
     if(id===23) html+=`<div class="modal-section"><div class="scheda-link-box"><span>🌐 Versione originale completa (con immagini e video) a questo link</span><a class="btn-apri" href="REL23_Circuito_RC.html" target="_blank" style="text-decoration:none">Apri scheda →</a></div></div>`;
+    if(id===24) html+=`<div class="modal-section"><div class="scheda-link-box"><span>🌐 Versione originale completa (con immagini e video) a questo link</span><a class="btn-apri" href="EXP24_Prima_Legge_di_Ohm_v2.html" target="_blank" style="text-decoration:none">Apri scheda →</a></div></div>`;
   } else {
     html+=`<div class="modal-section"><h4>Procedura</h4>${s.procedura.map((p,i)=>`<div class="step"><div class="step-n">${i+1}</div><div class="step-t">${p}</div></div>`).join('')}</div>`;
     html+=`<div class="modal-section"><h4>Note per il docente</h4><p>${s.note}</p></div>`;
@@ -1006,7 +1020,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('btn-chiudi-scheda').addEventListener('click',closeSchedaViewer);
   document.getElementById('scheda-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('scheda-overlay'))closeSchedaViewer();});
 
-  const SCHEDE_PUBBLICATE=new Set([1,2,3,4,23]);
+  const SCHEDE_PUBBLICATE=new Set([1,2,3,4,23,24]);
   SCHEDE.forEach(s=>s.pubblicata=SCHEDE_PUBBLICATE.has(s.id));
   PROGETTO.ricettario.pubblicati=SCHEDE.filter(s=>s.pubblicata).length;
   PROGETTO.libro.pubblicati=CAPITOLI.flatMap(c=>c.argomenti).filter(a=>a.stato==='pub').length;
