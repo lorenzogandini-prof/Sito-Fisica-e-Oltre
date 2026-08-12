@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXP E5.1 – Simulazione di un Pixel Fisico · Il Laboratorio di Fisica</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Source+Code+Pro:wght@400;600&display=swap');
+  :root {
+    --blu: #1a3a5c; --blu-chiaro: #2e6da4; --blu-pale: #e8f1fa; --blu-pale2: #d0e4f5;
+    --accento: #c0392b; --grigio-linea: #b0bec5; --grigio-sfondo: #f0f4f8;
+    --grigio-tabella: #dce8f3; --testo: #1c2a38; --testo-s: #4a6275;
+    --bianco: #ffffff; --bordo: #ccdded; --bg: #f4f7fb;
+    --verde: #0F6E56; --verde-p: #E1F5EE; --oro: #b07d20; --oro-p: #fdf3dc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--bg); color: var(--testo); font-size: 15px; line-height: 1.7; }
+  nav { background: var(--bianco); border-bottom: 1px solid var(--bordo); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 54px; position: sticky; top: 0; z-index: 100; gap: 1rem; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blu); }
+  .nav-site { font-family: 'Source Code Pro', monospace; font-size: 10px; color: var(--testo-s); letter-spacing: .1em; }
+  .nav-title { font-size: 13px; color: var(--blu); font-weight: 600; }
+  .nav-back { font-family: 'Source Code Pro', monospace; font-size: 11px; color: var(--testo-s); background: none; border: 1px solid var(--bordo); padding: 4px 12px; border-radius: 4px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: border-color .15s, color .15s; flex-shrink: 0; }
+  .nav-back:hover { border-color: var(--blu-chiaro); color: var(--blu); }
+  .hero { background: var(--bianco); border-bottom: 1px solid var(--bordo); padding: 2.8rem 2rem 2.2rem; }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: .9rem; flex-wrap: wrap; }
+  .codice-badge { font-family: 'Source Code Pro', monospace; font-size: 11px; font-weight: 600; color: var(--accento); background: #fdf0ef; border: 1px solid #f0c0b8; padding: 2px 9px; border-radius: 3px; letter-spacing: .8px; }
+  .area-badge { font-family: 'Source Code Pro', monospace; font-size: 11px; color: var(--blu-chiaro); background: var(--blu-pale); border: 1px solid var(--blu-pale2); padding: 2px 9px; border-radius: 3px; }
+  .classe-badge { font-family: 'Source Code Pro', monospace; font-size: 11px; color: var(--testo-s); background: var(--grigio-sfondo); border: 1px solid var(--grigio-linea); padding: 2px 9px; border-radius: 3px; }
+  .hero h1 { font-size: 2rem; font-weight: 600; color: var(--blu); line-height: 1.25; margin-bottom: .55rem; }
+  .hero-sub { font-size: 1rem; color: var(--testo-s); font-style: italic; margin-bottom: 1.4rem; }
+  .hero-meta { display: flex; gap: 2rem; flex-wrap: wrap; border-top: 1px solid var(--bordo); padding-top: 1rem; font-size: .8rem; color: var(--testo-s); font-family: 'Source Code Pro', monospace; letter-spacing: .03em; }
+  .hero-meta span strong { color: var(--blu); font-weight: 600; }
+  .main-wrap { max-width: 860px; margin: 0 auto; padding: 2.4rem 2rem 4rem; display: flex; flex-direction: column; }
+  .sezione { background: var(--bianco); border: 1px solid var(--bordo); border-radius: 6px; overflow: hidden; margin-bottom: 1rem; }
+  .sezione-header { display: flex; align-items: center; justify-content: space-between; padding: .7rem 1.2rem; background: var(--blu); cursor: pointer; user-select: none; gap: .8rem; }
+  .sezione-header:hover { background: #1e4570; }
+  .sezione-header-left { display: flex; align-items: center; gap: .75rem; }
+  .sezione-num { font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 600; color: rgba(255,255,255,.55); letter-spacing: 1px; flex-shrink: 0; }
+  .sezione-titolo-txt { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--bianco); }
+  .sezione-chevron { color: rgba(255,255,255,.6); font-size: 14px; transition: transform .25s; flex-shrink: 0; }
+  .sezione-chevron.open { transform: rotate(180deg); }
+  .sezione-body { display: none; padding: 1.2rem 1.4rem; border-top: 1px solid var(--bordo); }
+  .sezione-body.open { display: block; }
+  .obiettivo-box { border-left: 3px solid var(--accento); background: #fef9f9; padding: .85rem 1rem; font-size: .95rem; line-height: 1.75; color: var(--testo); border-radius: 0 4px 4px 0; }
+  .principi-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: .7rem; }
+  .principio-box { background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); padding: .75rem .9rem; border-radius: 4px; }
+  .p-label { font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--accento); text-transform: uppercase; letter-spacing: .8px; margin-bottom: .3rem; }
+  .p-formula { font-family: 'Source Code Pro', monospace; font-size: 1rem; color: var(--blu); text-align: center; padding: .35rem 0; border-bottom: 1px dashed var(--grigio-linea); margin-bottom: .4rem; }
+  .p-desc { font-size: .82rem; color: #445; line-height: 1.55; }
+  .principio-wide { background: #fef9f9; border: 1px solid #f0c0b0; border-left: 3px solid var(--accento); padding: .75rem 1rem; border-radius: 0 4px 4px 0; font-size: .85rem; line-height: 1.65; color: var(--testo); }
+  .principio-wide .p-label { color: var(--accento); margin-bottom: .3rem; }
+  .guida-titolo { font-family: 'Source Code Pro', monospace; font-size: 10.5px; font-weight: 600; color: var(--blu); text-transform: uppercase; letter-spacing: 1px; margin: 1.4rem 0 .7rem; padding-bottom: .35rem; border-bottom: 2px solid var(--blu-pale2); display: flex; align-items: center; gap: .5rem; }
+  .guida-titolo::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--blu-chiaro); flex-shrink: 0; }
+  .mat-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .mat-gruppo-titolo { font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--blu-chiaro); text-transform: uppercase; letter-spacing: .8px; border-bottom: 1px solid var(--bordo); padding-bottom: .3rem; margin-bottom: .5rem; }
+  .mat-lista { list-style: none; }
+  .mat-lista li { font-size: .85rem; padding: .3rem 0 .3rem 1rem; border-bottom: 1px solid var(--grigio-sfondo); position: relative; color: var(--testo); line-height: 1.4; }
+  .mat-lista li::before { content: '›'; position: absolute; left: 0; color: var(--accento); font-weight: 700; }
+  .mat-lista li em { font-size: .75rem; color: var(--testo-s); font-style: normal; font-family: 'Source Code Pro', monospace; }
+  .step-lista { list-style: none; }
+  .step-item { display: flex; gap: .9rem; align-items: flex-start; padding: .8rem 0; border-bottom: 1px solid #edf1f5; }
+  .step-item:last-child { border-bottom: none; }
+  .step-num { background: var(--blu-chiaro); color: white; font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 700; min-width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .step-content strong { color: var(--blu); }
+  .step-content p { font-size: .88rem; line-height: 1.65; color: var(--testo); }
+  .step-nota { margin-top: .3rem; font-size: .78rem; color: var(--accento); font-family: 'Source Code Pro', monospace; background: #fef9f9; border-left: 2px solid var(--accento); padding: .25rem .6rem; border-radius: 0 3px 3px 0; }
+  .tabella-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.dati { width: 100%; border-collapse: collapse; font-size: .82rem; margin-top: .3rem; }
+  table.dati th { background: var(--blu); color: white; padding: .45rem .6rem; text-align: center; font-weight: 600; font-size: .78rem; border: 1px solid var(--blu); }
+  table.dati th .u { display: block; font-family: 'Source Code Pro', monospace; font-size: .68rem; font-weight: 400; opacity: .8; margin-top: 1px; }
+  table.dati td { border: 1px solid var(--grigio-linea); padding: .4rem .6rem; vertical-align: middle; text-align: center; }
+  table.dati td.lbl { background: var(--grigio-sfondo); font-weight: 600; color: var(--blu); text-align: left; font-size: .82rem; }
+  table.dati tr:nth-child(even) td.lbl { background: #e3ecf5; }
+  table.dati td.calc { background: #f0f6fb; font-family: 'Source Code Pro', monospace; font-size: .8rem; color: var(--blu-chiaro); font-weight: 600; }
+  table.dati tr:nth-child(even) td.calc { background: #e4f0f8; }
+  .formula-block { background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); border-left: 3px solid var(--blu-chiaro); padding: .65rem 1rem; margin: .5rem 0; font-family: 'Source Code Pro', monospace; font-size: .92rem; color: var(--blu); line-height: 1.8; border-radius: 0 4px 4px 0; }
+  .formula-block .fl { font-size: .72rem; color: var(--accento); text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .2rem; font-family: 'Source Serif 4', serif; font-weight: 600; }
+  .formula-block .fr { font-weight: 700; font-size: 1rem; color: var(--blu); }
+  .attenzione-box { background: #fff8e1; border: 1px solid #ffe082; border-left: 3px solid #f9a825; padding: .75rem 1rem; border-radius: 0 4px 4px 0; margin: .7rem 0; font-size: .83rem; line-height: 1.65; color: #4a3200; }
+  .attenzione-box .at-label { font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600; color: #f9a825; text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .3rem; }
+  .verde-box { background: var(--verde-p); border: 1px solid #a5d6c6; border-left: 3px solid var(--verde); padding: .75rem 1rem; border-radius: 0 4px 4px 0; margin: .5rem 0; font-size: .85rem; line-height: 1.65; color: #0a2e24; }
+  .verde-box .vb-label { font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600; color: var(--verde); text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .3rem; }
+  .obs-item { display: flex; gap: .75rem; align-items: flex-start; padding: .7rem 0; border-bottom: 1px solid #edf1f5; font-size: .88rem; line-height: 1.65; }
+  .obs-item:last-child { border-bottom: none; }
+  .obs-arrow { color: var(--blu-chiaro); font-weight: 700; flex-shrink: 0; margin-top: 2px; font-size: .9rem; }
+  .conclusione-box { background: var(--grigio-sfondo); border: 1px solid var(--grigio-tabella); border-left: 3px solid var(--blu); padding: 1rem 1.2rem; border-radius: 0 4px 4px 0; font-size: .88rem; line-height: 1.72; color: var(--testo); }
+  .conclusione-box .c-label { font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--blu); text-transform: uppercase; letter-spacing: .8px; margin-bottom: .5rem; display: block; }
+  .conclusione-box p { margin-bottom: .6rem; }
+  .conclusione-box p:last-child { margin-bottom: 0; }
+  .img-misura { width: 100%; max-width: 340px; border-radius: 5px; border: 1px solid var(--bordo); display: block; margin: .6rem auto 0; }
+  .schema-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; align-items: start; }
+  .schema-box { background: var(--grigio-sfondo); border: 1px solid var(--bordo); border-radius: 4px; padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+  .schema-box-title { font-family: 'Source Code Pro', monospace; font-size: 9.5px; font-weight: 600; color: var(--blu-chiaro); text-transform: uppercase; letter-spacing: .8px; align-self: flex-start; }
+  .schema-didascalia { font-size: .75rem; color: var(--testo-s); font-style: italic; text-align: center; line-height: 1.5; }
+  /* Colori sintesi - griglia foto */
+  .colori-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: .8rem; }
+  .colore-card { border: 1px solid var(--bordo); border-radius: 6px; overflow: hidden; }
+  .colore-card-head { padding: .45rem .8rem; font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: white; }
+  .colore-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+  .colore-card-body { padding: .55rem .8rem; font-size: .8rem; color: var(--testo-s); line-height: 1.5; }
+  .colore-card-body strong { color: var(--testo); }
+  /* Tabella resistenze */
+  .res-table { width: 100%; border-collapse: collapse; font-size: .82rem; margin: .7rem 0; }
+  .res-table th { background: var(--blu); color: white; padding: .4rem .7rem; text-align: center; font-size: .78rem; border: 1px solid var(--blu); }
+  .res-table td { border: 1px solid var(--grigio-linea); padding: .35rem .7rem; text-align: center; }
+  .res-table td.lbl { background: var(--grigio-sfondo); font-weight: 600; color: var(--blu); text-align: left; }
+  .res-table td.ok { background: #e8f8f0; color: #0a5c35; font-family: 'Source Code Pro', monospace; font-weight: 600; }
+  .res-table td.warn { background: #fff3e0; color: #7a3e00; font-family: 'Source Code Pro', monospace; font-weight: 600; }
+  /* Pixel fisico box */
+  .pixel-fisico-box { background: linear-gradient(135deg, #1a1a2e 0%, #1c3a5c 100%); border-radius: 8px; padding: 1.2rem 1.4rem; margin: .8rem 0; color: white; display: flex; gap: 1.4rem; align-items: center; }
+  .pixel-fisico-led { display: flex; gap: 6px; flex-shrink: 0; }
+  .led-dot { width: 28px; height: 28px; border-radius: 50%; opacity: .9; box-shadow: 0 0 12px 4px; }
+  .led-r { background: #ff2222; box-shadow: 0 0 12px 4px rgba(255,30,30,.6); }
+  .led-g { background: #22ff22; box-shadow: 0 0 12px 4px rgba(30,255,30,.6); }
+  .led-b { background: #4466ff; box-shadow: 0 0 12px 4px rgba(50,80,255,.6); }
+  .pixel-fisico-testo { font-size: .83rem; line-height: 1.6; }
+  .pixel-fisico-testo strong { color: #aee0ff; }
+  /* Confronto pixel digitale/fisico */
+  .confronto-griglia { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin: .7rem 0; }
+  .confronto-box { border-radius: 5px; padding: .8rem 1rem; font-size: .82rem; line-height: 1.6; }
+  .confronto-box.digitale { background: #eef4fc; border: 1px solid #c0d8f0; border-left: 3px solid var(--blu-chiaro); }
+  .confronto-box.fisico { background: #1a1a2e; border: 1px solid #3a3a6a; border-left: 3px solid #4466ff; color: #d8e8ff; }
+  .confronto-box .ct-label { font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; margin-bottom: .4rem; display: block; }
+  .confronto-box.digitale .ct-label { color: var(--blu-chiaro); }
+  .confronto-box.fisico .ct-label { color: #7aadff; }
+  /* Nota resistenze */
+  .nota-res { background: #fff8e1; border: 1px solid #ffe082; border-left: 3px solid #f9a825; padding: .8rem 1rem; border-radius: 0 4px 4px 0; margin: .8rem 0; font-size: .83rem; line-height: 1.65; color: #4a3200; }
+  .nota-res .nr-label { font-family: 'Source Code Pro', monospace; font-size: 9px; font-weight: 600; color: #c47d00; text-transform: uppercase; letter-spacing: .8px; display: block; margin-bottom: .3rem; }
+  /* Componente-card (same as REL23) */
+  .componente-card { background: var(--bianco); border: 1px solid var(--bordo); border-radius: 5px; margin-bottom: .8rem; overflow: hidden; }
+  .componente-card-head { background: var(--blu-pale); border-bottom: 1px solid var(--blu-pale2); padding: .55rem .9rem; display: flex; align-items: center; gap: .6rem; }
+  .componente-icona { width: 26px; height: 26px; border-radius: 50%; background: var(--blu); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Source Code Pro', monospace; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .componente-titolo { font-size: .95rem; font-weight: 600; color: var(--blu); }
+  .componente-corpo { padding: .9rem 1rem; display: grid; grid-template-columns: 1fr 1.3fr; gap: 1rem; align-items: start; }
+  .componente-corpo.full { grid-template-columns: 1fr; }
+  .componente-img-wrap { display: flex; flex-direction: column; gap: .4rem; }
+  .componente-img-wrap img { width: 100%; border-radius: 4px; border: 1px solid var(--grigio-tabella); display: block; }
+  .componente-img-cap { font-size: .7rem; color: var(--testo-s); font-style: italic; text-align: center; line-height: 1.4; }
+  .componente-testo { font-size: .85rem; line-height: 1.65; color: var(--testo); }
+  .componente-testo p { margin-bottom: .55rem; }
+  .componente-testo p:last-child { margin-bottom: 0; }
+  .componente-testo strong { color: var(--blu); }
+  .collegamento-box { background: var(--grigio-sfondo); border-left: 2px solid var(--blu-chiaro); padding: .5rem .7rem; margin-top: .5rem; border-radius: 0 3px 3px 0; font-size: .8rem; line-height: 1.55; }
+  .collegamento-box .cb-label { font-family: 'Source Code Pro', monospace; font-size: 8.5px; font-weight: 600; color: var(--blu-chiaro); text-transform: uppercase; letter-spacing: .7px; display: block; margin-bottom: .25rem; }
+  footer { text-align: center; padding: 1.8rem 1rem; font-family: 'Source Code Pro', monospace; font-size: 10.5px; color: var(--testo-s); border-top: 1px solid var(--bordo); background: var(--bianco); letter-spacing: .04em; }
+  footer strong { color: var(--blu); }
+  @media (max-width: 640px) {
+    .principi-griglia, .mat-griglia, .schema-wrap, .colori-griglia, .confronto-griglia { grid-template-columns: 1fr; }
+    .pixel-fisico-box { flex-direction: column; }
+    .sezione-body { padding: 1rem; }
+    table.dati { font-size: .8rem; min-width: 420px; }
+    .hero h1 { font-size: 1.35rem; }
+    .hero-meta { gap: .8rem; font-size: .72rem; }
+    .main-wrap { padding: 1.2rem 1rem 3rem; }
+  }
+  @page {
+    size: A4;
+    margin: 15mm 15mm 18mm 15mm;
+    @bottom-center {
+      content: "lorenzogandini.it · Il Laboratorio di Fisica · REL EXP E5.1 · Pag. " counter(page) " / " counter(pages);
+      font-family: 'Source Code Pro', monospace; font-size: 8px; color: #4a6275;
+    }
+  }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: white !important; font-size: 13px; }
+    nav, .nav-back { display: none !important; }
+    footer { display: none; }
+    .hero { border: none; padding: 3mm 0 3mm; }
+    .hero-inner { max-width: 100%; }
+    .hero h1 { font-size: 18px; margin-bottom: 2px; }
+    .hero-sub { font-size: 11px; margin-bottom: 4px; }
+    .hero-meta { font-size: 9px; gap: 1rem; padding-top: 4px; }
+    .main-wrap { max-width: 100%; padding: 0; }
+    .sezione-obiettivo { page-break-after: avoid; break-after: avoid; }
+    .sezione-principi { page-break-before: always !important; break-before: always !important; }
+    .sezione { margin-bottom: 5mm; border: 1px solid #ccdded; }
+    .sezione-body { display: block !important; }
+    .sezione-chevron { display: none; }
+    .sezione-header { cursor: default; }
+    .tabella-scroll { overflow: visible; }
+    table.dati { break-inside: avoid; }
+    .obs-item, .step-item { break-inside: avoid; }
+    .attenzione-box, .verde-box, .formula-block, .conclusione-box { break-inside: avoid; }
+    .colore-card img { max-height: 140px !important; }
+    .pixel-fisico-box { background: #1a3a5c !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-dot"></div>
+    <div>
+      <div class="nav-site">lorenzogandini.it</div>
+      <div class="nav-title">Il Laboratorio di Fisica</div>
+    </div>
+  </div>
+  <a class="nav-back" href="#">← Ricettario</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="codice-badge">REL · EXP E5.1</span>
+      <span class="area-badge">Ottica · Elettronica</span>
+      <span class="classe-badge">Biennio / Triennio</span>
+    </div>
+    <h1>Simulazione di un Pixel Fisico</h1>
+    <div class="hero-sub">Sintesi additiva del colore con LED RGB e potenziometri — dalla luce al codice esadecimale</div>
+    <div class="hero-meta">
+      <span><strong>Argomenti:</strong> Sintesi additiva · Legge di Ohm · LED · Partitore di tensione</span>
+      <span><strong>Circuito:</strong> 5 V (Arduino/USB) · analogico</span>
+      <span><strong>A.S.:</strong> 2025/26</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- 01 OBIETTIVO -->
+  <div class="sezione sezione-obiettivo">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">01</span>
+        <span class="sezione-titolo-txt">Obiettivo</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="obiettivo-box">
+        Realizzare un <strong>pixel fisico</strong> utilizzando un LED RGB e tre potenziometri, ciascuno collegato a un canale cromatico (Rosso, Verde, Blu). Variando manualmente i potenziometri si controlla la luminosità di ogni canale, ottenendo qualsiasi colore per <strong>sintesi additiva</strong>. L'esperienza mette in luce la corrispondenza diretta tra la fisica della luce e il modello digitale RGB usato nei display, mostrando come il colore percepito dall'occhio sia il risultato della sovrapposizione di tre sorgenti monocromatiche distinte.
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 PRINCIPI TEORICI -->
+  <div class="sezione sezione-principi">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">02</span>
+        <span class="sezione-titolo-txt">Principi Teorici</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+
+      <!-- Pixel fisico vs digitale -->
+      <div class="guida-titolo">Il Pixel Fisico e il Pixel Digitale</div>
+
+      <div class="pixel-fisico-box">
+        <div class="pixel-fisico-led">
+          <div class="led-dot led-r"></div>
+          <div class="led-dot led-g"></div>
+          <div class="led-dot led-b"></div>
+        </div>
+        <div class="pixel-fisico-testo">
+          <strong>Pixel fisico:</strong> un dispositivo reale composto da tre sorgenti luminose — una rossa (R), una verde (G) e una blu (B) — la cui intensità relativa è regolabile. Il colore percepito è determinato dalla combinazione fisica della luce emessa, esattamente come nei display a LED. In questa esperienza, il LED RGB svolge il ruolo di un singolo pixel fisico.
+        </div>
+      </div>
+
+      <div class="confronto-griglia">
+        <div class="confronto-box digitale">
+          <span class="ct-label">🖥  Pixel digitale</span>
+          Un pixel digitale è un'<strong>unità di informazione</strong>: una tripletta di numeri interi — tipicamente (R, G, B) con valori da 0 a 255 — memorizzata in un file immagine. Non è un oggetto fisico ma una struttura dati. Lo stesso pixel digitale (189, 72, 243) può essere visualizzato su qualsiasi schermo, stampato o trasmesso via rete. La sua realtà è puramente <strong>simbolica e astratta</strong>.
+        </div>
+        <div class="confronto-box fisico">
+          <span class="ct-label">💡 Pixel fisico</span>
+          Un pixel fisico è una <strong>sorgente di luce reale</strong>: tre LED (o tre sub-pixel OLED/LCD) che emettono fotoni. La luce si propaga nello spazio, stimola i coni dell'occhio e produce la sensazione di colore. Non è informazione ma <strong>energia elettromagnetica</strong>. Due pixel fisici diversi con gli stessi valori RGB producono luce diversa se hanno efficienza o forward voltage differenti.
+        </div>
+      </div>
+
+      <div class="verde-box" style="margin-top:.8rem;">
+        <span class="vb-label">✓ Collegamento fisica ↔ informatica</span>
+        Il codice <strong style="font-family:'Source Code Pro',monospace;">#BD48F3</strong> (viola) equivale a R=189, G=72, B=243 in scala 0–255. Sul display, questi numeri controllano l'intensità di tre LED sub-pixel — esattamente come i tre potenziometri controllano i tre LED RGB in questo circuito. Lo stesso principio fisico governa entrambi i sistemi: la <em>sintesi additiva</em> della luce.
+      </div>
+
+      <!-- Principi elettrici -->
+      <div class="guida-titolo">Principi Elettrici del Circuito</div>
+
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="p-label">Legge di Ohm</div>
+          <div class="p-formula">V = R · I</div>
+          <div class="p-desc">La tensione ai capi di una resistenza è proporzionale alla corrente che vi scorre. Applicata al circuito LED: la resistenza in serie limita la corrente e protegge il LED da valori eccessivi.</div>
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Resistenza di limitazione LED</div>
+          <div class="p-formula">R = (Vcc − V<sub style="font-size:.75em">f</sub>) / I<sub style="font-size:.75em">LED</sub></div>
+          <div class="p-desc">Dove V<sub style="font-size:.75em">f</sub> è la tensione di soglia (forward voltage) del LED e I<sub style="font-size:.75em">LED</sub> è la corrente di esercizio desiderata (tipicamente 10–20 mA). Ogni colore di LED ha un V<sub style="font-size:.75em">f</sub> diverso.</div>
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Potenziometro come partitore</div>
+          <div class="p-formula">V<sub style="font-size:.75em">out</sub> = V<sub style="font-size:.75em">in</sub> · R₂ / (R₁+R₂)</div>
+          <div class="p-desc">Il potenziometro divide la tensione in ingresso in proporzione alla posizione del cursore, fornendo una tensione variabile tra 0 e V<sub style="font-size:.75em">cc</sub> al nodo intermedio. Questa tensione variabile alimenta il LED attraverso la resistenza di limitazione.</div>
+        </div>
+        <div class="principio-box">
+          <div class="p-label">Tensione di soglia LED (V<sub style="font-size:.75em">f</sub>)</div>
+          <div class="p-formula">V<sub style="font-size:.75em">f,R</sub> ≈ 2.0 V · V<sub style="font-size:.75em">f,G/B</sub> ≈ 3.2–3.4 V</div>
+          <div class="p-desc">I LED hanno un comportamento non ohmico: conducono solo sopra una tensione di soglia tipica. Il LED rosso ha V<sub style="font-size:.75em">f</sub> più bassa dei LED verde e blu, rendendo necessarie resistenze diverse per pareggiare le luminosità.</div>
+        </div>
+      </div>
+
+      <!-- Sintesi additiva -->
+      <div class="guida-titolo">Sintesi Additiva del Colore</div>
+
+      <div class="principio-wide">
+        <div class="p-label">Sintesi additiva — i tre primari della luce</div>
+        La sintesi additiva opera per <strong>somma di luce</strong>: sovrapporre sorgenti luminose di colori diversi produce un colore più luminoso (al contrario della sintesi sottrattiva dei pigmenti). I tre colori primari della luce sono Rosso, Verde e Blu (RGB). Le loro combinazioni a piena intensità producono i colori secondari: Rosso+Verde = <strong>Giallo</strong>, Verde+Blu = <strong>Ciano</strong>, Rosso+Blu = <strong>Magenta</strong>. La sovrapposizione di tutti e tre a piena intensità produce il <strong>Bianco</strong>. L'assenza di tutti produce il <strong>Nero</strong>.
+      </div>
+
+      <!-- GUIDA AI COMPONENTI -->
+      <div class="guida-titolo" style="margin-top:1.4rem;">Guida ai Componenti</div>
+
+      <!-- POTENZIOMETRO -->
+      <div class="componente-card">
+        <div class="componente-card-head">
+          <div class="componente-icona">P</div>
+          <div class="componente-titolo">Il Potenziometro Lineare</div>
+        </div>
+        <div class="componente-corpo">
+          <div class="componente-img-wrap">
+            <img src="potenziometro.jpeg" alt="Potenziometro lineare con simbolo circuitale e foto del componente con i tre pin etichettati: Massa, Uscita del cursore (freccia), Ingresso segnale (CW)">
+            <div class="componente-img-cap">Potenziometro lineare 10 kΩ. Da sinistra: <strong>Massa</strong> (GND), <strong>Uscita del cursore</strong> (pin centrale, freccia), <strong>Ingresso segnale</strong> (CW). Ruotando la manopola in senso orario il cursore si avvicina al pin CW e la tensione in uscita aumenta.</div>
+          </div>
+          <div class="componente-testo">
+            <p>Il <strong>potenziometro</strong> è una resistenza variabile con tre terminali: due estremi e un cursore mobile (detto anche <em>wiper</em>). La resistenza totale tra i due terminali estremi è fissa (in questo circuito 10 kΩ), mentre la resistenza tra un estremo e il cursore varia linearmente con la posizione della manopola, da 0 Ω a 10 kΩ.</p>
+            <p>Quando i due terminali estremi sono collegati rispettivamente a +5V e GND, il cursore si comporta da <strong>partitore di tensione</strong>: la tensione sul pin centrale varia continuamente tra 0 V (cursore tutto verso GND) e 5 V (cursore tutto verso +5V). Questa tensione variabile è quella che, attraverso la resistenza di limitazione, controlla la luminosità del LED.</p>
+            <div class="collegamento-box">
+              <span class="cb-label">Come si collega</span>
+              <strong>Pin Massa</strong> (sinistro) → bus GND della breadboard. <strong>Pin CW/Ingresso</strong> (destro) → bus +5V. <strong>Pin Cursore</strong> (centrale, freccia) → resistenza di limitazione → anodo del LED. Invertire i pin esterni non danneggia il circuito: cambia solo il verso di rotazione della manopola.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LED RGB a catodo comune -->
+      <div class="componente-card">
+        <div class="componente-card-head">
+          <div class="componente-icona" style="background:linear-gradient(135deg,#e74c3c 0%,#27ae60 50%,#2980b9 100%);font-size:9px;width:32px;height:32px;">RGB</div>
+          <div class="componente-titolo">Il LED RGB 5 mm a Catodo Comune</div>
+        </div>
+        <div class="componente-corpo" style="grid-template-columns:150px 1fr;">
+          <div class="componente-img-wrap">
+            <img src="RGBcc.png" alt="LED RGB 5mm a catodo comune: schema dei 4 pin e circuito interno con tre diodi R, G, B e catodo comune a GND">
+            <div class="componente-img-cap">LED RGB a catodo comune (Common Cathode – CC). In alto: i quattro pin fisici (R, catodo comune, G, B). In basso: schema circuitale con i tre diodi interni e il catodo condiviso collegato a GND.</div>
+          </div>
+          <div class="componente-testo">
+            <p>Il <strong>LED RGB</strong> è un singolo componente che contiene tre LED distinti — uno rosso, uno verde, uno blu — racchiusi nella stessa capsula trasparente da 5 mm. Ogni LED ha il proprio <strong>anodo</strong> (terminale positivo), ma condivide un unico <strong>catodo comune</strong> collegato a GND. Si tratta di una versione miniaturizzata di un pixel fisico: variando l'intensità dei tre canali si ottiene qualsiasi colore per sintesi additiva.</p>
+            <p>I quattro pin si identificano per lunghezza: il <strong>pin più lungo è il catodo comune</strong> (–). Guardando il LED di fronte con la lente verso di sé, i pin da sinistra a destra sono: <strong>R</strong> (anodo rosso) · <strong>Catodo (–)</strong> · <strong>G</strong> (anodo verde) · <strong>B</strong> (anodo blu). Le tensioni di soglia differiscono: ~2.0 V per R, ~3.2 V per G, ~3.4 V per B.</p>
+            <div class="collegamento-box">
+              <span class="cb-label">Come si collega</span>
+              Il <strong>catodo comune</strong> (pin lungo) → GND. Ogni <strong>anodo</strong> (R, G, B) → resistenza di limitazione dedicata → cursore del rispettivo potenziometro. Non collegare mai un anodo direttamente a +5V senza resistenza: la corrente non limitata danneggerebbe il LED irreversibilmente. Se un canale non si accende, verificare che V<sub style="font-size:.75em">cursore</sub> superi la soglia V<sub style="font-size:.75em">f</sub> di quel colore.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 03 STRUMENTI E MATERIALI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">03</span>
+        <span class="sezione-titolo-txt">Strumenti e Materiali</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <div class="mat-griglia">
+        <div>
+          <div class="mat-gruppo-titolo">Strumentazione</div>
+          <ul class="mat-lista">
+            <li>Arduino Uno R4 (o alimentatore USB 5V) <em>fonte di tensione 5 V</em></li>
+            <li>Breadboard a 830 fori <em>montaggio circuito</em></li>
+            <li>Cavi jumper M-M <em>collegamento componenti</em></li>
+            <li>Multimetro digitale <em>misura tensioni e correnti</em></li>
+          </ul>
+        </div>
+        <div>
+          <div class="mat-gruppo-titolo">Componenti elettronici</div>
+          <ul class="mat-lista">
+            <li>1× LED RGB 5 mm a catodo comune <em>pixel fisico</em></li>
+            <li>3× LED 5 mm separati (rosso, verde, blu) <em>visualizzazione canali</em></li>
+            <li>3× Potenziometro lineare 10 kΩ <em>controllo manuale R, G, B</em></li>
+            <li>3× Resistenza uguale (valore usato in questa esperienza) <em>limitazione corrente</em></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="attenzione-box" style="margin-top:.9rem;">
+        <span class="at-label">⚠ Nota sulle resistenze — imprecisione introdotta</span>
+        In questa esperienza sono state usate <strong>3 resistenze dello stesso valore</strong> per tutti i canali, per semplicità. Questa scelta introduce un'imprecisione nella calibrazione della luminosità, perché i tre LED hanno tensioni di soglia diverse. Una scelta più accurata prevede resistenze di valore diverso per ciascun canale. Vedi la sezione Osservazioni per la discussione quantitativa.
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 SCHEMA E MONTAGGIO -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">04</span>
+        <span class="sezione-titolo-txt">Schema e Montaggio</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <!-- Schema elettrico singolo canale (da cui si è partiti) -->
+      <div class="schema-box" style="margin-bottom:1.2rem;">
+        <div class="schema-box-title">Schema elettrico — Versione 5 V · Arduino / USB (singolo canale)</div>
+        <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:'Source Code Pro',monospace;border-radius:3px;display:block;">
+          <rect width="680" height="300" fill="#fafcfe"/>
+          <text x="10" y="14" font-size="9" fill="#2e6da4" font-weight="600" letter-spacing="0.5">VERSIONE 5 V — Un canale (es. Rosso) — logica identica per G e B</text>
+          <line x1="50" y1="50" x2="630" y2="50" stroke="#e74c3c" stroke-width="2"/>
+          <text x="18" y="54" font-size="11" fill="#e74c3c" font-weight="700">+5V</text>
+          <line x1="50" y1="260" x2="630" y2="260" stroke="#1a3a5c" stroke-width="2"/>
+          <text x="18" y="264" font-size="11" fill="#1a3a5c" font-weight="700">GND</text>
+          <!-- Potenziometro -->
+          <line x1="130" y1="50" x2="130" y2="80" stroke="#e74c3c" stroke-width="1.8"/>
+          <rect x="100" y="80" width="60" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="130" y="100" font-size="8" text-anchor="middle" fill="#1a3a5c" font-weight="600">POT</text>
+          <text x="130" y="112" font-size="7.5" text-anchor="middle" fill="#2e6da4">10 kΩ lin.</text>
+          <polygon points="148,115 162,105 162,125" fill="#c0392b"/>
+          <text x="166" y="112" font-size="7" fill="#c0392b">cursore</text>
+          <line x1="130" y1="130" x2="130" y2="148" stroke="#aaa" stroke-width="1.2" stroke-dasharray="3,3"/>
+          <text x="108" y="158" font-size="7" fill="#aaa">NC (aperto)</text>
+          <line x1="160" y1="105" x2="220" y2="105" stroke="#e67e22" stroke-width="1.8"/>
+          <text x="175" y="100" font-size="7" fill="#e67e22">V regolata</text>
+          <!-- Nodo di sdoppiamento -->
+          <circle cx="220" cy="105" r="4" fill="#e67e22"/>
+          <!-- Ramo A: LED singolo -->
+          <line x1="220" y1="105" x2="220" y2="68" stroke="#e67e22" stroke-width="1.8"/>
+          <line x1="220" y1="68" x2="320" y2="68" stroke="#e67e22" stroke-width="1.8"/>
+          <rect x="320" y="58" width="55" height="20" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="347" y="70" font-size="8" text-anchor="middle" fill="#c0392b" font-weight="600">150 Ω</text>
+          <text x="347" y="80" font-size="7" text-anchor="middle" fill="#999">R_A</text>
+          <line x1="375" y1="68" x2="410" y2="68" stroke="#e67e22" stroke-width="1.8"/>
+          <polygon points="410,55 410,81 434,68" fill="#e74c3c" opacity="0.9"/>
+          <line x1="434" y1="55" x2="434" y2="81" stroke="#e74c3c" stroke-width="2"/>
+          <line x1="434" y1="68" x2="460" y2="68" stroke="#e74c3c" stroke-width="1.8"/>
+          <text x="421" y="50" font-size="7.5" text-anchor="middle" fill="#e74c3c" font-weight="600">LED Rosso</text>
+          <text x="410" y="88" font-size="6.5" fill="#999">A (+)</text>
+          <text x="434" y="88" font-size="6.5" fill="#999">K (−)</text>
+          <line x1="448" y1="56" x2="458" y2="46" stroke="#e74c3c" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="453" y1="60" x2="465" y2="50" stroke="#e74c3c" stroke-width="1" stroke-dasharray="2,2"/>
+          <line x1="460" y1="68" x2="460" y2="260" stroke="#1a3a5c" stroke-width="1.5"/>
+          <!-- Ramo B: LED RGB -->
+          <line x1="220" y1="105" x2="220" y2="145" stroke="#e67e22" stroke-width="1.8"/>
+          <line x1="220" y1="145" x2="320" y2="145" stroke="#e67e22" stroke-width="1.8"/>
+          <rect x="320" y="135" width="55" height="20" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="347" y="147" font-size="8" text-anchor="middle" fill="#c0392b" font-weight="600">150 Ω</text>
+          <text x="347" y="157" font-size="7" text-anchor="middle" fill="#999">R_B</text>
+          <line x1="375" y1="145" x2="410" y2="145" stroke="#e67e22" stroke-width="1.8"/>
+          <polygon points="410,132 410,158 434,145" fill="#e74c3c" opacity="0.7"/>
+          <line x1="434" y1="132" x2="434" y2="158" stroke="#e74c3c" stroke-width="2"/>
+          <line x1="434" y1="145" x2="460" y2="145" stroke="#e74c3c" stroke-width="1.8"/>
+          <rect x="460" y="115" width="55" height="80" rx="5" fill="none" stroke="#2e6da4" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="487" y="113" font-size="7.5" text-anchor="middle" fill="#2e6da4" font-weight="600">LED RGB</text>
+          <text x="487" y="125" font-size="6.5" text-anchor="middle" fill="#666">(catodo comune)</text>
+          <line x1="460" y1="145" x2="510" y2="145" stroke="#e74c3c" stroke-width="1.5"/>
+          <circle cx="510" cy="145" r="3" fill="#e74c3c"/>
+          <text x="518" y="148" font-size="7" fill="#e74c3c">R pin</text>
+          <line x1="487" y1="195" x2="487" y2="260" stroke="#1a3a5c" stroke-width="1.5"/>
+          <line x1="475" y1="195" x2="500" y2="195" stroke="#1a3a5c" stroke-width="1.5"/>
+          <text x="503" y="198" font-size="7" fill="#1a3a5c">Catodo comune</text>
+          <!-- Label parallelo -->
+          <path d="M 240 90 Q 280 68 300 68" stroke="#aaa" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
+          <path d="M 240 120 Q 280 145 300 145" stroke="#aaa" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
+          <text x="245" y="107" font-size="7" fill="#666" font-style="italic">parallelo</text>
+          <!-- Calcolo resistenza -->
+          <text x="530" y="55" font-size="8" fill="#c0392b" font-weight="600">V_LED(R) = 2,0 V</text>
+          <text x="530" y="66" font-size="7" fill="#666">I_safe = 20 mA</text>
+          <text x="530" y="77" font-size="7" fill="#666">R = (5−2)/0,02 = 150 Ω</text>
+          <!-- Legenda -->
+          <rect x="530" y="200" width="140" height="52" rx="3" fill="#f0f4f8" stroke="#b0bec5" stroke-width="1"/>
+          <text x="540" y="213" font-size="7.5" fill="#1a3a5c" font-weight="600">LEGENDA</text>
+          <line x1="540" y1="223" x2="556" y2="223" stroke="#e74c3c" stroke-width="2"/>
+          <text x="560" y="226" font-size="7" fill="#333">Linea +Vcc (positivo)</text>
+          <line x1="540" y1="234" x2="556" y2="234" stroke="#1a3a5c" stroke-width="2"/>
+          <text x="560" y="237" font-size="7" fill="#333">Linea GND (negativo)</text>
+          <line x1="540" y1="245" x2="556" y2="245" stroke="#e67e22" stroke-width="1.8"/>
+          <text x="560" y="248" font-size="7" fill="#333">Segnale regolato</text>
+        </svg>
+        <div class="schema-didascalia">Fig. 1 — Schema elettrico del singolo canale (versione 5 V). Il nodo arancio è il punto di sdoppiamento: ogni LED (singolo e canale RGB) ha la propria resistenza di protezione. Lo stesso schema si replica per i canali G e B con le rispettive resistenze ottimali.</div>
+      </div>
+
+      <div class="schema-wrap">
+        <div class="schema-box" style="grid-column: 1 / -1;">
+          <div class="schema-box-title">Schema breadboard — versione 5 V (simulazione Tinkercad)</div>
+          <img src="RGB_Tinker.png" alt="Schema breadboard Tinkercad con LED RGB, tre potenziometri e Arduino" style="width:100%;border-radius:3px;display:block;">
+          <div class="schema-didascalia">Schema realizzato in Tinkercad. Ogni potenziometro (10 kΩ) controlla un canale cromatico: il cursore centrale alimenta il LED di quel colore attraverso la resistenza di limitazione. Tutti i catodi convergono a GND comune.</div>
+        </div>
+      </div>
+
+      <div class="guida-titolo">Descrizione del collegamento</div>
+      <ol class="step-lista">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <p><strong>Alimentazione:</strong> il pin 5V di Arduino (o un alimentatore USB) fornisce la tensione di riferimento al bus positivo della breadboard; il pin GND si collega al bus negativo.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <p><strong>Potenziometri:</strong> il terminale sinistro di ciascun potenziometro va al bus 5V, il terminale destro a GND, il cursore centrale (pin 2) produce una tensione variabile tra 0 e 5 V.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <p><strong>Resistenza di limitazione:</strong> il cursore del potenziometro si collega all'anodo del LED attraverso la resistenza. Il catodo comune del LED RGB e i catodi dei LED singoli vanno tutti a GND.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <p><strong>LED singoli aggiuntivi:</strong> oltre al LED RGB, per visualizzare meglio ogni singolo canale, tre LED separati (rosso, verde, blu) sono collegati in parallelo ai rispettivi canali, ciascuno con la propria resistenza.</p>
+            <div class="step-nota">ℹ I LED singoli mostrano più chiaramente l'intensità di ciascun canale rispetto ai tre sub-pin ravvicinati del LED RGB.</div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 05 PROCEDURA -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">05</span>
+        <span class="sezione-titolo-txt">Procedura Sperimentale</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+      <ol class="step-lista">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <p><strong>Montaggio del circuito:</strong> realizzare il circuito come da schema, con i tre potenziometri, le resistenze di limitazione e il LED RGB collegati al bus 5V e GND.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <p><strong>Colori primari:</strong> portare un potenziometro al massimo e gli altri due a zero. Osservare il colore del LED RGB e dei singoli LED, misurare la tensione ai capi del LED attivo e la corrente nel ramo.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <p><strong>Colori secondari:</strong> portare due potenziometri al massimo, il terzo a zero. Verificare: R+G = Giallo, G+B = Ciano, R+B = Magenta. Fotografare i risultati.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <p><strong>Bianco:</strong> portare tutti e tre i potenziometri al massimo. Osservare la luce bianca emessa dal LED RGB (somma R+G+B). Misurare la corrente totale assorbita.</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <p><strong>Raccolta dati quantitativi:</strong> per ciascun canale (R, G, B) variare il potenziometro in modo continuo e registrare nella tabella le tensioni e le correnti corrispondenti a diverse posizioni (0%, 25%, 50%, 75%, 100%).</p>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <p><strong>Confronto col codice colore:</strong> impostare una combinazione a piacere e stimare il corrispondente codice HEX sommando le intensità relative. Verificare aprendo un selettore colori su PC.</p>
+            <div class="step-nota">⚠ L'approssimazione non è perfetta: la percezione dell'occhio non è lineare e le resistenze uguali introducono sbilanciamento tra i canali.</div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 06 MISURE SPERIMENTALI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">06</span>
+        <span class="sezione-titolo-txt">Misure Sperimentali</span>
+      </div>
+      <span class="sezione-chevron open">▾</span>
+    </div>
+    <div class="sezione-body open">
+
+      <div class="guida-titolo">Tabella dati — canali R, G, B al variare del potenziometro</div>
+
+      <div class="tabella-scroll">
+        <table class="dati">
+          <thead>
+            <tr>
+              <th rowspan="2">Canale</th>
+              <th rowspan="2">Posizione POT<span class="u">%</span></th>
+              <th colspan="2">Tensione<span class="u">V</span></th>
+              <th rowspan="2">Corrente I<sub style="font-size:.75em">LED</sub><span class="u">mA</span></th>
+              <th rowspan="2">Luminosità percepita<span class="u">sogg.</span></th>
+            </tr>
+            <tr>
+              <th>V<sub style="font-size:.75em">POT</sub> (cursore)</th>
+              <th>V<sub style="font-size:.75em">LED</sub> (ai capi)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="lbl" rowspan="5" style="background:#fdecea;color:#c0392b;">Rosso (R)</td>
+              <td>0 %</td><td>0.00</td><td>—</td><td>0</td><td>spento</td>
+            </tr>
+            <tr><td>25 %</td><td>1.25</td><td>—</td><td>—</td><td>debole</td></tr>
+            <tr><td>50 %</td><td>2.50</td><td class="calc">≈ 2.0</td><td>—</td><td>media</td></tr>
+            <tr><td>75 %</td><td>3.75</td><td class="calc">≈ 2.0</td><td>—</td><td>intensa</td></tr>
+            <tr><td>100 %</td><td>5.00</td><td class="calc">≈ 2.0</td><td>—</td><td>massima</td></tr>
+            <tr>
+              <td class="lbl" rowspan="5" style="background:#eafaf1;color:#1a7a3a;">Verde (G)</td>
+              <td>0 %</td><td>0.00</td><td>—</td><td>0</td><td>spento</td>
+            </tr>
+            <tr><td>25 %</td><td>1.25</td><td>—</td><td>—</td><td>spento*</td></tr>
+            <tr><td>50 %</td><td>2.50</td><td>—</td><td>—</td><td>debole</td></tr>
+            <tr><td>75 %</td><td>3.75</td><td class="calc">≈ 3.2</td><td>—</td><td>media</td></tr>
+            <tr><td>100 %</td><td>5.00</td><td class="calc">≈ 3.2</td><td>—</td><td>massima</td></tr>
+            <tr>
+              <td class="lbl" rowspan="5" style="background:#eaf2fb;color:#2471a3;">Blu (B)</td>
+              <td>0 %</td><td>0.00</td><td>—</td><td>0</td><td>spento</td>
+            </tr>
+            <tr><td>25 %</td><td>1.25</td><td>—</td><td>—</td><td>spento*</td></tr>
+            <tr><td>50 %</td><td>2.50</td><td>—</td><td>—</td><td>spento*</td></tr>
+            <tr><td>75 %</td><td>3.75</td><td class="calc">≈ 3.4</td><td>—</td><td>debole</td></tr>
+            <tr><td>100 %</td><td>5.00</td><td class="calc">≈ 3.4</td><td>—</td><td>media</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.75rem;color:var(--testo-s);margin-top:.4rem;">* Il LED non si accende finché la tensione del cursore non supera V<sub style="font-size:.75em">f</sub> + caduta sulla resistenza. I valori con trattino (—) sono da completare durante la misura.</p>
+
+    </div>
+  </div>
+
+  <!-- 07 OSSERVAZIONI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">07</span>
+        <span class="sezione-titolo-txt">Osservazioni sulla Sintesi Additiva</span>
+      </div>
+      <span class="sezione-chevron">▾</span>
+    </div>
+    <div class="sezione-body">
+
+      <!-- Tabella colori -->
+      <div class="guida-titolo">Tabella dei colori ottenuti</div>
+      <div class="tabella-scroll">
+        <table class="dati">
+          <thead>
+            <tr>
+              <th>Colore ottenuto</th>
+              <th>Canale R<span class="u">POT %</span></th>
+              <th>Canale G<span class="u">POT %</span></th>
+              <th>Canale B<span class="u">POT %</span></th>
+              <th>Equivalente RGB<span class="u">0–255</span></th>
+              <th>Codice HEX<span class="u">appross.</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="lbl" style="color:#c0392b;">■ Rosso</td><td>100</td><td>0</td><td>0</td><td class="calc">(255, 0, 0)</td><td class="calc">#FF0000</td></tr>
+            <tr><td class="lbl" style="color:#1a7a3a;">■ Verde</td><td>0</td><td>100</td><td>0</td><td class="calc">(0, 255, 0)</td><td class="calc">#00FF00</td></tr>
+            <tr><td class="lbl" style="color:#2471a3;">■ Blu</td><td>0</td><td>0</td><td>100</td><td class="calc">(0, 0, 255)</td><td class="calc">#0000FF</td></tr>
+            <tr><td class="lbl" style="color:#008b8b;">■ Ciano</td><td>0</td><td>100</td><td>100</td><td class="calc">(0, 255, 255)</td><td class="calc">#00FFFF</td></tr>
+            <tr><td class="lbl" style="color:#b8860b;">■ Giallo</td><td>100</td><td>100</td><td>0</td><td class="calc">(255, 255, 0)</td><td class="calc">#FFFF00</td></tr>
+            <tr><td class="lbl" style="color:#8b008b;">■ Magenta</td><td>100</td><td>0</td><td>100</td><td class="calc">(255, 0, 255)</td><td class="calc">#FF00FF</td></tr>
+            <tr><td class="lbl" style="color:#555;">■ Bianco</td><td>100</td><td>100</td><td>100</td><td class="calc">(255, 255, 255)</td><td class="calc">#FFFFFF</td></tr>
+            <tr><td class="lbl" style="color:#999;">■ Nero</td><td>0</td><td>0</td><td>0</td><td class="calc">(0, 0, 0)</td><td class="calc">#000000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Nota RGB ed HEX -->
+      <div class="verde-box" style="margin-top:.8rem;">
+        <span class="vb-label">ℹ Cosa sono l'Equivalente RGB e il Codice HEX?</span>
+        Le ultime due colonne della tabella contengono concetti che appartengono all'informatica e all'elaborazione delle immagini digitali, e che in questa esperienza compaiono per la prima volta come "corrispondenze" qualitative.
+        <p style="margin-top:.5rem;"><strong>Equivalente RGB (es. 255, 0, 0):</strong> è la tripletta di numeri interi — ciascuno compreso tra 0 e 255 — con cui ogni sistema informatico descrive un colore. Il valore 0 significa "canale spento", il valore 255 significa "canale al massimo". In questa fase dell'esperienza i valori sono assegnati in modo approssimato (0 = POT al minimo, 255 = POT al massimo) perché non disponiamo ancora di uno strumento di misura preciso.</p>
+        <p style="margin-top:.4rem;"><strong>Codice HEX (es. #FF0000):</strong> è la rappresentazione esadecimale della stessa tripletta RGB. Ogni coppia di cifre HEX corrisponde a un canale: <code style="background:#e8f1fa;padding:1px 4px;border-radius:2px;">#RRGGBB</code>. Poiché in base 16 ogni coppia può rappresentare 256 valori (da 00 a FF), il codice HEX è semplicemente un modo più compatto di scrivere lo stesso dato RGB ed è il formato usato universalmente nei fogli di stile CSS, nei software di grafica e nei selettori colore dei sistemi operativi.</p>
+        <p style="margin-top:.5rem;">🔬 <strong>Il legame fisico–digitale tra queste due rappresentazioni e il circuito fisico sarà il tema centrale della seconda parte di questa esperienza:</strong> <a href="EXP_E5.2_Pixel_Fisico_Logico.html" style="color:var(--verde);font-weight:600;text-decoration:underline;">EXP E5.2 — Il Legame tra Pixel Fisico e Pixel Logico →</a><br>
+        In quella scheda, grazie all'Arduino e al display OLED, vedremo come un valore ADC (0–1023) si trasforma in un numero RGB (0–255) e in un codice HEX in tempo reale, chiudendo il cerchio tra la luce fisica e il dato informatico.</p>
+      </div>
+
+      <!-- Foto colori secondari -->
+      <div class="guida-titolo" style="margin-top:1.2rem;">Colori secondari — fotografie del circuito</div>
+
+      <div class="colori-griglia">
+        <div class="colore-card">
+          <div class="colore-card-head" style="background:#007c7c;">Ciano — G + B</div>
+          <img src="celeste.jpg" alt="Circuito con LED RGB che emette luce ciano (verde + blu)">
+          <div class="colore-card-body">
+            <strong>R = 0, G = max, B = max.</strong> La sovrapposizione di verde e blu produce il ciano (azzurro-verdino). Il LED RGB emette una luce fredda che illumina la breadboard di verde-azzurro. I LED singoli verde e blu sono entrambi accesi.
+          </div>
+        </div>
+        <div class="colore-card">
+          <div class="colore-card-head" style="background:#9a7d00;">Giallo — R + G</div>
+          <img src="yellow2.jpg" alt="Circuito con LED RGB che emette luce gialla (rosso + verde)">
+          <div class="colore-card-body">
+            <strong>R = max, G = max, B = 0.</strong> La somma di rosso e verde produce il giallo. Sorprendente: nessun LED "giallo" è presente nel circuito, eppure l'occhio percepisce chiaramente un giallo vivace. Questo dimostra la sintesi additiva in modo diretto.
+          </div>
+        </div>
+        <div class="colore-card">
+          <div class="colore-card-head" style="background:#9b27af;">Magenta — R + B</div>
+          <img src="violet2.jpg" alt="Circuito con LED RGB che emette luce magenta (rosso + blu)">
+          <div class="colore-card-body">
+            <strong>R = max, G = 0, B = max.</strong> Il LED RGB emette luce magenta (viola-rosa), somma di rosso e blu. Nei LED singoli si osservano contemporaneamente il LED rosso e quello blu accesi. La luce mista appare di colore viola-fucsia.
+          </div>
+        </div>
+        <div class="colore-card">
+          <div class="colore-card-head" style="background:#555;">Bianco — R + G + B</div>
+          <img src="white2.jpg" alt="Circuito con LED RGB che emette luce bianca (tutti i canali al massimo)">
+          <div class="colore-card-body">
+            <strong>R = max, G = max, B = max.</strong> Tutti e tre i canali al massimo producono luce bianca. La luce del LED RGB è molto intensa e illumina ampiamente la breadboard. Si osserva però un bianco leggermente caldo o freddo a causa dello sbilanciamento introdotto dalle resistenze uguali.
+          </div>
+        </div>
+      </div>
+
+      <!-- Osservazioni testuali -->
+      <div class="guida-titolo" style="margin-top:1.2rem;">Osservazioni e note</div>
+
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Soglia di accensione dipendente dal colore:</strong> il LED rosso si accende a tensioni di cursore più basse (già intorno a 2 V) rispetto ai LED verde e blu (che richiedono circa 3.2–3.4 V prima di condurre). Di conseguenza, portando il potenziometro al 50% la luce rossa è già ben visibile, mentre verde e blu sono ancora spenti o appena accesi. Questo rende difficile ottenere sfumature di colore bilanciate con resistenze identiche.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Il bianco non è perfettamente bianco:</strong> con i tre potenziometri al massimo e resistenze uguali per tutti i canali, il bianco ottenuto appare leggermente freddo (dominante blu-verde) o caldo (dominante rossa) a seconda del valore di resistenza scelto. Questo è dovuto al diverso V<sub style="font-size:.75em">f</sub> dei LED: con la stessa resistenza, la corrente nel canale rosso (V<sub style="font-size:.75em">f</sub> ≈ 2.0 V) è maggiore rispetto a verde e blu, rendendo il rosso più brillante.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>La sintesi additiva è verificata sperimentalmente:</strong> i colori secondari (giallo, ciano, magenta) sono stati osservati con chiarezza, confermando le previsioni teoriche. Nessuno dei colori secondari corrisponde a una sorgente luminosa presente fisicamente nel kit: il giallo "nasce" dalla sovrapposizione di rosso e verde, non da un LED giallo. Questo è il risultato più significativo dell'esperienza.</div>
+      </div>
+      <div class="obs-item">
+        <span class="obs-arrow">→</span>
+        <div><strong>Limite delle resistenze uguali — il canale blu:</strong> il LED blu, avendo la tensione di soglia più alta (V<sub style="font-size:.75em">f</sub> ≈ 3.4 V), è il più penalizzato dall'uso di una resistenza uguale agli altri. Con Vcc = 5 V e R uguale per tutti, la corrente nel canale blu è sistematicamente inferiore a quella degli altri due canali: la stessa resistenza R lascia passare una corrente (5−3.4)/R nel blu contro (5−2.0)/R nel rosso, con un rapporto di circa 1:2. Per questo motivo, nella misura del bianco, il canale blu appare visibilmente più debole. Per ottenere un bianco neutro sarebbe necessario usare per il blu una resistenza di valore <em>inferiore</em> rispetto a quella del rosso.</div>
+      </div>
+
+      <!-- Tabella resistenze ottimali -->
+      <div class="guida-titolo">Resistenze ottimali vs. resistenze usate (Vcc = 5 V, I = 20 mA)</div>
+
+      <table class="res-table">
+        <thead>
+          <tr>
+            <th>LED</th>
+            <th>V<sub style="font-size:.75em">f</sub> tipica</th>
+            <th>R ottimale (I = 20 mA)</th>
+            <th>R usata in questa esperienza</th>
+            <th>Corrente effettiva</th>
+            <th>Effetto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lbl" style="color:#c0392b;">LED Rosso</td>
+            <td>≈ 2.0 V</td>
+            <td class="ok">150 Ω</td>
+            <td>uguale agli altri</td>
+            <td class="warn">alta (> 20 mA se R &lt; 150 Ω)</td>
+            <td>Troppo brillante o rischio LED</td>
+          </tr>
+          <tr>
+            <td class="lbl" style="color:#1a7a3a;">LED Verde</td>
+            <td>≈ 3.2 V</td>
+            <td class="ok">90–100 Ω</td>
+            <td>uguale agli altri</td>
+            <td>accettabile</td>
+            <td>Vicino all'ottimale</td>
+          </tr>
+          <tr>
+            <td class="lbl" style="color:#2471a3;">LED Blu</td>
+            <td>≈ 3.4 V</td>
+            <td class="ok">80 Ω</td>
+            <td>uguale agli altri</td>
+            <td class="warn">bassa (< 16 mA se R > 80 Ω)</td>
+            <td><strong>Troppo debole</strong> rispetto agli altri canali</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="nota-res" style="margin-top:.8rem;">
+        <span class="nr-label">⚠ Perché il LED blu ha bisogno di una resistenza più piccola</span>
+        Il LED blu ha la tensione di soglia più alta del gruppo (V<sub style="font-size:.75em">f</sub> ≈ 3.4 V su 5 V disponibili), il che significa che alla resistenza rimane solo 5 − 3.4 = <strong>1.6 V</strong>. Per fare scorrere 20 mA occorre R = 1.6/0.02 = <strong>80 Ω</strong>. Con la stessa resistenza usata per il rosso (ad esempio 150 Ω), il canale blu porterebbe solo 1.6/150 ≈ <strong>11 mA</strong>, cioè circa la metà della corrente del rosso — e apparirebbe molto più debole. Usare resistenze calibrate su ciascun V<sub style="font-size:.75em">f</sub> è fondamentale per ottenere un bianco equilibrato e confrontare le luminosità dei canali in modo affidabile.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 08 CONCLUSIONI -->
+  <div class="sezione">
+    <div class="sezione-header" onclick="toggleSezione(this)">
+      <div class="sezione-header-left">
+        <span class="sezione-num">08</span>
+        <span class="sezione-titolo-txt">Conclusioni</span>
+      </div>
+      <span class="sezione-chevron">▾</span>
+    </div>
+    <div class="sezione-body">
+      <div class="conclusione-box">
+        <span class="c-label">Sintesi e risposta all'obiettivo</span>
+        <p>L'esperienza ha raggiunto il suo obiettivo principale: realizzare fisicamente un pixel RGB e verificare la sintesi additiva del colore. Con tre LED, tre potenziometri e tre resistenze è possibile riprodurre l'intero spazio cromatico che un display digitale rappresenta numericamente. Ogni posizione dei potenziometri corrisponde a un codice colore RGB e — con la versione Arduino dell'esperienza — a un preciso valore esadecimale su display OLED.</p>
+        <p>La differenza concettuale tra <strong>pixel fisico</strong> e <strong>pixel digitale</strong> è emersa con chiarezza: il pixel fisico produce luce reale per sintesi additiva, mentre il pixel digitale è un dato numerico. La corrispondenza tra i due sistemi è il fondamento tecnologico dei display moderni: ogni pixel sullo schermo è una tripletta di micro-LED (o sub-pixel LCD) che replicano esattamente il principio di questa esperienza.</p>
+        <p>L'uso di <strong>resistenze uguali per i tre canali</strong> ha introdotto un'imprecisione misurabile: il canale blu, avendo la tensione di soglia più alta, risulta sistematicamente più debole degli altri a parità di posizione del potenziometro. Questo sbilanciamento è un'ottima dimostrazione pratica dell'importanza di scegliere correttamente le resistenze in funzione delle caratteristiche elettriche dei LED. In un display industriale questo problema è risolto calibrando elettronicamente l'intensità di ogni sub-pixel.</p>
+        <p>Per un approfondimento quantitativo, la versione 3 dell'esperienza (Arduino R4 + OLED) permette di leggere i valori ADC, convertirli in bit 0–255 e visualizzarli in tempo reale, chiudendo il cerchio tra la fisica della luce e il codice informatico del colore.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- fine main-wrap -->
+
+<footer>
+  <strong>lorenzogandini.it</strong> · Il Laboratorio di Fisica · REL EXP E5.1 · Ottica / Elettronica · A.S. 2025/26
+</footer>
+
+<script>
+function toggleSezione(header) {
+  const chevron = header.querySelector('.sezione-chevron');
+  const body = header.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>

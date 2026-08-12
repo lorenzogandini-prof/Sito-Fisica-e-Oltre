@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXP – Simulazione di un Pixel: Controllo del LED RGB</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Source+Code+Pro:wght@400;600&display=swap');
+
+  :root {
+    --blu: #1a3a5c;
+    --blu-chiaro: #2e6da4;
+    --accento: #c0392b;
+    --grigio-linea: #b0bec5;
+    --grigio-sfondo: #f0f4f8;
+    --grigio-tabella: #dce8f3;
+    --testo: #1c2a38;
+    --bianco: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 10.5pt;
+    color: var(--testo);
+    background: #e8edf2;
+    padding: 20px;
+  }
+
+  .pagina {
+    background: var(--bianco);
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 30px auto;
+    padding: 14mm 15mm 12mm 15mm;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  }
+
+  /* INTESTAZIONE */
+  .intestazione {
+    border-top: 4px solid var(--blu);
+    border-bottom: 2px solid var(--blu-chiaro);
+    padding: 8px 0 7px 0;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .intestazione .codice {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--accento);
+    letter-spacing: 1px;
+  }
+  .intestazione .titolo-principale {
+    font-size: 13pt;
+    font-weight: 600;
+    color: var(--blu);
+    text-align: center;
+    flex: 1;
+    padding: 0 10px;
+    line-height: 1.3;
+  }
+  .intestazione .data-nome {
+    font-size: 8.5pt;
+    color: #666;
+    text-align: right;
+    line-height: 1.7;
+    min-width: 90px;
+  }
+  .intestazione .data-nome span {
+    display: block;
+    border-bottom: 1px solid var(--grigio-linea);
+    min-width: 80px;
+  }
+
+  /* SEZIONI */
+  .sezione { margin-bottom: 9px; }
+  .sezione-titolo {
+    background: var(--blu);
+    color: var(--bianco);
+    font-size: 8.5pt;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    margin-bottom: 5px;
+  }
+  .sezione-titolo.secondario {
+    background: var(--blu-chiaro);
+    font-size: 8pt;
+    letter-spacing: 1px;
+  }
+  .sezione-corpo { padding: 0 4px; }
+
+  /* OBIETTIVO */
+  .obiettivo-testo {
+    font-size: 9.5pt;
+    line-height: 1.55;
+    color: var(--testo);
+    padding: 4px 6px;
+    border-left: 3px solid var(--accento);
+    background: #fef9f9;
+  }
+
+  /* PRINCIPI TEORICI */
+  .principi-griglia {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .principio-box {
+    background: var(--grigio-sfondo);
+    border: 1px solid var(--grigio-tabella);
+    padding: 5px 7px;
+    border-radius: 2px;
+  }
+  .principio-box .label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 7.5pt;
+    font-weight: 600;
+    color: var(--accento);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 2px;
+  }
+  .principio-box .formula {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10pt;
+    color: var(--blu);
+    text-align: center;
+    padding: 3px 0;
+    border-bottom: 1px dashed var(--grigio-linea);
+    margin-bottom: 3px;
+  }
+  .principio-box .desc {
+    font-size: 8.5pt;
+    color: #444;
+    line-height: 1.4;
+  }
+
+  /* MATERIALI */
+  .materiali-lista {
+    columns: 2;
+    list-style: none;
+    padding: 0;
+    gap: 4px;
+  }
+  .materiali-lista li {
+    font-size: 8.5pt;
+    padding: 2px 0 2px 12px;
+    border-bottom: 1px solid #e8ecef;
+    position: relative;
+  }
+  .materiali-lista li::before {
+    content: '▸';
+    color: var(--blu-chiaro);
+    position: absolute;
+    left: 0;
+    font-size: 8pt;
+  }
+
+  /* STEP PROCEDURA */
+  .step-lista {
+    list-style: none;
+    padding: 0;
+    counter-reset: steps;
+  }
+  .step-lista li {
+    counter-increment: steps;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    padding: 3px 0;
+    border-bottom: 1px solid #edf1f5;
+    font-size: 8.5pt;
+    line-height: 1.45;
+  }
+  .step-lista li::before {
+    content: counter(steps);
+    background: var(--blu-chiaro);
+    color: white;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 7.5pt;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* TABELLA COMPONENTI */
+  table.dati {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8pt;
+    margin-top: 2px;
+  }
+  table.dati th {
+    background: var(--blu);
+    color: white;
+    padding: 4px 5px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 8pt;
+    border: 1px solid var(--blu);
+  }
+  table.dati td {
+    border: 1px solid var(--grigio-linea);
+    padding: 3px 6px;
+    height: 22px;
+    vertical-align: middle;
+    font-size: 8pt;
+  }
+  table.dati td.label-col {
+    background: var(--grigio-sfondo);
+    font-weight: 600;
+    color: var(--blu);
+  }
+  table.dati tr:nth-child(even) td.label-col { background: #e3ecf5; }
+  table.dati td.mono {
+    font-family: 'Source Code Pro', monospace;
+    color: var(--accento);
+    font-weight: 600;
+    text-align: center;
+  }
+  table.dati tr.sep-row td {
+    background: var(--blu-chiaro);
+    color: white;
+    font-weight: 600;
+    font-size: 7.5pt;
+    letter-spacing: 0.8px;
+    text-align: center;
+  }
+
+  /* TABS VERSIONE */
+  .tab-versione {
+    display: flex;
+    gap: 0;
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--blu-chiaro);
+  }
+  .tab-btn {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 8pt;
+    font-weight: 600;
+    padding: 4px 14px;
+    border: none;
+    cursor: pointer;
+    background: var(--grigio-sfondo);
+    color: var(--blu);
+    border-radius: 3px 3px 0 0;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .tab-btn.active {
+    background: var(--blu-chiaro);
+    color: white;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* SCHEMA ELETTRICO SVG */
+  .schema-container {
+    border: 1px solid var(--grigio-linea);
+    background: #fafcfe;
+    padding: 4px;
+    margin-bottom: 6px;
+  }
+  .schema-caption {
+    font-size: 7.5pt;
+    color: #777;
+    text-align: center;
+    font-style: italic;
+    margin-top: 3px;
+  }
+
+  /* BREADBOARD SVG */
+  .breadboard-container {
+    border: 1px solid var(--grigio-linea);
+    background: #fafcfe;
+    padding: 4px;
+  }
+
+  /* OSSERVAZIONI */
+  .riga-scrittura {
+    border-bottom: 1px solid var(--grigio-linea);
+    height: 18px;
+    margin-bottom: 1px;
+    width: 100%;
+  }
+
+  /* NOTE DOCENTE */
+  .nota-docente {
+    background: #f0f4f8;
+    border: 1px solid var(--grigio-tabella);
+    border-left: 3px solid var(--blu-chiaro);
+    padding: 5px 8px;
+    font-size: 8.5pt;
+    line-height: 1.5;
+    color: #334;
+  }
+  .nota-docente strong {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 7.5pt;
+    color: var(--blu);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* CONCLUSIONI */
+  .conclusioni-domande { list-style: none; padding: 0; }
+  .conclusioni-domande li {
+    font-size: 8.5pt;
+    padding: 3px 0 1px 0;
+    border-bottom: 1px dashed #d0dbe6;
+    color: var(--blu);
+  }
+  .conclusioni-domande li .risposta-linea {
+    border-bottom: 1px solid var(--grigio-linea);
+    display: block;
+    height: 16px;
+    margin-top: 2px;
+  }
+
+  /* COLORI LED badge */
+  .badge-r { display:inline-block; width:9px; height:9px; background:#e74c3c; border-radius:50%; margin-right:3px; vertical-align:middle; }
+  .badge-g { display:inline-block; width:9px; height:9px; background:#27ae60; border-radius:50%; margin-right:3px; vertical-align:middle; }
+  .badge-b { display:inline-block; width:9px; height:9px; background:#2980b9; border-radius:50%; margin-right:3px; vertical-align:middle; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .pagina { box-shadow: none; margin: 0; }
+    .tab-btn { display: none; }
+    .tab-panel { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ PAGINA 1 ══ -->
+<div class="pagina">
+
+  <!-- INTESTAZIONE -->
+  <div class="intestazione">
+    <span class="codice">EXP·OPT·05</span>
+    <div class="titolo-principale">Simulazione di un Pixel<br>Controllo di un LED RGB con Potenziometri</div>
+    <div class="data-nome">
+      Data: <span>&nbsp;</span>
+      Classe: <span>&nbsp;</span>
+      Nome: <span>&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- OBIETTIVO -->
+  <div class="sezione">
+    <div class="sezione-titolo">Obiettivo</div>
+    <div class="sezione-corpo">
+      <div class="obiettivo-testo">
+        Realizzare un circuito su breadboard che permetta di controllare indipendentemente i tre canali cromatici (Rosso, Verde, Blu) di un LED RGB tramite potenziometri. Tre LED singoli fungono da «indicatori di canale», mentre il LED RGB mostra la <em>sintesi additiva</em> dei colori. L'esperienza introduce i concetti di legge di Ohm, caduta di tensione nei diodi e miscelazione della luce.
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINCIPI TEORICI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Principi Teorici</div>
+    <div class="sezione-corpo">
+      <div class="principi-griglia">
+        <div class="principio-box">
+          <div class="label">Legge di Ohm</div>
+          <div class="formula">R = (V<sub>cc</sub> − V<sub>LED</sub>) / I</div>
+          <div class="desc">La resistenza di protezione limita la corrente che attraversa il LED, evitandone la rottura. La caduta di tensione V<sub>LED</sub> varia con il colore del diodo.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Caduta di tensione LED</div>
+          <div class="formula">V<sub>R</sub> ≈ 2,0 V &nbsp;|&nbsp; V<sub>G,B</sub> ≈ 3,2 V</div>
+          <div class="desc">I LED rossi hanno una giunzione PN con gap energetico minore. Verde e blu richiedono più energia per emettere fotoni.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Potenziometro come partitore</div>
+          <div class="formula">V<sub>out</sub> = V<sub>cc</sub> · (R<sub>2</sub> / R<sub>tot</sub>)</div>
+          <div class="desc">Usato con cursore variabile tra 0 e V<sub>cc</sub>: regola la tensione applicata al LED modulandone la luminosità in modo continuo.</div>
+        </div>
+        <div class="principio-box">
+          <div class="label">Sintesi Additiva</div>
+          <div class="formula">R + G + B = Bianco</div>
+          <div class="desc">Sommando i tre colori primari della luce (non della pittura!) si ottiene luce bianca. Ogni monitor o TV usa questo principio per ogni pixel.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Materiali e Componenti</div>
+    <div class="sezione-corpo">
+      <ul class="materiali-lista">
+        <li>1× LED RGB a catodo comune (4 pin)</li>
+        <li>1× LED singolo Rosso (5 mm)</li>
+        <li>1× LED singolo Verde (5 mm)</li>
+        <li>1× LED singolo Blu (5 mm)</li>
+        <li>3× Potenziometri lineari (vedi tabella versioni)</li>
+        <li>4× Resistenze per il canale Rosso (vedi tabella)</li>
+        <li>4× Resistenze per i canali Verde/Blu (vedi tabella)</li>
+        <li>1× Breadboard (830 punti)</li>
+        <li>Cavi di collegamento (jumper wire)</li>
+        <li>Alimentatore: Arduino 5 V <em>oppure</em> pila 9 V a transistor</li>
+        <li>Multimetro (opzionale, per verifica tensioni)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TABELLA COMPONENTI PER VERSIONE -->
+  <div class="sezione">
+    <div class="sezione-titolo">Valori dei Componenti per le Due Versioni</div>
+    <div class="sezione-corpo">
+      <table class="dati">
+        <thead>
+          <tr>
+            <th>Alimentazione</th>
+            <th>Componente</th>
+            <th>Valore calcolato</th>
+            <th>Valore commerciale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="sep-row"><td colspan="4">⚡ VERSIONE 5 V – Arduino / USB</td></tr>
+          <tr>
+            <td class="label-col">5 V</td>
+            <td><span class="badge-r"></span>Resistenza LED Rosso</td>
+            <td class="mono">150 Ω</td>
+            <td class="mono">150 Ω</td>
+          </tr>
+          <tr>
+            <td class="label-col">5 V</td>
+            <td><span class="badge-g"></span><span class="badge-b"></span>Resistenza LED Verde / Blu</td>
+            <td class="mono">90 Ω</td>
+            <td class="mono">100 Ω</td>
+          </tr>
+          <tr>
+            <td class="label-col">5 V</td>
+            <td>Potenziometri (×3)</td>
+            <td>—</td>
+            <td class="mono">1 kΩ o 5 kΩ lin.</td>
+          </tr>
+          <tr class="sep-row"><td colspan="4">🔋 VERSIONE 9 V – Pila a transistor</td></tr>
+          <tr>
+            <td class="label-col">9 V</td>
+            <td><span class="badge-r"></span>Resistenza LED Rosso</td>
+            <td class="mono">350 Ω</td>
+            <td class="mono">390 Ω</td>
+          </tr>
+          <tr>
+            <td class="label-col">9 V</td>
+            <td><span class="badge-g"></span><span class="badge-b"></span>Resistenza LED Verde / Blu</td>
+            <td class="mono">290 Ω</td>
+            <td class="mono">330 Ω</td>
+          </tr>
+          <tr>
+            <td class="label-col">9 V</td>
+            <td>Potenziometri (×3)</td>
+            <td>—</td>
+            <td class="mono">5 kΩ o 10 kΩ lin.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:7.5pt; color:#666; margin-top:3px; font-style:italic;">* Ogni LED (singolo + canale RGB) ha la propria resistenza dedicata: 4 resistenze per colore totali.</p>
+    </div>
+  </div>
+
+</div><!-- fine pagina 1 -->
+
+
+<!-- ══════════════════════════════════════════ PAGINA 2 ══ -->
+<div class="pagina">
+
+  <!-- SCHEMI ELETTRICI con TAB -->
+  <div class="sezione">
+    <div class="sezione-titolo">Schema Elettrico — Singolo Canale (logica identica per R, G, B)</div>
+    <div class="sezione-corpo">
+
+      <div class="tab-versione">
+        <button class="tab-btn active" onclick="switchTab('schema','5v',this)">⚡ Versione 5 V (Arduino)</button>
+        <button class="tab-btn" onclick="switchTab('schema','9v',this)">🔋 Versione 9 V (Pila)</button>
+      </div>
+
+      <!-- SCHEMA 5V -->
+      <div id="schema-5v" class="tab-panel active">
+        <div class="schema-container">
+          <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:'Source Code Pro',monospace;">
+            <!-- sfondo -->
+            <rect width="680" height="300" fill="#fafcfe"/>
+
+            <!-- ETICHETTA VERSIONE -->
+            <text x="10" y="14" font-size="9" fill="#2e6da4" font-weight="600" letter-spacing="0.5">VERSIONE 5 V — Un canale (es. Rosso)</text>
+
+            <!-- ── LINEA VCC (in alto) ─────────────── -->
+            <line x1="50" y1="50" x2="630" y2="50" stroke="#e74c3c" stroke-width="2"/>
+            <text x="18" y="54" font-size="11" fill="#e74c3c" font-weight="700">+5V</text>
+
+            <!-- ── LINEA GND (in basso) ──────────────── -->
+            <line x1="50" y1="260" x2="630" y2="260" stroke="#1a3a5c" stroke-width="2"/>
+            <text x="18" y="264" font-size="11" fill="#1a3a5c" font-weight="700">GND</text>
+
+            <!-- ═══ POTENZIOMETRO ═══ -->
+            <!-- Filo da +5V al Pin1 del pot -->
+            <line x1="130" y1="50" x2="130" y2="80" stroke="#e74c3c" stroke-width="1.8"/>
+
+            <!-- Corpo potenziometro -->
+            <rect x="100" y="80" width="60" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+            <text x="130" y="100" font-size="8" text-anchor="middle" fill="#1a3a5c" font-weight="600">POT</text>
+            <text x="130" y="112" font-size="7.5" text-anchor="middle" fill="#2e6da4">1 kΩ lin.</text>
+            <!-- freccia cursore -->
+            <polygon points="148,115 162,105 162,125" fill="#c0392b"/>
+            <text x="166" y="112" font-size="7" fill="#c0392b">cursore</text>
+
+            <!-- Pin 1 (alto = +Vcc) freccia in -->
+            <line x1="130" y1="80" x2="130" y2="80" stroke="#e74c3c" stroke-width="1.5"/>
+            <!-- Pin 3 (non collegato) -->
+            <line x1="130" y1="130" x2="130" y2="148" stroke="#aaa" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="108" y="158" font-size="7" fill="#aaa">NC (aperto)</text>
+
+            <!-- Uscita cursore (Pin 2) → nodo sdoppiamento -->
+            <line x1="160" y1="105" x2="220" y2="105" stroke="#e67e22" stroke-width="1.8"/>
+            <text x="175" y="100" font-size="7" fill="#e67e22">V regolata</text>
+
+            <!-- NODO di sdoppiamento -->
+            <circle cx="220" cy="105" r="4" fill="#e67e22"/>
+
+            <!-- ═══ RAMO A → LED SINGOLO ═══ -->
+            <!-- filo verso su poi destra -->
+            <line x1="220" y1="105" x2="220" y2="68" stroke="#e67e22" stroke-width="1.8"/>
+            <line x1="220" y1="68" x2="320" y2="68" stroke="#e67e22" stroke-width="1.8"/>
+
+            <!-- Resistenza A (LED singolo) -->
+            <rect x="320" y="58" width="55" height="20" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="347" y="70" font-size="8" text-anchor="middle" fill="#c0392b" font-weight="600">150 Ω</text>
+            <text x="347" y="80" font-size="7" text-anchor="middle" fill="#999">R_A</text>
+            <line x1="375" y1="68" x2="410" y2="68" stroke="#e67e22" stroke-width="1.8"/>
+
+            <!-- LED SINGOLO ROSSO -->
+            <!-- triangolo diodo -->
+            <polygon points="410,55 410,81 434,68" fill="#e74c3c" opacity="0.9"/>
+            <line x1="434" y1="55" x2="434" y2="81" stroke="#e74c3c" stroke-width="2"/>
+            <line x1="434" y1="68" x2="460" y2="68" stroke="#e74c3c" stroke-width="1.8"/>
+            <!-- etichette -->
+            <text x="421" y="50" font-size="7.5" text-anchor="middle" fill="#e74c3c" font-weight="600">LED Rosso</text>
+            <text x="410" y="88" font-size="6.5" fill="#999">A (+)</text>
+            <text x="434" y="88" font-size="6.5" fill="#999">K (−)</text>
+            <!-- Emissione luce -->
+            <line x1="448" y1="56" x2="458" y2="46" stroke="#e74c3c" stroke-width="1" stroke-dasharray="2,2"/>
+            <line x1="453" y1="60" x2="465" y2="50" stroke="#e74c3c" stroke-width="1" stroke-dasharray="2,2"/>
+
+            <!-- catodo → GND -->
+            <line x1="460" y1="68" x2="460" y2="260" stroke="#1a3a5c" stroke-width="1.5"/>
+
+            <!-- ═══ RAMO B → canale LED RGB ═══ -->
+            <!-- filo verso giù poi destra -->
+            <line x1="220" y1="105" x2="220" y2="145" stroke="#e67e22" stroke-width="1.8"/>
+            <line x1="220" y1="145" x2="320" y2="145" stroke="#e67e22" stroke-width="1.8"/>
+
+            <!-- Resistenza B (canale RGB) -->
+            <rect x="320" y="135" width="55" height="20" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="347" y="147" font-size="8" text-anchor="middle" fill="#c0392b" font-weight="600">150 Ω</text>
+            <text x="347" y="157" font-size="7" text-anchor="middle" fill="#999">R_B</text>
+            <line x1="375" y1="145" x2="410" y2="145" stroke="#e67e22" stroke-width="1.8"/>
+
+            <!-- LED RGB canale R -->
+            <polygon points="410,132 410,158 434,145" fill="#e74c3c" opacity="0.7"/>
+            <line x1="434" y1="132" x2="434" y2="158" stroke="#e74c3c" stroke-width="2"/>
+            <line x1="434" y1="145" x2="460" y2="145" stroke="#e74c3c" stroke-width="1.8"/>
+            <!-- corpo RGB (rettangolo che mostra che è il canale del RGB) -->
+            <rect x="460" y="115" width="55" height="80" rx="5" fill="none" stroke="#2e6da4" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="487" y="113" font-size="7.5" text-anchor="middle" fill="#2e6da4" font-weight="600">LED RGB</text>
+            <text x="487" y="125" font-size="6.5" text-anchor="middle" fill="#666">(catodo comune)</text>
+
+            <!-- pin canale R dentro RGB -->
+            <line x1="460" y1="145" x2="510" y2="145" stroke="#e74c3c" stroke-width="1.5"/>
+            <circle cx="510" cy="145" r="3" fill="#e74c3c"/>
+            <text x="518" y="148" font-size="7" fill="#e74c3c">R pin</text>
+
+            <!-- catodo comune RGB → GND -->
+            <line x1="487" y1="195" x2="487" y2="260" stroke="#1a3a5c" stroke-width="1.5"/>
+            <line x1="475" y1="195" x2="500" y2="195" stroke="#1a3a5c" stroke-width="1.5"/>
+            <text x="503" y="198" font-size="7" fill="#1a3a5c">Catodo comune</text>
+
+            <!-- ═══ LABEL etichette circuito ═══ -->
+            <!-- freccia "parallelo" -->
+            <path d="M 240 90 Q 280 68 300 68" stroke="#aaa" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
+            <path d="M 240 120 Q 280 145 300 145" stroke="#aaa" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
+            <text x="245" y="107" font-size="7" fill="#666" font-style="italic">parallelo</text>
+
+            <!-- LEGGENDA V_LED -->
+            <text x="530" y="55" font-size="8" fill="#c0392b" font-weight="600">V_LED(R) = 2,0 V</text>
+            <text x="530" y="66" font-size="7" fill="#666">I_safe = 20 mA</text>
+            <text x="530" y="77" font-size="7" fill="#666">R = (5−2)/0,02 = 150 Ω</text>
+
+            <!-- Legenda -->
+            <rect x="530" y="200" width="140" height="52" rx="3" fill="#f0f4f8" stroke="#b0bec5" stroke-width="1"/>
+            <text x="540" y="213" font-size="7.5" fill="#1a3a5c" font-weight="600">LEGENDA</text>
+            <line x1="540" y1="223" x2="556" y2="223" stroke="#e74c3c" stroke-width="2"/>
+            <text x="560" y="226" font-size="7" fill="#333">Linea +Vcc (positivo)</text>
+            <line x1="540" y1="234" x2="556" y2="234" stroke="#1a3a5c" stroke-width="2"/>
+            <text x="560" y="237" font-size="7" fill="#333">Linea GND (negativo)</text>
+            <line x1="540" y1="245" x2="556" y2="245" stroke="#e67e22" stroke-width="1.8"/>
+            <text x="560" y="248" font-size="7" fill="#333">Segnale regolato</text>
+          </svg>
+          <div class="schema-caption">Fig. 1a — Schema elettrico versione 5 V. Il nodo arancio è il punto di sdoppiamento: ogni LED ha la propria resistenza di protezione.</div>
+        </div>
+      </div>
+
+      <!-- SCHEMA 9V -->
+      <div id="schema-9v" class="tab-panel">
+        <div class="schema-container">
+          <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:'Source Code Pro',monospace;">
+            <rect width="680" height="300" fill="#fafcfe"/>
+            <text x="10" y="14" font-size="9" fill="#2e6da4" font-weight="600" letter-spacing="0.5">VERSIONE 9 V — Un canale (es. Rosso)</text>
+
+            <!-- PILA disegnata -->
+            <rect x="40" y="38" width="30" height="50" rx="3" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+            <line x1="55" y1="28" x2="55" y2="38" stroke="#e74c3c" stroke-width="2"/>
+            <line x1="55" y1="88" x2="55" y2="98" stroke="#1a3a5c" stroke-width="2"/>
+            <text x="72" y="58" font-size="8" fill="#1a3a5c" font-weight="600">9 V</text>
+            <text x="43" y="68" font-size="8" text-anchor="middle" fill="#666">🔋</text>
+            <text x="72" y="70" font-size="7" fill="#666">pila</text>
+
+            <!-- VCC line -->
+            <line x1="55" y1="28" x2="630" y2="28" stroke="#e74c3c" stroke-width="2"/>
+            <text x="638" y="32" font-size="10" fill="#e74c3c" font-weight="700">+9V</text>
+
+            <!-- GND line -->
+            <line x1="55" y1="260" x2="630" y2="260" stroke="#1a3a5c" stroke-width="2"/>
+            <text x="638" y="264" font-size="10" fill="#1a3a5c" font-weight="700">GND</text>
+            <line x1="55" y1="98" x2="55" y2="260" stroke="#1a3a5c" stroke-width="1.8"/>
+
+            <!-- POTENZIOMETRO 5kΩ -->
+            <line x1="130" y1="28" x2="130" y2="80" stroke="#e74c3c" stroke-width="1.8"/>
+            <rect x="100" y="80" width="60" height="50" rx="4" fill="#f0f4f8" stroke="#1a3a5c" stroke-width="1.5"/>
+            <text x="130" y="100" font-size="8" text-anchor="middle" fill="#1a3a5c" font-weight="600">POT</text>
+            <text x="130" y="112" font-size="7.5" text-anchor="middle" fill="#2e6da4">5 kΩ lin.</text>
+            <polygon points="148,115 162,105 162,125" fill="#c0392b"/>
+            <text x="166" y="112" font-size="7" fill="#c0392b">cursore</text>
+            <line x1="130" y1="130" x2="130" y2="148" stroke="#aaa" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="108" y="158" font-size="7" fill="#aaa">NC (aperto)</text>
+
+            <!-- Uscita cursore -->
+            <line x1="160" y1="105" x2="220" y2="105" stroke="#e67e22" stroke-width="1.8"/>
+            <circle cx="220" cy="105" r="4" fill="#e67e22"/>
+
+            <!-- RAMO A LED singolo -->
+            <line x1="220" y1="105" x2="220" y2="50" stroke="#e67e22" stroke-width="1.8"/>
+            <line x1="220" y1="50" x2="300" y2="50" stroke="#e67e22" stroke-width="1.8"/>
+            <!-- R = 390 Ω -->
+            <rect x="300" y="40" width="60" height="20" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="330" y="52" font-size="8" text-anchor="middle" fill="#c0392b" font-weight="600">390 Ω</text>
+            <line x1="360" y1="50" x2="395" y2="50" stroke="#e67e22" stroke-width="1.8"/>
+            <!-- LED singolo -->
+            <polygon points="395,37 395,63 419,50" fill="#e74c3c" opacity="0.9"/>
+            <line x1="419" y1="37" x2="419" y2="63" stroke="#e74c3c" stroke-width="2"/>
+            <line x1="419" y1="50" x2="455" y2="50" stroke="#e74c3c" stroke-width="1.8"/>
+            <text x="407" y="32" font-size="7.5" text-anchor="middle" fill="#e74c3c" font-weight="600">LED Rosso</text>
+            <line x1="455" y1="50" x2="455" y2="260" stroke="#1a3a5c" stroke-width="1.5"/>
+            <!-- luce -->
+            <line x1="435" y1="38" x2="445" y2="28" stroke="#e74c3c" stroke-width="1" stroke-dasharray="2,2"/>
+            <line x1="440" y1="43" x2="452" y2="33" stroke="#e74c3c" stroke-width="1" stroke-dasharray="2,2"/>
+
+            <!-- RAMO B canale RGB -->
+            <line x1="220" y1="105" x2="220" y2="155" stroke="#e67e22" stroke-width="1.8"/>
+            <line x1="220" y1="155" x2="300" y2="155" stroke="#e67e22" stroke-width="1.8"/>
+            <rect x="300" y="145" width="60" height="20" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="330" y="157" font-size="8" text-anchor="middle" fill="#c0392b" font-weight="600">390 Ω</text>
+            <line x1="360" y1="155" x2="395" y2="155" stroke="#e67e22" stroke-width="1.8"/>
+            <polygon points="395,142 395,168 419,155" fill="#e74c3c" opacity="0.7"/>
+            <line x1="419" y1="142" x2="419" y2="168" stroke="#e74c3c" stroke-width="2"/>
+            <line x1="419" y1="155" x2="460" y2="155" stroke="#e74c3c" stroke-width="1.8"/>
+
+            <!-- corpo RGB -->
+            <rect x="460" y="120" width="55" height="80" rx="5" fill="none" stroke="#2e6da4" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="487" y="118" font-size="7.5" text-anchor="middle" fill="#2e6da4" font-weight="600">LED RGB</text>
+            <line x1="460" y1="155" x2="510" y2="155" stroke="#e74c3c" stroke-width="1.5"/>
+            <circle cx="510" cy="155" r="3" fill="#e74c3c"/>
+            <text x="518" y="158" font-size="7" fill="#e74c3c">R pin</text>
+            <line x1="487" y1="200" x2="487" y2="260" stroke="#1a3a5c" stroke-width="1.5"/>
+            <line x1="475" y1="200" x2="500" y2="200" stroke="#1a3a5c" stroke-width="1.5"/>
+
+            <!-- CALCOLO -->
+            <text x="530" y="40" font-size="8" fill="#c0392b" font-weight="600">V_LED(R) = 2,0 V</text>
+            <text x="530" y="52" font-size="7" fill="#666">R = (9−2)/0,02 = 350 Ω</text>
+            <text x="530" y="63" font-size="7" fill="#2e6da4">→ commerciale: 390 Ω ✓</text>
+
+            <!-- nota POT più grande -->
+            <rect x="530" y="80" width="140" height="40" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1"/>
+            <text x="540" y="94" font-size="7.5" fill="#c0392b" font-weight="600">⚠ Potenziometro 5 kΩ</text>
+            <text x="540" y="106" font-size="7" fill="#666">Valore più alto necessario</text>
+            <text x="540" y="115" font-size="7" fill="#666">per una regolazione fluida</text>
+          </svg>
+          <div class="schema-caption">Fig. 1b — Schema elettrico versione 9 V (pila a transistor). Resistenze più grandi per limitare la corrente con tensione maggiore.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- fine pagina 2 -->
+
+
+<!-- ══════════════════════════════════════════ PAGINA 3 ══ -->
+<div class="pagina">
+
+  <!-- BREADBOARD VISUALE -->
+  <div class="sezione">
+    <div class="sezione-titolo">Visualizzazione sulla Breadboard</div>
+    <div class="sezione-corpo">
+
+      <div class="tab-versione">
+        <button class="tab-btn active" onclick="switchTab('bb','5v',this)">⚡ Versione 5 V (Arduino)</button>
+        <button class="tab-btn" onclick="switchTab('bb','9v',this)">🔋 Versione 9 V (Pila)</button>
+      </div>
+
+      <!-- BREADBOARD 5V -->
+      <div id="bb-5v" class="tab-panel active">
+        <div class="breadboard-container">
+          <svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:'Source Serif 4',serif;">
+
+            <!-- sfondo breadboard -->
+            <rect x="20" y="10" width="660" height="400" rx="8" fill="#e8e0d0" stroke="#c8b89a" stroke-width="2"/>
+            <text x="340" y="28" font-size="9" text-anchor="middle" fill="#888" font-family="'Source Code Pro',monospace" font-weight="600">BREADBOARD — VERSIONE 5 V (Arduino)</text>
+
+            <!-- ── BARRE BUS (sopra) ── -->
+            <rect x="30" y="35" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <!-- fori bus + rosso -->
+            <text x="35" y="47" font-size="8" fill="#e74c3c" font-weight="700">+</text>
+            <!-- linea rossa bus -->
+            <line x1="48" y1="43" x2="660" y2="43" stroke="#e74c3c" stroke-width="1.5" opacity="0.4"/>
+
+            <rect x="30" y="53" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <text x="35" y="65" font-size="8" fill="#1a3a5c" font-weight="700">−</text>
+            <line x1="48" y1="61" x2="660" y2="61" stroke="#1a3a5c" stroke-width="1.5" opacity="0.3"/>
+
+            <!-- ── AREA COMPONENTI centrale ── -->
+            <rect x="30" y="75" width="640" height="270" rx="3" fill="#f5f0e8" stroke="#ccc" stroke-width="1"/>
+
+            <!-- Griglia punti breadboard (stilizzata) -->
+            <g opacity="0.25">
+              <!-- colonne ogni ~13px a partire da 60, 30 righe -->
+              <script type="text/plain">per x in range ...non reale, uso path</script>
+            </g>
+
+            <!-- ── Riga lettere A-E ── -->
+            <text x="42" y="88" font-size="7" fill="#888">A</text>
+            <text x="42" y="101" font-size="7" fill="#888">B</text>
+            <text x="42" y="114" font-size="7" fill="#888">C</text>
+            <text x="42" y="127" font-size="7" fill="#888">D</text>
+            <text x="42" y="140" font-size="7" fill="#888">E</text>
+            <!-- divisorio centrale -->
+            <rect x="30" y="200" width="640" height="10" rx="0" fill="#c8b89a" stroke="none"/>
+            <!-- Riga F-J -->
+            <text x="42" y="222" font-size="7" fill="#888">F</text>
+            <text x="42" y="235" font-size="7" fill="#888">G</text>
+            <text x="42" y="248" font-size="7" fill="#888">H</text>
+            <text x="42" y="261" font-size="7" fill="#888">I</text>
+            <text x="42" y="274" font-size="7" fill="#888">J</text>
+
+            <!-- Numerazione colonne  -->
+            <g font-size="7" fill="#888" text-anchor="middle" font-family="'Source Code Pro',monospace">
+              <text x="65" y="78">1</text><text x="78" y="78">2</text><text x="91" y="78">3</text>
+              <text x="104" y="78">4</text><text x="117" y="78">5</text><text x="130" y="78">6</text>
+              <text x="143" y="78">7</text><text x="156" y="78">8</text><text x="169" y="78">9</text>
+              <text x="182" y="78">10</text><text x="195" y="78">11</text><text x="208" y="78">12</text>
+              <text x="221" y="78">13</text><text x="234" y="78">14</text><text x="247" y="78">15</text>
+              <text x="260" y="78">16</text><text x="273" y="78">17</text><text x="286" y="78">18</text>
+              <text x="299" y="78">19</text><text x="312" y="78">20</text>
+              <text x="338" y="78">21</text><text x="351" y="78">22</text><text x="364" y="78">23</text>
+              <text x="377" y="78">24</text><text x="390" y="78">25</text><text x="403" y="78">26</text>
+              <text x="416" y="78">27</text><text x="429" y="78">28</text><text x="442" y="78">29</text>
+              <text x="455" y="78">30</text>
+            </g>
+
+            <!-- ════ COMPONENTI ════ -->
+
+            <!-- ── POTENZIOMETRO ROSSO (col 1-3) ── -->
+            <rect x="55" y="215" width="42" height="42" rx="4" fill="#d4a" stroke="#1a3a5c" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="76" cy="236" r="10" fill="#b388" stroke="#1a3a5c" stroke-width="1"/>
+            <line x1="76" y1="226" x2="80" y2="220" stroke="white" stroke-width="2"/>
+            <text x="76" y="267" font-size="7" text-anchor="middle" fill="#c0392b" font-family="'Source Code Pro',monospace" font-weight="600">POT R</text>
+            <text x="76" y="275" font-size="6.5" text-anchor="middle" fill="#666">1 kΩ</text>
+
+            <!-- Pin1 POT → bus + -->
+            <line x1="65" y1="215" x2="65" y2="61" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+            <!-- Pin2 cursore POT → col 5 riga C -->
+            <line x1="76" y1="215" x2="76" y2="114" stroke="#e67e22" stroke-width="1.8"/>
+
+            <!-- ── RESISTENZA R_A (col 7-9, riga B-C) ── -->
+            <!-- corpo resistenza -->
+            <rect x="137" y="98" width="30" height="10" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="130" y1="103" x2="137" y2="103" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="167" y1="103" x2="175" y2="103" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="152" y="110" font-size="6.5" text-anchor="middle" fill="#c0392b" font-weight="600">150Ω</text>
+
+            <!-- Filo POT → R_A -->
+            <line x1="76" y1="114" x2="130" y2="114" stroke="#e67e22" stroke-width="1.5"/>
+            <line x1="130" y1="114" x2="130" y2="103" stroke="#e67e22" stroke-width="1.5"/>
+
+            <!-- ── LED SINGOLO ROSSO (col 11-12, riga A-D) ── -->
+            <!-- corpo LED -->
+            <ellipse cx="198" cy="110" rx="8" ry="12" fill="#e74c3c" opacity="0.85" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="194" y1="122" x2="194" y2="140" stroke="#c0392b" stroke-width="2"/>
+            <line x1="202" y1="122" x2="202" y2="140" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="2,1"/>
+            <text x="198" y="96" font-size="7" text-anchor="middle" fill="#e74c3c" font-weight="600">LED R</text>
+            <text x="190" y="148" font-size="6" fill="#c0392b">K</text>
+            <text x="200" y="148" font-size="6" fill="#e74c3c">A</text>
+
+            <!-- Filo R_A → anodo LED singolo -->
+            <line x1="175" y1="103" x2="202" y2="103" stroke="#e67e22" stroke-width="1.5"/>
+            <line x1="202" y1="103" x2="202" y2="110" stroke="#e67e22" stroke-width="1.5"/>
+
+            <!-- catodo LED singolo → GND bus -->
+            <line x1="194" y1="140" x2="194" y2="345" stroke="#1a3a5c" stroke-width="1.5"/>
+
+            <!-- ── RESISTENZA R_B (col 7-9, riga G-H) ── -->
+            <rect x="137" y="230" width="30" height="10" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="130" y1="235" x2="137" y2="235" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="167" y1="235" x2="175" y2="235" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="152" y="242" font-size="6.5" text-anchor="middle" fill="#c0392b" font-weight="600">150Ω</text>
+
+            <!-- Filo cursore → R_B -->
+            <line x1="76" y1="235" x2="130" y2="235" stroke="#e67e22" stroke-width="1.5"/>
+
+            <!-- ── LED RGB (col 14-17, riga E-J) ── -->
+            <rect x="240" y="90" width="55" height="240" rx="5" fill="#e8e0f5" stroke="#2e6da4" stroke-width="1.5" opacity="0.7"/>
+            <ellipse cx="267" cy="150" rx="15" ry="15" fill="url(#rgbGrad)" opacity="0.9" stroke="#2e6da4" stroke-width="1.5"/>
+            <text x="267" y="90" font-size="7.5" text-anchor="middle" fill="#2e6da4" font-weight="600">LED RGB</text>
+            <text x="267" y="100" font-size="6.5" text-anchor="middle" fill="#666">catodo comune</text>
+            <!-- 4 pin del LED RGB -->
+            <line x1="248" y1="165" x2="248" y2="310" stroke="#e74c3c" stroke-width="1.5"/>
+            <line x1="261" y1="165" x2="261" y2="310" stroke="#1a3a5c" stroke-width="2"/>
+            <line x1="274" y1="165" x2="274" y2="310" stroke="#27ae60" stroke-width="1.5"/>
+            <line x1="287" y1="165" x2="287" y2="310" stroke="#2980b9" stroke-width="1.5"/>
+            <!-- label pin -->
+            <text x="248" y="318" font-size="6.5" text-anchor="middle" fill="#e74c3c">R</text>
+            <text x="261" y="318" font-size="6.5" text-anchor="middle" fill="#1a3a5c">GND</text>
+            <text x="274" y="318" font-size="6.5" text-anchor="middle" fill="#27ae60">G</text>
+            <text x="287" y="318" font-size="6.5" text-anchor="middle" fill="#2980b9">B</text>
+
+            <defs>
+              <radialGradient id="rgbGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="white" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#ddd" stop-opacity="0.5"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Filo R_B → pin R del LED RGB -->
+            <line x1="175" y1="235" x2="248" y2="235" stroke="#e74c3c" stroke-width="1.5"/>
+            <line x1="248" y1="235" x2="248" y2="165" stroke="#e74c3c" stroke-width="1.5"/>
+
+            <!-- catodo GND → bus negativo -->
+            <line x1="261" y1="310" x2="261" y2="345" stroke="#1a3a5c" stroke-width="1.8"/>
+
+            <!-- ── POTENZIOMETRO VERDE (col 19-21) ── -->
+            <rect x="325" y="215" width="42" height="42" rx="4" fill="#4d8a" stroke="#1a3a5c" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="346" cy="236" r="10" fill="#3d7a" stroke="#1a3a5c" stroke-width="1"/>
+            <line x1="346" y1="226" x2="350" y2="220" stroke="white" stroke-width="2"/>
+            <text x="346" y="267" font-size="7" text-anchor="middle" fill="#27ae60" font-family="'Source Code Pro',monospace" font-weight="600">POT G</text>
+            <line x1="335" y1="215" x2="335" y2="61" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+
+            <!-- ── POTENZIOMETRO BLU (col 23-25) ── -->
+            <rect x="403" y="215" width="42" height="42" rx="4" fill="#28aa" stroke="#1a3a5c" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="424" cy="236" r="10" fill="#1890b8" stroke="#1a3a5c" stroke-width="1"/>
+            <line x1="424" y1="226" x2="428" y2="220" stroke="white" stroke-width="2"/>
+            <text x="424" y="267" font-size="7" text-anchor="middle" fill="#2980b9" font-family="'Source Code Pro',monospace" font-weight="600">POT B</text>
+            <line x1="413" y1="215" x2="413" y2="61" stroke="#2980b9" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+
+            <!-- ── Arduino ── -->
+            <rect x="555" y="80" width="110" height="130" rx="6" fill="#1c5c2e" stroke="#0d3018" stroke-width="2"/>
+            <text x="610" y="100" font-size="8.5" text-anchor="middle" fill="white" font-weight="600">ARDUINO</text>
+            <text x="610" y="112" font-size="7" text-anchor="middle" fill="#88cc88">UNO / NANO</text>
+            <!-- pin 5V -->
+            <rect x="555" y="120" width="14" height="10" rx="2" fill="#e74c3c"/>
+            <text x="572" y="129" font-size="7" fill="white">5V</text>
+            <!-- pin GND -->
+            <rect x="555" y="135" width="14" height="10" rx="2" fill="#333"/>
+            <text x="572" y="144" font-size="7" fill="white">GND</text>
+
+            <!-- cavo 5V → bus + -->
+            <line x1="555" y1="125" x2="500" y2="125" stroke="#e74c3c" stroke-width="2"/>
+            <line x1="500" y1="125" x2="500" y2="43" stroke="#e74c3c" stroke-width="2"/>
+
+            <!-- cavo GND → bus - -->
+            <line x1="555" y1="140" x2="520" y2="140" stroke="#1a3a5c" stroke-width="2"/>
+            <line x1="520" y1="140" x2="520" y2="61" stroke="#1a3a5c" stroke-width="2"/>
+
+            <!-- ── BUS IN BASSO ── -->
+            <rect x="30" y="340" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <text x="35" y="352" font-size="8" fill="#e74c3c" font-weight="700">+</text>
+            <line x1="48" y1="348" x2="660" y2="348" stroke="#e74c3c" stroke-width="1.5" opacity="0.4"/>
+            <rect x="30" y="358" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <text x="35" y="370" font-size="8" fill="#1a3a5c" font-weight="700">−</text>
+            <line x1="48" y1="366" x2="660" y2="366" stroke="#1a3a5c" stroke-width="1.5" opacity="0.3"/>
+
+            <!-- catodi → bus GND basso -->
+            <line x1="194" y1="345" x2="194" y2="365" stroke="#1a3a5c" stroke-width="1.5"/>
+            <line x1="261" y1="345" x2="261" y2="365" stroke="#1a3a5c" stroke-width="1.5"/>
+
+            <!-- LEGENDA componenti -->
+            <rect x="478" y="230" width="200" height="110" rx="4" fill="#f8f5ef" stroke="#b0bec5" stroke-width="1"/>
+            <text x="488" y="244" font-size="8" fill="#1a3a5c" font-weight="600" font-family="'Source Code Pro',monospace">LEGENDA CAVI</text>
+            <line x1="488" y1="255" x2="505" y2="255" stroke="#e74c3c" stroke-width="2"/>
+            <text x="510" y="258" font-size="7" fill="#333">Positivo / Canale Rosso</text>
+            <line x1="488" y1="268" x2="505" y2="268" stroke="#1a3a5c" stroke-width="2"/>
+            <text x="510" y="271" font-size="7" fill="#333">GND / Massa</text>
+            <line x1="488" y1="281" x2="505" y2="281" stroke="#e67e22" stroke-width="2"/>
+            <text x="510" y="284" font-size="7" fill="#333">Segnale dal cursore POT</text>
+            <line x1="488" y1="294" x2="505" y2="294" stroke="#27ae60" stroke-width="2"/>
+            <text x="510" y="297" font-size="7" fill="#333">Canale Verde</text>
+            <line x1="488" y1="307" x2="505" y2="307" stroke="#2980b9" stroke-width="2"/>
+            <text x="510" y="310" font-size="7" fill="#333">Canale Blu</text>
+            <line x1="488" y1="320" x2="505" y2="320" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="510" y="323" font-size="7" fill="#333">Collegamento a bus VCC</text>
+
+          </svg>
+          <div class="schema-caption">Fig. 2a — Breadboard versione 5 V. Mostrato un solo ramo (Rosso) per chiarezza; i rami Verde e Blu seguono la stessa struttura.</div>
+        </div>
+      </div>
+
+      <!-- BREADBOARD 9V -->
+      <div id="bb-9v" class="tab-panel">
+        <div class="breadboard-container">
+          <svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:'Source Serif 4',serif;">
+            <rect x="20" y="10" width="660" height="400" rx="8" fill="#e8e0d0" stroke="#c8b89a" stroke-width="2"/>
+            <text x="340" y="28" font-size="9" text-anchor="middle" fill="#888" font-family="'Source Code Pro',monospace" font-weight="600">BREADBOARD — VERSIONE 9 V (Pila a transistor)</text>
+
+            <!-- Bus sopra -->
+            <rect x="30" y="35" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <text x="35" y="47" font-size="8" fill="#e74c3c" font-weight="700">+</text>
+            <line x1="48" y1="43" x2="660" y2="43" stroke="#e74c3c" stroke-width="1.5" opacity="0.4"/>
+            <rect x="30" y="53" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <text x="35" y="65" font-size="8" fill="#1a3a5c" font-weight="700">−</text>
+            <line x1="48" y1="61" x2="660" y2="61" stroke="#1a3a5c" stroke-width="1.5" opacity="0.3"/>
+
+            <!-- Area componenti -->
+            <rect x="30" y="75" width="640" height="270" rx="3" fill="#f5f0e8" stroke="#ccc" stroke-width="1"/>
+            <rect x="30" y="200" width="640" height="10" fill="#c8b89a"/>
+
+            <!-- ── PILA 9V ── -->
+            <rect x="545" y="85" width="45" height="70" rx="6" fill="#222" stroke="#444" stroke-width="2"/>
+            <rect x="553" y="78" width="12" height="10" rx="2" fill="#e74c3c"/>
+            <rect x="567" y="78" width="12" height="10" rx="2" fill="#333" stroke="#666" stroke-width="1"/>
+            <text x="567" y="112" font-size="7.5" text-anchor="middle" fill="white" font-weight="600">9 V</text>
+            <text x="567" y="123" font-size="7" text-anchor="middle" fill="#888">pila</text>
+
+            <!-- Fili pila → bus -->
+            <line x1="559" y1="78" x2="559" y2="43" stroke="#e74c3c" stroke-width="2"/>
+            <line x1="573" y1="78" x2="573" y2="61" stroke="#1a3a5c" stroke-width="2"/>
+
+            <!-- POT R (5kΩ) -->
+            <rect x="55" y="215" width="42" height="42" rx="4" fill="#d4a" stroke="#1a3a5c" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="76" cy="236" r="10" fill="#b38" stroke="#1a3a5c" stroke-width="1"/>
+            <line x1="76" y1="226" x2="80" y2="220" stroke="white" stroke-width="2"/>
+            <text x="76" y="267" font-size="7" text-anchor="middle" fill="#c0392b" font-family="'Source Code Pro',monospace" font-weight="600">POT R</text>
+            <text x="76" y="275" font-size="6.5" text-anchor="middle" fill="#666">5 kΩ</text>
+            <line x1="65" y1="215" x2="65" y2="61" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <line x1="76" y1="215" x2="76" y2="114" stroke="#e67e22" stroke-width="1.8"/>
+            <line x1="76" y1="235" x2="130" y2="235" stroke="#e67e22" stroke-width="1.5"/>
+
+            <!-- R_A 390Ω LED singolo -->
+            <rect x="137" y="98" width="32" height="10" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="130" y1="103" x2="137" y2="103" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="169" y1="103" x2="177" y2="103" stroke="#c0392b" stroke-width="1.5"/>
+            <text x="153" y="110" font-size="6.5" text-anchor="middle" fill="#c0392b" font-weight="600">390Ω</text>
+            <line x1="76" y1="114" x2="130" y2="114" stroke="#e67e22" stroke-width="1.5"/>
+            <line x1="130" y1="114" x2="130" y2="103" stroke="#e67e22" stroke-width="1.5"/>
+
+            <!-- LED singolo -->
+            <ellipse cx="198" cy="110" rx="8" ry="12" fill="#e74c3c" opacity="0.85" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="194" y1="122" x2="194" y2="140" stroke="#c0392b" stroke-width="2"/>
+            <line x1="202" y1="122" x2="202" y2="140" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="2,1"/>
+            <text x="198" y="96" font-size="7" text-anchor="middle" fill="#e74c3c" font-weight="600">LED R</text>
+            <line x1="177" y1="103" x2="202" y2="103" stroke="#e67e22" stroke-width="1.5"/>
+            <line x1="202" y1="103" x2="202" y2="110" stroke="#e67e22" stroke-width="1.5"/>
+            <line x1="194" y1="140" x2="194" y2="345" stroke="#1a3a5c" stroke-width="1.5"/>
+
+            <!-- R_B 390Ω canale RGB -->
+            <rect x="137" y="230" width="32" height="10" rx="3" fill="#fff8e1" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="130" y1="235" x2="137" y2="235" stroke="#c0392b" stroke-width="1.5"/>
+            <line x1="169" y1="235" x2="248" y2="235" stroke="#e74c3c" stroke-width="1.5"/>
+
+            <!-- LED RGB -->
+            <rect x="240" y="90" width="55" height="240" rx="5" fill="#e8e0f5" stroke="#2e6da4" stroke-width="1.5" opacity="0.7"/>
+            <ellipse cx="267" cy="150" rx="15" ry="15" fill="url(#rgbGrad9)" opacity="0.9" stroke="#2e6da4" stroke-width="1.5"/>
+            <text x="267" y="90" font-size="7.5" text-anchor="middle" fill="#2e6da4" font-weight="600">LED RGB</text>
+            <line x1="248" y1="165" x2="248" y2="310" stroke="#e74c3c" stroke-width="1.5"/>
+            <line x1="261" y1="165" x2="261" y2="310" stroke="#1a3a5c" stroke-width="2"/>
+            <line x1="274" y1="165" x2="274" y2="310" stroke="#27ae60" stroke-width="1.5"/>
+            <line x1="287" y1="165" x2="287" y2="310" stroke="#2980b9" stroke-width="1.5"/>
+            <text x="248" y="318" font-size="6.5" text-anchor="middle" fill="#e74c3c">R</text>
+            <text x="261" y="318" font-size="6.5" text-anchor="middle" fill="#1a3a5c">GND</text>
+            <text x="274" y="318" font-size="6.5" text-anchor="middle" fill="#27ae60">G</text>
+            <text x="287" y="318" font-size="6.5" text-anchor="middle" fill="#2980b9">B</text>
+            <line x1="248" y1="235" x2="248" y2="165" stroke="#e74c3c" stroke-width="1.5"/>
+            <line x1="261" y1="310" x2="261" y2="345" stroke="#1a3a5c" stroke-width="1.8"/>
+
+            <defs>
+              <radialGradient id="rgbGrad9" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="white" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#ddd" stop-opacity="0.5"/>
+              </radialGradient>
+            </defs>
+
+            <!-- POT G (5kΩ) -->
+            <rect x="325" y="215" width="42" height="42" rx="4" fill="#4d8a" stroke="#1a3a5c" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="346" cy="236" r="10" fill="#3d7a" stroke="#1a3a5c" stroke-width="1"/>
+            <text x="346" y="267" font-size="7" text-anchor="middle" fill="#27ae60" font-family="'Source Code Pro',monospace" font-weight="600">POT G</text>
+            <text x="346" y="275" font-size="6.5" text-anchor="middle" fill="#666">5 kΩ</text>
+            <line x1="335" y1="215" x2="335" y2="61" stroke="#27ae60" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+
+            <!-- POT B (5kΩ) -->
+            <rect x="403" y="215" width="42" height="42" rx="4" fill="#28aa" stroke="#1a3a5c" stroke-width="1.5" opacity="0.85"/>
+            <circle cx="424" cy="236" r="10" fill="#1890b8" stroke="#1a3a5c" stroke-width="1"/>
+            <text x="424" y="267" font-size="7" text-anchor="middle" fill="#2980b9" font-family="'Source Code Pro',monospace" font-weight="600">POT B</text>
+            <text x="424" y="275" font-size="6.5" text-anchor="middle" fill="#666">5 kΩ</text>
+            <line x1="413" y1="215" x2="413" y2="61" stroke="#2980b9" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+
+            <!-- Bus basso -->
+            <rect x="30" y="340" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <text x="35" y="352" font-size="8" fill="#e74c3c" font-weight="700">+</text>
+            <line x1="48" y1="348" x2="660" y2="348" stroke="#e74c3c" stroke-width="1.5" opacity="0.4"/>
+            <rect x="30" y="358" width="640" height="16" rx="3" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+            <text x="35" y="370" font-size="8" fill="#1a3a5c" font-weight="700">−</text>
+            <line x1="48" y1="366" x2="660" y2="366" stroke="#1a3a5c" stroke-width="1.5" opacity="0.3"/>
+            <line x1="194" y1="345" x2="194" y2="365" stroke="#1a3a5c" stroke-width="1.5"/>
+            <line x1="261" y1="345" x2="261" y2="365" stroke="#1a3a5c" stroke-width="1.5"/>
+
+            <!-- NOTA 9V -->
+            <rect x="478" y="230" width="190" height="100" rx="4" fill="#fff8e1" stroke="#c0392b" stroke-width="1"/>
+            <text x="488" y="244" font-size="8" fill="#c0392b" font-weight="600" font-family="'Source Code Pro',monospace">⚠ NOTE VERSIONE 9 V</text>
+            <text x="488" y="258" font-size="7" fill="#333">• Potenziometri da 5 kΩ o 10 kΩ</text>
+            <text x="488" y="270" font-size="7" fill="#333">• Resistenze: 390 Ω (R) / 330 Ω (G,B)</text>
+            <text x="488" y="282" font-size="7" fill="#333">• Collegare − pila al bus GND</text>
+            <text x="488" y="294" font-size="7" fill="#333">• Verificare polarità pila!</text>
+            <text x="488" y="306" font-size="7" fill="#666" font-style="italic">La regolazione è più fluida grazie</text>
+            <text x="488" y="316" font-size="7" fill="#666" font-style="italic">al potenziometro di valore maggiore.</text>
+
+          </svg>
+          <div class="schema-caption">Fig. 2b — Breadboard versione 9 V con pila a transistor. Resistenze più grandi, potenziometri 5 kΩ per regolazione graduale.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- fine pagina 3 -->
+
+
+<!-- ══════════════════════════════════════════ PAGINA 4 ══ -->
+<div class="pagina">
+
+  <!-- PROCEDURA -->
+  <div class="sezione">
+    <div class="sezione-titolo">Procedura Sperimentale</div>
+    <div class="sezione-corpo">
+      <ol class="step-lista">
+        <li>Scegli la versione del circuito (5 V con Arduino <em>oppure</em> 9 V con pila) e procurati i componenti con i valori della tabella a pagina 1.</li>
+        <li>Inserisci il LED RGB al centro della breadboard a cavallo della divisione centrale (pin su entrambi i lati). Identifica i pin: il pin più lungo è il <strong>catodo comune</strong> (GND).</li>
+        <li>Inserisci i tre LED singoli (Rosso, Verde, Blu) in zone distinte della breadboard, con il catodo (gambino corto) verso la riga GND.</li>
+        <li>Collega i tre potenziometri: Pin 1 (estremo sinistro) al bus +V<sub>cc</sub>; Pin 3 (estremo destro) lascialo libero (aperto); Pin 2 (cursore, centrale) all'ingresso del rispettivo ramo.</li>
+        <li>Per il canale Rosso: dal cursore del POT-R, aggiungi due resistenze in parallelo: R_A all'anodo del LED singolo rosso, R_B all'anodo del pin R del LED RGB.</li>
+        <li>Ripeti il passo 5 per il canale Verde (POT-G, R_A/R_B da 100 Ω a 5 V o 330 Ω a 9 V, LED verde singolo e pin G dell'RGB).</li>
+        <li>Ripeti per il canale Blu (POT-B, stesso schema del Verde).</li>
+        <li>Collega tutti i catodi (LED singoli e catodo comune RGB) al bus GND.</li>
+        <li>Collega l'alimentazione (pin 5 V e GND di Arduino, oppure i morsetti della pila). <strong>Verifica due volte la polarità prima di alimentare.</strong></li>
+        <li>Testa il circuito: ruota ogni potenziometro separatamente e verifica che il rispettivo LED singolo e il canale dell'RGB si accendano e spengano in modo fluido.</li>
+        <li>Prova la sintesi: accendi solo R e G → il LED RGB dovrebbe mostrare il <strong>Giallo</strong>. Accendi tutti e tre → <strong>Bianco</strong>.</li>
+        <li>Se hai il multimetro, misura la tensione ai capi di un LED singolo e registra il valore di V<sub>LED</sub> misurato nella tabella seguente.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- TABELLA MISURE -->
+  <div class="sezione">
+    <div class="sezione-titolo">Misure Sperimentali</div>
+    <div class="sezione-corpo">
+      <table class="dati">
+        <thead>
+          <tr>
+            <th>Canale / LED</th>
+            <th>V<sub>cc</sub> alimentazione<br><span style="font-weight:400;font-size:7pt;">[V]</span></th>
+            <th>R usata<br><span style="font-weight:400;font-size:7pt;">[Ω]</span></th>
+            <th>V<sub>LED</sub> misurata<br><span style="font-weight:400;font-size:7pt;">[V]</span></th>
+            <th>I calcolata = (V<sub>cc</sub>−V<sub>LED</sub>)/R<br><span style="font-weight:400;font-size:7pt;">[mA]</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-col"><span class="badge-r"></span>LED Rosso singolo</td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col"><span class="badge-r"></span>Canale R (RGB)</td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col"><span class="badge-g"></span>LED Verde singolo</td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col"><span class="badge-g"></span>Canale G (RGB)</td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col"><span class="badge-b"></span>LED Blu singolo</td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col"><span class="badge-b"></span>Canale B (RGB)</td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- OSSERVAZIONI COLORI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Osservazioni sulla Sintesi Additiva</div>
+    <div class="sezione-corpo">
+      <table class="dati">
+        <thead>
+          <tr>
+            <th>POT-R</th><th>POT-G</th><th>POT-B</th>
+            <th>Colore atteso del LED RGB</th>
+            <th>Colore osservato</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-col mono">MAX</td><td class="mono">0</td><td class="mono">0</td>
+            <td>Rosso</td><td></td>
+          </tr>
+          <tr>
+            <td class="mono">0</td><td class="label-col mono">MAX</td><td class="mono">0</td>
+            <td>Verde</td><td></td>
+          </tr>
+          <tr>
+            <td class="mono">0</td><td class="mono">0</td><td class="label-col mono">MAX</td>
+            <td>Blu</td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col mono">MAX</td><td class="mono">MAX</td><td class="mono">0</td>
+            <td>Giallo</td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col mono">MAX</td><td class="mono">0</td><td class="mono">MAX</td>
+            <td>Magenta</td><td></td>
+          </tr>
+          <tr>
+            <td class="mono">0</td><td class="label-col mono">MAX</td><td class="mono">MAX</td>
+            <td>Ciano</td><td></td>
+          </tr>
+          <tr>
+            <td class="label-col mono">MAX</td><td class="mono">MAX</td><td class="mono">MAX</td>
+            <td>Bianco</td><td></td>
+          </tr>
+          <tr>
+            <td class="mono">½</td><td class="mono">½</td><td class="label-col mono">MAX</td>
+            <td>Blu-viola (tua stima)</td><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CONCLUSIONI -->
+  <div class="sezione">
+    <div class="sezione-titolo">Domande Conclusive</div>
+    <div class="sezione-corpo">
+      <ul class="conclusioni-domande">
+        <li>1. Perché il LED rosso richiede una resistenza di valore diverso rispetto al verde e al blu?
+          <span class="risposta-linea"></span><span class="risposta-linea"></span>
+        </li>
+        <li>2. Se riduci a metà la resistenza di un canale, cosa succede alla corrente e alla luminosità del LED?
+          <span class="risposta-linea"></span><span class="risposta-linea"></span>
+        </li>
+        <li>3. Perché nella sintesi additiva R + G = Giallo, mentre nella pittura rosso + giallo ≠ verde?
+          <span class="risposta-linea"></span><span class="risposta-linea"></span>
+        </li>
+        <li>4. Ogni pixel di un monitor usa un LED RGB. Se la risoluzione è 1920×1080, quanti LED ci sono in totale?
+          <span class="risposta-linea"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- NOTE DOCENTE -->
+  <div class="sezione">
+    <div class="sezione-titolo">Note per il Docente</div>
+    <div class="sezione-corpo">
+      <div class="nota-docente">
+        <strong>🔬 Suggerimenti didattici</strong>
+        La versione a 5 V (Arduino) è preferibile in classe per la sicurezza e la semplicità. La versione 9 V introduce il concetto di dimensionamento delle resistenze al variare della tensione. Suggerire agli studenti di misurare la V<sub>LED</sub> con il multimetro prima del montaggio: i valori reali (spesso 1,8–2,2 V per il rosso, 3,0–3,4 V per verde/blu) possono differire dai valori nominali e aprono una discussione sulla dispersione dei componenti. L'effetto della sintesi additiva è molto più visibile se la stanza è leggermente oscurata. Collegamento curriculare: ottica (colori primari additivi vs. sottrattivi), legge di Ohm, collegamento in parallelo.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="margin-top:12px; border-top:1px solid var(--grigio-linea); padding-top:5px; display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-family:'Source Code Pro',monospace; font-size:7.5pt; color:#888;">lorenzogandini.it · Il Laboratorio di Fisica</span>
+    <span style="font-family:'Source Code Pro',monospace; font-size:7.5pt; color:#888;">EXP·OPT·05 · Controllo LED RGB · v1.0</span>
+    <span style="font-size:7.5pt; color:#888;">Pag. 4 / 4</span>
+  </div>
+
+</div><!-- fine pagina 4 -->
+
+<script>
+function switchTab(group, id, btn) {
+  // Deactivate all panels and buttons in this group
+  document.querySelectorAll('[id^="' + group + '-"]').forEach(p => p.classList.remove('active'));
+  // Find the button container and deactivate siblings
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  // Activate selected
+  document.getElementById(group + '-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>
